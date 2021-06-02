@@ -6,6 +6,8 @@
 #
 
 ### Imports and variables ###
+import config
+import random
 
 ### Professions ###
 
@@ -20,4 +22,6 @@ class Farmer:
 
     def action(self, villager):
         # Collect food
-        pass
+        
+        food_produced = random.randint(2,5)
+        config.food += food_produced
