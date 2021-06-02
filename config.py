@@ -14,5 +14,6 @@ def init():
     villagers = []
 
     # Materials
-    global food
+    global food, wood
     food = 0
+    wood = 0
