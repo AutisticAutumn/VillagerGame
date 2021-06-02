@@ -26,6 +26,8 @@ class Farmer:
         food_produced = random.randint(2,5)
         config.food += food_produced
 
+        return f'{villager.name} has produced {food_produced} food'
+
 class Feller:
     '''The Feller provides Wood for the village'''
 
@@ -34,3 +36,5 @@ class Feller:
 
         wood_produced = random.randint(2,4)
         config.wood += wood_produced
+
+        return f'{villager.name} has produced {wood_produced} wood'
