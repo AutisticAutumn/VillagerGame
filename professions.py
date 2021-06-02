@@ -18,10 +18,19 @@ class Unemployed:
         pass
 
 class Farmer:
-    '''The farmer provides foods for the village at farming buildings'''
+    '''The farmer provides foods for the village at Farms'''
 
     def action(self, villager):
         # Collect food
         
         food_produced = random.randint(2,5)
         config.food += food_produced
+
+class Feller:
+    '''The Feller provides Wood for the village'''
+
+    def action(self, villager):
+        # Collect Wood
+
+        wood_produced = random.randint(2,4)
+        config.wood += wood_produced
