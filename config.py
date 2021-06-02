@@ -17,3 +17,8 @@ def init():
     global food, wood
     food = 0
     wood = 0
+
+    # Turn Log and  counter
+    global log, turn
+    log = ['Turn 1']
+    turn = 1
