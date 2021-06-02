@@ -28,8 +28,9 @@ class GameApp:
         self.center_frame.grid(row=0, column= 1, padx= 4, pady= 4)
         self.right_frame.grid(row=0, column= 2, padx= 4, pady= 4)
 
+        # Left Frame
         # Create the frames for the village
-        self.village_frame = tk.LabelFrame(self.left_frame, text='Village', width= 48)
+        self.village_frame = tk.LabelFrame(self.left_frame, text='Village')
         self.village_frame.grid(row=0, column= 0, padx= 2, pady= 2)
 
         # Create the frame for the statistics
@@ -46,3 +47,19 @@ class GameApp:
         self.wood_stat_var.set(f'Total Wood: {config.wood}')
         self.wood_stat_label = tk.Label(self.stats_frame, textvariable=self.wood_stat_var)
         self.wood_stat_label.grid(row=1, column= 1, padx= 8, pady= 2, sticky= tk.NSEW)
+
+        # Centeral Frame
+        self.modifcation_frame = tk.Frame(self.center_frame)
+        self.modifcation_frame.grid(row=0, column= 0, padx= 2, pady= 2)
+
+        self.end_turn_button = tk.Button(self.center_frame, text= 'End Turn', width= 48)
+        self.end_turn_button.grid(row=1, column= 0, padx= 2, pady= 4)
+
+        # Right Frame
+
+    def end_turn(self):
+        # Run end of turn functions 
+
+        # Update turn counter and add to the logs
+        config.turn += 1
+        config.log.append(f'\nTurn {config.turn}')
