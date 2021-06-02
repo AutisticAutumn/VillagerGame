@@ -23,10 +23,14 @@ class Villager:
         self.health_max = 12
         self.health = self.health_max
 
+        self.log = []
+
     def end_turn(self):
         
         # Calculate stat changes
         self.hunger += random.randint(1,3)
         
-        # Run action
-        self.profession.action(self)
+        # Run action and log the action
+        self.log.append(self.profession.action(self))
+        config.log.append(self.log[-1])
+
