@@ -8,10 +8,14 @@
 ### Importants and Varibles ###
 import config
 import game_app
-import villagers, professions
+import villagers
 
 # Initialize the globals
 config.init()
+
+# Create innitial villagers
+for i in range(3):
+    villagers.create_villager()
 
 ### Main Game Loop ###
 
