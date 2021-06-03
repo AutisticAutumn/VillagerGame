@@ -18,6 +18,7 @@ class Unemployed:
 
         self.name = 'Unemployed'
         self.description = ''
+        self.ability = None
 
     def action(self, villager):
         pass
@@ -29,6 +30,7 @@ class Farmer:
 
         self.name = 'Farmer'
         self.description = 'Provides 2-4 food each turn'
+        self.ability = None
 
     def action(self, villager):
         # Collect food
@@ -45,6 +47,7 @@ class Feller:
 
         self.name = 'Feller'
         self.description = 'Provides 2-3 wood each turn'
+        self.ability = None
 
     def action(self, villager):
         # Collect Wood
