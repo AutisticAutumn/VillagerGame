@@ -31,13 +31,21 @@ class Villager:
         self.log = []
 
     def end_turn(self):
-        
-        # Calculate stat changes
-        self.hunger += random.randint(1,3)
-        
+
         # Run action and log the action
-        self.log.append(self.profession.action(self))
-        config.turn_log.append(self.log[-1])
+        action = self.profession.action(self)
+        if action != None:
+            self.log.append(action)
+        
+        # Add internal logs to the main log
+        for action in self.log:
+            config.turn_log.append(action)
+    
+    def begin_turn(self):  
+        '''Beginning of turn functions'''
+
+        # Clear the turn log at the start of the turn
+        self.log = []
 
 def create_villager():
     '''Creates a randomized villager and to the village'''
