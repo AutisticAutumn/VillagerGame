@@ -2,12 +2,11 @@
 # Villager Game
 # Main Game Application Module
 # Written by Madeline Autumn
-# Last modified on 03/06/21
+# Last modified on 04/06/21
 #
 
 ### Importants and Varibles ###
 import tkinter as tk
-from villagers import Villager
 import config
 import random
 
