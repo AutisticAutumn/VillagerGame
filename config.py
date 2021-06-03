@@ -5,14 +5,15 @@
 # Last modified on 03/06/21
 #
 
+import professions
+
 def init():
     '''Initializes the global variables for the program'''
 
     # Villagers and housing
-    global village, villagers, professions
+    global village, villagers
     village = []
     villagers = []
-    professions = ['Unemployed', 'Farmer', 'Feller']
 
     # Materials
     global food, wood
@@ -30,6 +31,18 @@ def init():
     food_priority_values = ('High', 'Normal', 'Low')
     food_priority = [[],[],[]]
     hunger_range = (1, 3)
+
+    # Professions Dictionary
+    global professions_dict
+    professions_list = [professions.Unemployed(),
+                        professions.Farmer(),
+                        professions.Feller()]
+
+    # Turn the list into a dictionary
+    professions_dict = {}
+    for profession in professions_list:
+        professions_dict.update({profession.name : profession})
+    print(professions_dict)
 
 def save():
     '''Save the variables into files'''
