@@ -14,11 +14,21 @@ import random
 class Unemployed:
     '''Unemployed villagers provide no materials or bonuses but can build buildings'''
 
+    def __init__(self):
+
+        self.name = 'Unemployed'
+        self.description = ''
+
     def action(self, villager):
         pass
 
 class Farmer:
     '''The farmer provides foods for the village at Farms'''
+
+    def __init__(self):
+
+        self.name = 'Farmer'
+        self.description = 'Provides 2-4 food each turn'
 
     def action(self, villager):
         # Collect food
@@ -30,6 +40,11 @@ class Farmer:
 
 class Feller:
     '''The Feller provides Wood for the village'''
+
+    def __init__(self):
+
+        self.name = 'Feller'
+        self.description = 'Provides 2-3 wood each turn'
 
     def action(self, villager):
         # Collect Wood
