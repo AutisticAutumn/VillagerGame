@@ -16,7 +16,7 @@ def init():
 
     # Materials
     global food, wood
-    food = 0
+    food = 10
     wood = 0
 
     # Turn Log and  counter
@@ -26,9 +26,10 @@ def init():
     turn_log = []
 
     # Food priority 
-    global food_priority_values, food_priority
-    food_priority_values = ['High', 'Normal', 'Low']
-    food_priority = []
+    global food_priority_values, food_priority, hunger_range
+    food_priority_values = ('High', 'Normal', 'Low')
+    food_priority = [[],[],[]]
+    hunger_range = (1, 3)
 
 def save():
     '''Save the variables into files'''
