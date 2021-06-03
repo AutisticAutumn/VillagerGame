@@ -22,3 +22,10 @@ def init():
     global log, turn
     log = ['Turn 1']
     turn = 1
+
+def save():
+    '''Save the variables into files'''
+
+    # Save the logs
+    with open('log.txt', 'w') as f:
+        f.writelines(log)
