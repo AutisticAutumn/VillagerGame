@@ -29,13 +29,14 @@ class Villager:
         self.health = self.health_max
 
         self.log = []
+        self.turn_log = []
 
     def end_turn(self):
 
         # Run action and log the action
         action = self.profession.action(self)
         if action != None:
-            self.log.append(action)
+            self.turn_log.append(action)
         
         # Add internal logs to the main log
         for action in self.log:
@@ -44,8 +45,12 @@ class Villager:
     def begin_turn(self):  
         '''Beginning of turn functions'''
 
-        # Clear the turn log at the start of the turn
-        self.log = []
+        # Clear the turn log at the start of the turn and add to main log
+        for line in self.turn_log:
+            self.log.append(line)
+        self.turn_log = []
+
+        self.log.append(f'\nTurn {config.turn}')
 
 def create_villager():
     '''Creates a randomized villager and to the village'''
