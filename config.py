@@ -19,9 +19,10 @@ def init():
     wood = 0
 
     # Turn Log and  counter
-    global log, turn
+    global log, turn, turn_log
     log = ['Turn 1']
     turn = 1
+    turn_log = []
 
 def save():
     '''Save the variables into files'''
