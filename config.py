@@ -8,10 +8,11 @@
 def init():
     '''Initializes the global variables for the program'''
 
-    # Stores the village houses and the villagers
-    global village, villagers
+    # Villagers and housing
+    global village, villagers, professions
     village = []
     villagers = []
+    professions = ['Unemployed', 'Farmer', 'Feller']
 
     # Materials
     global food, wood
