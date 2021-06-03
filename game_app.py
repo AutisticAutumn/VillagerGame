@@ -30,43 +30,57 @@ class VillagerFrame:
         self.frame = tk.Frame(self.parent.mod_frame_scrollable, relief=tk.GROOVE, borderwidth=2)
         self.frame.grid(row=self.id, column=0, padx=2, pady=4, sticky=tk.NSEW)
 
-        # Creat the three frames for the widgets 
+        # Creat the four frames for the widgets 
         self.ascii_frame = tk.Frame(self.frame)
-        self.ascii_frame.grid(row=0, column=0, rowspan=3)
+        self.ascii_frame.grid(row=0, column=0, rowspan=2)
 
         self.stats_frame = tk.Frame(self.frame)
-        self.stats_frame.grid(row=0, column=1, rowspan=2)
+        self.stats_frame.grid(row=0, column=1)
 
-        self.selection_frame = tk.Frame(self.frame)
-        self.selection_frame.grid(row=1, column=1)
+        self.button_frame = tk.Frame(self.frame)
+        self.button_frame.grid(row=0, column=2, rowspan=2)
+
+        self.profession_frame = tk.Frame(self.frame)
+        self.profession_frame.grid(row=1, column=1)
         
-        # Ascii frame widgets
+        # Ascii frame widgets #
         self.ascii_art = tk.Label(self.ascii_frame, text='', relief=tk.GROOVE, borderwidth=2, width=8)
-        self.ascii_art.grid(row=0, column=0, padx=2, pady=2, sticky=tk.NSEW)
+        self.ascii_art.grid(row=0, column=0, padx=2, pady=2, sticky=tk.EW)
 
         self.ascii_name = tk.Label(self.ascii_frame, text=self.villager.name)
-        self.ascii_name.grid(row=1, column=0, padx=2, pady=2, sticky=tk.NSEW)
+        self.ascii_name.grid(row=1, column=0, padx=2, pady=2, sticky=tk.EW)
 
-        # Stats frame widgets
+        self.kill_button = tk.Button(self.ascii_frame, text='Kill', width=8)
+        self.kill_button.grid(row=2, column=0, padx=2, pady=2)
+
+        # Stats frame widgets #
         self.title = f'{self.villager.name} the {self.villager.profession.name}'
-        self.name_frame = tk.Label(self.stats_frame, text=self.title, width=32)
-        self.name_frame.grid(row=0, column=0, padx=2, pady=2, sticky=tk.NSEW)
-
-        self.kill_button = tk.Button(self.stats_frame, text='Kill', width=8)
-        self.kill_button.grid(row=0, column=1, padx=2, pady=2, sticky=tk.NSEW)
+        self.name_frame = tk.Label(self.stats_frame, text=self.title, width=30)
+        self.name_frame.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
         self.stats = f'Health: {self.villager.health}        Hunger: {self.villager.hunger}'
         self.stats_frame = tk.Label(self.stats_frame, text=self.stats)
+        self.stats_frame.grid(row=1, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
-        # Only add ability button if it exists
-        if self.villager.profession.ability == None:
-            self.stats_frame.grid(row=1, column=0, columnspan=2, 
-                                  padx=2, pady=2, sticky=tk.NSEW)
-        else:
-            self.stats_frame.grid(row=1, column=0, padx=2, pady=2, sticky=tk.NSEW)
+        # Professions frame widgets #
+        self.professions_menu_var = tk.StringVar()
+        self.professions_menu_var.set(self.villager.profession.name)
+        self.professions_menu = tk.OptionMenu(self.profession_frame, self.professions_menu_var, *config.professions)
+        self.professions_menu.config(width=14)
+        self.professions_menu.grid(row=2, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
-            self.ability_button = tk.Button(self.stats_frame, text='Ability', width=8)
-            self.ability_button.grid(row=0, column=1, padx=2, pady=2, sticky=tk.NSEW)
+        # Button Frame widgets #
+
+        self.food_label = tk.Label(self.button_frame, text='Food Priority:')
+        self.food_label.grid(row=0, column=0, padx=2, pady=4, sticky=tk.NSEW)
+        self.food_menu_var = tk.StringVar()
+        self.food_menu_var.set(config.food_priority_values[1])
+
+        for value in config.food_priority_values:
+            tk.Radiobutton(self.button_frame,
+                           text=value, value=value,
+                           variable=self.food_menu_var,
+                           indicator = 0, width=6).grid(padx=2, pady=2)
 
 ## Game Application Class ##
 
