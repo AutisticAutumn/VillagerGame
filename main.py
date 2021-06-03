@@ -18,3 +18,5 @@ config.init()
 if __name__ == '__main__':
     main_app = game_app.GameApp()
     main_app.root.mainloop()
+
+    config.save()
