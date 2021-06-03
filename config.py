@@ -25,6 +25,11 @@ def init():
     turn = 1
     turn_log = []
 
+    # Food priority 
+    global food_priority_values, food_priority
+    food_priority_values = ['High', 'Normal', 'Low']
+    food_priority = []
+
 def save():
     '''Save the variables into files'''
 
