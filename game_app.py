@@ -7,6 +7,7 @@
 
 ### Importants and Varibles ###
 import tkinter as tk
+from villagers import Villager
 import config
 
 ### Classes ###
@@ -24,11 +25,48 @@ class VillagerFrame:
 
     def create_widgets(self):
         '''Create the widgets onscreen for the villager'''
-        self.frame = tk.Frame(self.parent.mod_frame_scrollable, relief=tk.RIDGE, borderwidth=1)
+        
+        # Create the main frame for the villager
+        self.frame = tk.Frame(self.parent.mod_frame_scrollable, relief=tk.GROOVE, borderwidth=2)
         self.frame.grid(row=self.id, column=0, padx=2, pady=4, sticky=tk.NSEW)
 
-        self.name_label = tk.Label(self.frame, text=self.villager.name)
-        self.name_label.grid(row=0, column=0, padx=2, pady=2)
+        # Creat the three frames for the widgets 
+        self.ascii_frame = tk.Frame(self.frame)
+        self.ascii_frame.grid(row=0, column=0, rowspan=3)
+
+        self.stats_frame = tk.Frame(self.frame)
+        self.stats_frame.grid(row=0, column=1, rowspan=2)
+
+        self.selection_frame = tk.Frame(self.frame)
+        self.selection_frame.grid(row=1, column=1)
+        
+        # Ascii frame widgets
+        self.ascii_art = tk.Label(self.ascii_frame, text='', relief=tk.GROOVE, borderwidth=2, width=8)
+        self.ascii_art.grid(row=0, column=0, padx=2, pady=2, sticky=tk.NSEW)
+
+        self.ascii_name = tk.Label(self.ascii_frame, text=self.villager.name)
+        self.ascii_name.grid(row=1, column=0, padx=2, pady=2, sticky=tk.NSEW)
+
+        # Stats frame widgets
+        self.title = f'{self.villager.name} the {self.villager.profession.name}'
+        self.name_frame = tk.Label(self.stats_frame, text=self.title, width=32)
+        self.name_frame.grid(row=0, column=0, padx=2, pady=2, sticky=tk.NSEW)
+
+        self.kill_button = tk.Button(self.stats_frame, text='Kill', width=8)
+        self.kill_button.grid(row=0, column=1, padx=2, pady=2, sticky=tk.NSEW)
+
+        self.stats = f'Health: {self.villager.health}        Hunger: {self.villager.hunger}'
+        self.stats_frame = tk.Label(self.stats_frame, text=self.stats)
+
+        # Only add ability button if it exists
+        if self.villager.profession.ability == None:
+            self.stats_frame.grid(row=1, column=0, columnspan=2, 
+                                  padx=2, pady=2, sticky=tk.NSEW)
+        else:
+            self.stats_frame.grid(row=1, column=0, padx=2, pady=2, sticky=tk.NSEW)
+
+            self.ability_button = tk.Button(self.stats_frame, text='Ability', width=8)
+            self.ability_button.grid(row=0, column=1, padx=2, pady=2, sticky=tk.NSEW)
 
 ## Game Application Class ##
 
@@ -109,7 +147,7 @@ class GameApp:
 
         self.log_text = tk.Text(self.right_frame, 
                                  width=48, 
-                                 height=16,
+                                 height=24,
                                  state=tk.DISABLED)
         self.log_text.grid(row=0, column=0, padx=4, pady=4)
 
@@ -128,10 +166,16 @@ class GameApp:
 
         # Updates onscreen logs
         self.log_text.config(state=tk.NORMAL)
-        self.log_text.insert(tk.END, f'\nTurn {config.turn}\n')
+
+        if config.turn > 1:
+            self.log_text.insert(tk.END, f'\nTurn {config.turn}\n')
+        else:
+            self.log_text.insert(tk.END, f'Turn {config.turn}\n')
+
         for line in config.turn_log:
             self.log_text.insert(tk.END, f'{line}\n')
         self.log_text.see("end")
+        
         self.log_text.config(state=tk.DISABLED)
 
         # Add the turns log to the main log and reset the turn log
