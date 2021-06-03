@@ -10,7 +10,7 @@ import config, professions
 import random
 
 with open("villager_names", 'r') as f:
-    names = f.readline
+    names = f.readline()
 names = [n.strip() for n in names] 
 
 ### Villager class ###
