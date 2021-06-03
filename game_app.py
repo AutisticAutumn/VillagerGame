@@ -52,13 +52,37 @@ class GameApp:
         self.modifcation_frame = tk.Frame(self.center_frame)
         self.modifcation_frame.grid(row=0, column= 0, padx= 2, pady= 2)
 
-        self.end_turn_button = tk.Button(self.center_frame, text= 'End Turn', width= 48)
+        self.end_turn_button = tk.Button(self.center_frame, text= 'End Turn', width= 48, command= self.end_turn)
         self.end_turn_button.grid(row=1, column= 0, padx= 2, pady= 4)
 
         # Right Frame
+        self.log_scrollbar = tk.Scrollbar(self.right_frame)
+        self.log_scrollbar.grid(row=0, column= 1, sticky=tk.NSEW)
+
+        self.log_text = tk.Text(self.right_frame, 
+                                 width=48, 
+                                 height=16,
+                                 state=tk.DISABLED)
+        self.log_text.grid(row=0, column= 0, padx= 4, pady= 4)
+
+        self.log_text.config(yscrollcommand=self.log_scrollbar.set)
+        self.log_scrollbar.config(command=self.log_text.yview)
 
     def end_turn(self):
         # Run end of turn functions 
+
+        # Updates onscreen logs
+        self.log_text.config(state=tk.NORMAL)
+        self.log_text.insert(tk.END, f'\nTurn {config.turn}\n')
+        for line in config.turn_log:
+            self.log_text.insert(tk.END, f'{line}\n')
+        self.log_text.see("end")
+        self.log_text.config(state=tk.DISABLED)
+
+        # Add the turns log to the main log and reset the turn log
+        for line in config.turn_log:
+            config.log.append(line)
+        config.log = []
 
         # Update turn counter and add to the logs
         config.turn += 1
