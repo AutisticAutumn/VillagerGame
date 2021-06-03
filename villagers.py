@@ -6,12 +6,17 @@
 #
 
 ### Imports and Varibles ###
-import config
+import config, professions
 import random
+
+with open("villager_names", 'r') as f:
+    names = f.readline
+names = [n.strip() for n in names] 
 
 ### Villager class ###
 
 class Villager:
+    '''Class the stores the data for each villager'''
 
     def __init__(self, name, profession):
 
@@ -33,3 +38,8 @@ class Villager:
         # Run action and log the action
         self.log.append(self.profession.action(self))
         config.turn_log.append(self.log[-1])
+
+def create_villager():
+    '''Creates a randomized villager and to the village'''
+
+    config.villagers.append(Villager(random.choice(names), professions.Unemployed()))
