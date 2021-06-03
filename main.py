@@ -2,12 +2,12 @@
 # Villager Game
 # Main Module
 # Written by Madeline Autumn
-# Last modified on 03/06/21
+# Last modified on 04/06/21
 #
 
 ### Importants and Varibles ###
 import config
-import game_app
+import gameApp
 import villagers
 
 # Initialize the globals
@@ -20,7 +20,7 @@ for i in range(3):
 ### Main Game Loop ###
 
 if __name__ == '__main__':
-    main_app = game_app.GameApp()
+    main_app = gameApp.GameApp()
     main_app.root.mainloop()
 
     config.save()
