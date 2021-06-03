@@ -67,7 +67,12 @@ class VillagerFrame:
         # Professions frame widgets #
         self.professions_menu_var = tk.StringVar()
         self.professions_menu_var.set(self.villager.profession.name)
-        self.professions_menu = tk.OptionMenu(self.profession_frame, self.professions_menu_var, *config.professions)
+
+        self.professions_list = config.professions_dict.keys()
+        self.professions_menu = tk.OptionMenu(self.profession_frame,
+                                              self.professions_menu_var, 
+                                              *self.professions_list,
+                                              command=self.set_profession)
         self.professions_menu.config(width=14)
         self.professions_menu.grid(row=2, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
@@ -82,6 +87,12 @@ class VillagerFrame:
                            text=value, value=value,
                            variable=self.food_menu_var,
                            indicator = 0, width=6,).grid(padx=2, pady=2)
+
+    def set_profession(self, profession):
+        '''Upates the villager profession based on the profession menu'''
+
+        self.villager.profession = config.professions_dict[profession]
+        self.update_stats()
     
     def update_stats(self):
         '''Updates the onscreen stats and data for the villager'''
