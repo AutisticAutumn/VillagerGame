@@ -32,5 +32,4 @@ class Villager:
         
         # Run action and log the action
         self.log.append(self.profession.action(self))
-        config.log.append(self.log[-1])
-
+        config.turn_log.append(self.log[-1])
