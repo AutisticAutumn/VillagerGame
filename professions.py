@@ -1,58 +1,217 @@
 #
 # Villager Game
-# Professions Module
+# Villager Module
 # Written by Madeline Autumn
 # Last modified on 04/06/21
 #
 
-### Imports and variables ###
-import config
+### Imports and Varibles ###
+import config, professions
 import random
 
-### Professions ###
+with open("villager_names", 'r') as f:
+    names = f.readlines()
+names = [n.strip() for n in names] 
 
-class Unemployed:
-    '''Unemployed villagers provide no materials or bonuses but can build buildings'''
+### Villager class ###
 
-    def __init__(self):
+class Villager:
+    '''Class the stores the data for each villager'''
 
-        self.name = 'Unemployed'
-        self.description = ''
-        self.ability = None
+    def __init__(self, name, profession):
 
-    def action(self, villager):
-        pass
+        self.name = name
+        self.profession = profession
 
-class Farmer:
-    '''The farmer provides foods for the village at Farms'''
+        # Villagers initial stats
+        self.hunger = 0
+        self.health = config.health_max
+        self.happiness = 0
 
-    def __init__(self):
+        # Villager Logs
+        self.log = [(f'Turn {config.turn}', 'white')]
+        self.turn_log = []
 
-        self.name = 'Farmer'
-        self.description = 'Provides 2-4 food each turn'
-        self.ability = None
+        # Frame widget
+        self.frame = None
 
-    def action(self, villager):
-        # Collect food
+    ## Turn functions ##
+    def end_turn(self):
+
+        # Run profession action and log the action
+        action = self.profession.action(self)
+        if action != None:
+            self.append_villager_log(action[0], action[1])
         
-        food_produced = random.randint(1,3)
-        config.food += food_produced
+        # Random attack villagers if unhappy
+        if self.happiness < 0:
+            if random.randint(1,48) <= self.happiness**2:
+                self.attack_villager()
+    
+    def begin_turn(self):  
+        '''Beginning of turn functions'''
 
-        return (f'{villager.name} has produced {food_produced} food', 'lime')
+        # Appends new turn line directly to villager log
+        self.log.append((f'\nTurn {config.turn+1}', 'white'))
 
-class Feller:
-    '''The Feller provides Wood for the village'''
+        # Reset the turn log
+        self.turn_log = []
 
-    def __init__(self):
+    def append_villager_log(self, line, colour='white'):
+        '''Appends a line to the villager log and prints to main log'''
 
-        self.name = 'Feller'
-        self.description = 'Provides 2-3 wood each turn'
-        self.ability = None
+        if not(line in self.turn_log):
+            self.turn_log.append(line)
+            self.log.append((line, colour))
+            self.frame.parent.append_log(line, colour=colour)
 
-    def action(self, villager):
-        # Collect Wood
+    ## Internal actions ##
+    def feed_villager(self):
+        '''Feed the villager and calculate stats'''
+        # Only caluate food if needed
+        if self.hunger > 0:
+            if config.food > 0:
+                init_food = config.food
+                config.food -= self.hunger
+                self.hunger = 0
+                if config.food < 0:
+                    # Add back food and hunger so that food > 0
+                    self.hunger += config.food*-1
+                    config.food += config.food*-1
+                food_consumed = init_food - config.food
+                # Add result to log
+                self.append_villager_log(f'{self.name} has consumed {food_consumed} food', 'yellow')
+                # Gain happiness from eating if below 0
+                if self.happiness < 0:
+                    self.gain_happiness(0,1)
+            else:
+                # Add result to log
+                self.append_villager_log(f'There is no food for {self.name} to consume', 'gold2')
+                # Add hunger if no food was consumed
+                self.gain_hunger(True)
 
-        wood_produced = random.randint(2,3)
-        config.wood += wood_produced
+        else:
+            # Add hunger if no food was consumed
+            self.gain_hunger(False)
+    
+    def attack_villager(self):
+        '''Function for dealing with villager combat'''
 
-        return (f'{villager.name} has produced {wood_produced} wood', 'lime')
+        target = random.choice(config.villagers)
+        damage = random.randint(1,4)
+        
+        if target == self:
+            self.append_villager_log(f'In a fit of rage {self.name} has attack themselves dealing {damage} damage', 'red')
+        else:
+            self.append_villager_log(f'In a fit of rage {self.name} has attack {target.name} for {damage} health', 'red')
+            target.log.append((f'{target.name} has been attacked by {self.name} losing {damage} health', 'red2'))
+        
+        target.lose_health(damage, damage)
+
+    ## Hunger functions ##
+    def gain_hunger(self, lose_happiness):
+        '''Add hunger to villager and keep within bounds'''
+
+        self.hunger += random.randint(config.hunger_range[0],
+                                      config.hunger_range[1])
+        
+        # Check boundries
+        if self.hunger > config.hunger_max:
+            self.hunger = config.hunger_max
+    
+        self.return_hunger_log()
+
+        # Lose happiness if requested
+        if lose_happiness:
+            self.lose_happiness(0,2)
+
+    def return_hunger_log(self):
+        '''Return an output to the logs depending on hunger level'''
+
+        if self.hunger >= config.hunger_log_boundry[0]:
+            self.append_villager_log(f'{self.name} is starving', 'gold2')
+        elif self.hunger >= config.hunger_log_boundry[1]:
+            self.append_villager_log(f'{self.name} is quite hungry', 'gold2')
+
+    ## Happiness functions ##
+    def gain_happiness(self, min, max):
+        '''Calculate happiness loss and keep within bounds'''
+
+        self.happiness += random.randint(min, max)
+
+        # Check boundries 
+        if self.happiness > config.happiness_max:
+            self.happiness = config.happiness_max
+
+        self.return_happiness_log()
+
+
+    def lose_happiness(self, min, max):
+        '''Calculate happiness loss and keep within bounds'''
+
+        self.happiness -= random.randint(min, max)
+
+        # Check boundries
+        if self.happiness < config.happiness_min:
+            self.happiness = config.happiness_min
+
+        self.return_happiness_log()
+
+    def return_happiness_log(self):
+        '''Return an output to the logs depending on happiness level'''
+
+        if self.happiness <= config.happiness_log_boundry[0]:
+            self.append_villager_log(f'{self.name} is intensely unhappy', 'medium orchid')
+        elif self.happiness <= config.happiness_log_boundry[1]:
+            self.append_villager_log(f'{self.name} is currently very unhappy', 'medium orchid')
+        elif self.happiness <= config.happiness_log_boundry[2]:
+            self.append_villager_log(f'{self.name} is unhappy', 'medium orchid')
+        elif self.happiness >= config.happiness_log_boundry[3]:
+            self.append_villager_log(f'{self.name} is happy', 'cyan')
+        elif self.happiness >= config.happiness_log_boundry[4]:
+            self.append_villager_log(f'{self.name} is extremely happy', 'cyan')
+
+    ## Health functions ##
+    def lose_health(self, min, max):
+        '''Calculate health loss'''
+
+        self.health -= random.randint(min, max) 
+
+        # Kill if out of bounds
+        if self.health <= 0:
+            self.kill()
+
+        self.return_health_log()
+
+        # Lose happiness as result of injury
+        self.lose_happiness(1,2)
+
+    def return_health_log(self):
+        '''Return output to the log based on health'''
+
+        if self.health <= config.health_log_boundry[0]:
+            self.append_villager_log(f'{self.name} is dying', 'red')
+        elif self.health <= config.health_log_boundry[1]:
+            self.append_villager_log(f'{self.name} is deeply wounded', 'red')
+        elif self.health <= config.health_log_boundry[2]:
+            self.append_villager_log(f'{self.name} is moderatly injured', 'red')
+        elif self.health <= config.health_log_boundry[3]:
+            self.append_villager_log(f'{self.name} is slightly hurt', 'red')
+
+    def kill(self):
+        '''Kills the villager'''
+
+        # Remove frame from screen
+        self.frame.frame.grid_forget()
+        self.frame.parent.villager_frames.remove(self.frame)
+
+        # Add death to logs
+        self.append_villager_log(f'{self.name} has been killed', 'red')
+
+        # Remove self from villager list
+        config.villagers.remove(self)
+
+def create_villager():
+    '''Creates a randomized villager and to the village'''
+
+    config.villagers.append(Villager(random.choice(names), professions.Unemployed()))
