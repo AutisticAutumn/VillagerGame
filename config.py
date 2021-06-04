@@ -65,4 +65,4 @@ def save():
     # Save the logs
     with open('log.txt', 'w') as f:
         for line in log:
-            f.writelines(f'{line}\n')
+            f.writelines(f'{line[0]}\n')
