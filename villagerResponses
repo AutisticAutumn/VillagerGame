@@ -1,0 +1,12 @@
+{
+farmer_work
+{villager.name} has produced {food_produced} food
+{villager.name} has farmed {food_produced} food
+{villager.name} has collected {food_produced} food
+}
+{
+feller_work
+{villager.name} has produced {wood_produced} wood
+{villager.name} has harvested {wood_produced} wood
+{villager.name} has colled {wood_produced} wood
+}
