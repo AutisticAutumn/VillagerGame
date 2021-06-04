@@ -101,9 +101,9 @@ class Villager:
         damage = random.randint(1,4)
         
         if target == self:
-            self.append_villager_log(f'In a fit of range {self.name} has attack themselves dealing {damage} damage')
+            self.append_villager_log(f'In a fit of rage {self.name} has attack themselves dealing {damage} damage')
         else:
-            self.append_villager_log(f'In a fit of range {self.name} has attack {target.name} for {damage} health')
+            self.append_villager_log(f'In a fit of rage {self.name} has attack {target.name} for {damage} health')
             target.log.append(f'{target.name} has been attacked by {self.name} losing {damage} health')
         
         target.lose_health(damage, damage)
