@@ -2,7 +2,7 @@
 # Villager Game
 # Villager Module
 # Written by Madeline Autumn
-# Last modified on 03/06/21
+# Last modified on 04/06/21
 #
 
 ### Imports and Varibles ###
@@ -39,15 +39,13 @@ class Villager:
             self.turn_log.append(action)
         
         # Add internal logs to the main log
-        for action in self.log:
+        for action in self.turn_log:
             config.turn_log.append(action)
     
     def begin_turn(self):  
         '''Beginning of turn functions'''
 
-        # Clear the turn log at the start of the turn and add to main log
-        for line in self.turn_log:
-            self.log.append(line)
+        # Clear the turn log
         self.turn_log = []
 
         self.log.append(f'\nTurn {config.turn}')
