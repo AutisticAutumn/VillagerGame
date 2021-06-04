@@ -80,13 +80,16 @@ class Villager:
                     config.food += config.food*-1
                 food_consumed = init_food - config.food
                 # Add result to log
-                self.append_villager_log(f'{self.name} has consumed {food_consumed} food', 'yellow')
+                result = config.get_response('consume_food')
+                result = result.format(self.name, food_consumed)
+                self.append_villager_log(result,'yellow')
                 # Gain happiness from eating if below 0
                 if self.happiness < 0:
                     self.gain_happiness(0,1)
             else:
                 # Add result to log
-                self.append_villager_log(f'There is no food for {self.name} to consume', 'red')
+                result = config.get_response('no_food_found').format(self.name)
+                self.append_villager_log(result, 'red')
                 # Add hunger if no food was consumed
                 self.gain_hunger(True)
 
@@ -100,11 +103,17 @@ class Villager:
         target = random.choice(config.villagers)
         damage = random.randint(1,4)
         
+        # Return result
         if target == self:
-            self.append_villager_log(f'In a fit of rage {self.name} has attack themselves dealing {damage} damage', 'red')
+            result = config.get_response('attack_self')
+            result = result.format(self.name, damage)
         else:
-            self.append_villager_log(f'In a fit of rage {self.name} has attack {target.name} for {damage} health', 'red')
-            target.log.append((f'{target.name} has been attacked by {self.name} losing {damage} health', 'red2'))
+            result = config.get_response('attack_villager')
+            result = result.format(self.name, target.name, damage)
+            target_result = config.get_response('target_villager')
+            target_result.format(self.name, target.name, damage)
+            target.log.append((target_result, 'red2'))
+        self.append_villager_log(result, 'red')
         
         target.lose_health(damage, damage)
 
@@ -128,10 +137,14 @@ class Villager:
     def return_hunger_log(self):
         '''Return an output to the logs depending on hunger level'''
 
+        result = None
         if self.hunger >= config.hunger_log_boundry[0]:
-            self.append_villager_log(f'{self.name} is starving', 'gold2')
+            result = (config.get_response('starving').format(self.name), 'red')
         elif self.hunger >= config.hunger_log_boundry[1]:
-            self.append_villager_log(f'{self.name} is quite hungry', 'gold2')
+            result = (config.get_response('hungry').format(self.name), 'yellow')
+
+        if result != None:
+            self.append_villager_log(result[0], result[1])
 
     ## Happiness functions ##
     def gain_happiness(self, min, max):
@@ -160,16 +173,25 @@ class Villager:
     def return_happiness_log(self):
         '''Return an output to the logs depending on happiness level'''
 
+        result = None
+
         if self.happiness <= config.happiness_log_boundry[0]:
-            self.append_villager_log(f'{self.name} is intensely unhappy', 'medium orchid')
+            result = (config.get_response('extremely_unhappy').format(self.name),
+                      'medium orchid')
         elif self.happiness <= config.happiness_log_boundry[1]:
-            self.append_villager_log(f'{self.name} is currently very unhappy', 'medium orchid')
+            result = (config.get_response('unhappy').format(self.name),
+                      'medium orchid')
         elif self.happiness <= config.happiness_log_boundry[2]:
-            self.append_villager_log(f'{self.name} is unhappy', 'medium orchid')
+            result = (config.get_response('mildly_unhappy').format(self.name),
+                      'medium orchid')
         elif self.happiness >= config.happiness_log_boundry[3]:
-            self.append_villager_log(f'{self.name} is happy', 'cyan')
+            result = (config.get_response('happy').format(self.name), 'cyan')
         elif self.happiness >= config.happiness_log_boundry[4]:
-            self.append_villager_log(f'{self.name} is extremely happy', 'cyan')
+            result = (config.get_response('extremely_happy').format(self.name),
+                      'cyan')
+
+        if result != None:
+            self.append_villager_log(result[0], result[1])
 
     ## Health functions ##
     def lose_health(self, min, max):
@@ -189,14 +211,19 @@ class Villager:
     def return_health_log(self):
         '''Return output to the log based on health'''
 
+        result = None
+
         if self.health <= config.health_log_boundry[0]:
-            self.append_villager_log(f'{self.name} is dying', 'red')
+            result = config.get_response('near_death').format(self.name)
         elif self.health <= config.health_log_boundry[1]:
-            self.append_villager_log(f'{self.name} is deeply wounded', 'red')
+            result = config.get_response('hurt_severe').format(self.name)
         elif self.health <= config.health_log_boundry[2]:
-            self.append_villager_log(f'{self.name} is moderatly injured', 'red')
+            result = config.get_response('hurt_moderate').format(self.name)
         elif self.health <= config.health_log_boundry[3]:
-            self.append_villager_log(f'{self.name} is slightly hurt', 'red')
+            result = config.get_response('hurt_mild').format(self.name)
+        
+        if result != None:
+            self.append_villager_log(result, 'red')
 
     def kill(self):
         '''Kills the villager'''
@@ -206,7 +233,8 @@ class Villager:
         self.frame.parent.villager_frames.remove(self.frame)
 
         # Add death to logs
-        self.append_villager_log(f'{self.name} has been killed', 'red')
+        response = config.get_response('death').format(self.name)
+        self.append_villager_log(response, 'red')
 
         # Remove self from villager list
         config.villagers.remove(self)
