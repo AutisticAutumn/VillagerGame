@@ -71,27 +71,36 @@ class Villager:
                 # Add result to log
                 self.turn_log.append(f'There is no food for {self.name} to consume')
                 # Add hunger if no food was consumed
-                self.add_hunger()
+                self.add_hunger(True)
 
         else:
             # Add hunger if no food was consumed
-            self.add_hunger()
+            self.add_hunger(False)
 
-    def add_hunger(self):
+    def add_hunger(self, lose_happiness):
         '''Add hunger to villager and keep within bounds'''
 
         self.hunger += random.randint(config.hunger_range[0],
                                       config.hunger_range[1])
-        self.hunger = min(self.hunger, config.hunger_max)
+        
+        if self.hunger > config.hunger_max:
+            self.hunger = config.hunger_max
 
-        self.lose_happiness(0,2)
+        if lose_happiness:
+            self.lose_happiness(0,2)
 
 
     def lose_happiness(self, min, max):
         '''Calculate happiness loss and keep withing bounds'''
 
         self.happiness -= random.randint(min, max)
-        self.happiness = max(min(self.happiness, config.happiness_max), config.happiness_min)
+
+        if self.happiness > config.happiness_max:
+            self.happiness = config.happiness_max
+        elif self.happiness < config.happiness_min:
+            self.happiness = config.happiness_min
+        # The functions min() and max() don't appear to work so this 
+        # is the best solution I can find to fix it
 
 
 def create_villager():
