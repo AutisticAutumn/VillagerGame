@@ -38,10 +38,9 @@ def init():
     wood = 0
 
     # Turn Log and  counter
-    global log, turn, turn_log
+    global log, turn
     log = ['Turn 1']
     turn = 1
-    turn_log = []
 
     # Food priority 
     global food_priority_values, food_priority, hunger_range
