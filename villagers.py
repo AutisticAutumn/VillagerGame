@@ -32,6 +32,9 @@ class Villager:
         self.log = []
         self.turn_log = []
 
+        # Frame widget
+        self.frame = None
+
     def end_turn(self):
 
         # Run action and log the action
@@ -144,8 +147,16 @@ class Villager:
     def kill(self):
         '''Kills the villager'''
 
-        config.villagers.remove(self)
+        # Remove frame from screen
+        self.frame.frame.grid_forget()
+        self.frame.parent.villager_frames.remove(self.frame)
 
+        # Add death to logs
+        config.log.append(f'{self.name} has been killed')
+        self.frame.parent.append_log(config.log[-1])
+
+        # Remove self from villager list
+        config.villagers.remove(self)
 
 def create_villager():
     '''Creates a randomized villager and to the village'''
