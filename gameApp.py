@@ -92,6 +92,7 @@ class GameApp:
         self.log_scrollbar.config(command=self.log_text.yview)
 
         self.update_stats()
+        self.append_log('Turn 1')
 
     def add_villager_frame(self, villager):
         '''Creates the frame onscreen to display the villager'''
@@ -154,11 +155,6 @@ class GameApp:
         # Updates onscreen logs
         self.log_text.config(state=tk.NORMAL)
 
-        if config.turn > 1:
-            self.log_text.insert(tk.END, f'\nTurn {config.turn}\n')
-        else:
-            self.log_text.insert(tk.END, f'Turn {config.turn}\n')
-
         for line in config.turn_log:
             self.log_text.insert(tk.END, f'{line}\n')
         self.log_text.see("end")
@@ -177,6 +173,7 @@ class GameApp:
         # Update turn counter and add to the logs
         config.turn += 1
         config.log.append(f'\nTurn {config.turn}')
+        self.append_log(f'\nTurn {config.turn}')
 
         # Update the gui
         self.update_stats()
