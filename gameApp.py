@@ -130,29 +130,7 @@ class GameApp:
         if feeding != []:
             random.shuffle(feeding)
             for villager in feeding:
-                # Only caluate food if needed
-                if villager.hunger > 0:
-                    if config.food > 0:
-                        init_food = config.food
-                        config.food -= villager.hunger
-                        villager.hunger = 0
-                        if config.food < 0:
-                            # Add back food and hunger so that food > 0
-                            villager.hunger += config.food*-1
-                            config.food += config.food*-1
-                        food_consumed = init_food - config.food
-                        # Add result to log
-                        villager.turn_log.append(f'{villager.name} has consumed {food_consumed} food')
-                    else:
-                        # Add result to log
-                        villager.turn_log.append(f'There is no food for {villager.name} to consume')
-                        # Add hunger if no food was consumed
-                        villager.hunger += random.randint(config.hunger_range[0],
-                                                          config.hunger_range[1])
-                else:
-                    # Add hunger if no food was consumed
-                    villager.hunger += random.randint(config.hunger_range[0],
-                                                      config.hunger_range[1])
+                villager.feed_villager()
 
     def end_turn(self):
         '''Run end of turn functions'''
