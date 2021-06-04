@@ -161,7 +161,6 @@ class GameApp:
 
         # Update turn counter and add to the logs
         config.turn += 1
-        config.log.append(f'\nTurn {config.turn}')
         self.append_log(f'\nTurn {config.turn}')
 
         # Update the gui
