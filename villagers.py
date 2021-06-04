@@ -25,8 +25,8 @@ class Villager:
 
         # Villagers initial stats
         self.hunger = 0
-        self.health_max = 12
-        self.health = self.health_max
+        self.health = config.health_max
+        self.happiness = 0
 
         self.log = []
         self.turn_log = []
@@ -51,6 +51,47 @@ class Villager:
         for line in self.turn_log:
             self.log.append(line)
         self.turn_log = []
+
+    def feed_villager(self):
+        '''Feed the villager and calculate stats'''
+        # Only caluate food if needed
+        if self.hunger > 0:
+            if config.food > 0:
+                init_food = config.food
+                config.food -= self.hunger
+                self.hunger = 0
+                if config.food < 0:
+                    # Add back food and hunger so that food > 0
+                    self.hunger += config.food*-1
+                    config.food += config.food*-1
+                food_consumed = init_food - config.food
+                # Add result to log
+                self.turn_log.append(f'{self.name} has consumed {food_consumed} food')
+            else:
+                # Add result to log
+                self.turn_log.append(f'There is no food for {self.name} to consume')
+                # Add hunger if no food was consumed
+                self.add_hunger()
+
+        else:
+            # Add hunger if no food was consumed
+            self.add_hunger()
+
+    def add_hunger(self):
+        '''Add hunger to villager and keep within bounds'''
+
+        self.hunger += random.randint(config.hunger_range[0],
+                                      config.hunger_range[1])
+        self.hunger = min(self.hunger, config.hunger_max)
+
+        self.lose_happiness(0,2)
+
+
+    def lose_happiness(self, min, max):
+        '''Calculate happiness loss and keep withing bounds'''
+
+        self.happiness -= random.randint(min, max)
+        self.happiness = max(min(self.happiness, config.happiness_max), config.happiness_min)
 
 
 def create_villager():
