@@ -25,6 +25,12 @@ def init():
     happiness_max = 4
     happiness_min = -4
 
+    # Boundries for when villages returns logs for high stats
+    # Stats at most extreme to least
+    global happiness_log_boundry, hunger_log_boundry
+    happiness_log_boundry = [-4, -3, -1, 2, 4]
+    hunger_log_boundry = [7, 4]
+
     # Materials
     global food, wood
     food = 10
