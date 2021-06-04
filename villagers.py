@@ -83,24 +83,40 @@ class Villager:
         self.hunger += random.randint(config.hunger_range[0],
                                       config.hunger_range[1])
         
+        # Check boundries
         if self.hunger > config.hunger_max:
             self.hunger = config.hunger_max
+    
+        # Add getting hungry to log if too high
+        if self.hunger >= config.hunger_log_boundry[0]:
+            self.turn_log.append(f'{self.name} is starving')
+        elif self.hunger >= config.hunger_log_boundry[1]:
+            self.turn_log.append(f'{self.name} is getting quite hungry')
 
+        # Lose happiness if requested
         if lose_happiness:
             self.lose_happiness(0,2)
-
 
     def lose_happiness(self, min, max):
         '''Calculate happiness loss and keep withing bounds'''
 
         self.happiness -= random.randint(min, max)
 
+        # Check boundries
         if self.happiness > config.happiness_max:
             self.happiness = config.happiness_max
         elif self.happiness < config.happiness_min:
             self.happiness = config.happiness_min
         # The functions min() and max() don't appear to work so this 
         # is the best solution I can find to fix it
+
+        # Add losing happiness to log if too low
+        if self.happiness <= config.happiness_log_boundry[0]:
+            self.turn_log.append(f'{self.name} is intensely unhappy')
+        elif self.happiness <= config.happiness_log_boundry[1]:
+            self.turn_log.append(f'{self.name} is getting very unhappy')
+        elif self.happiness <= config.happiness_log_boundry[2]:
+            self.turn_log.append(f'{self.name} is getting unhappy')
 
 
 def create_villager():
