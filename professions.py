@@ -2,7 +2,7 @@
 # Villager Game
 # Professions Module
 # Written by Madeline Autumn
-# Last modified on 03/06/21
+# Last modified on 04/06/21
 #
 
 ### Imports and variables ###
@@ -35,10 +35,10 @@ class Farmer:
     def action(self, villager):
         # Collect food
         
-        food_produced = random.randint(2,4)
+        food_produced = random.randint(1,3)
         config.food += food_produced
 
-        return f'{villager.name} has produced {food_produced} food'
+        return (f'{villager.name} has produced {food_produced} food', 'green')
 
 class Feller:
     '''The Feller provides Wood for the village'''
@@ -55,4 +55,4 @@ class Feller:
         wood_produced = random.randint(2,3)
         config.wood += wood_produced
 
-        return f'{villager.name} has produced {wood_produced} wood'
+        return (f'{villager.name} has produced {wood_produced} wood', 'green')
