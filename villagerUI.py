@@ -103,7 +103,12 @@ class VillagerFrame:
 
         self.ascii_name_var.set(self.villager.name)
         self.title.set(f'{self.villager.name} the {self.villager.profession.name}')
-        self.stats.set(f'Health: {self.villager.health}        Hunger: {self.villager.hunger}')
+        
+        space = '        '
+        health = self.villager.health
+        hunger = self.villager.hunger
+        happiness = self.villager.happiness
+        self.stats.set(f'Health: {health}{space}Hunger: {hunger}{space}Happiness:{happiness}')
 
 ## Villager info window ##
 
