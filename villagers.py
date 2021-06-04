@@ -28,6 +28,7 @@ class Villager:
         self.health = config.health_max
         self.happiness = 0
 
+        # Villager Logs
         self.log = []
         self.turn_log = []
 
@@ -143,7 +144,7 @@ class Villager:
     def kill(self):
         '''Kills the villager'''
 
-        pass
+        config.villagers.remove(self)
 
 
 def create_villager():
