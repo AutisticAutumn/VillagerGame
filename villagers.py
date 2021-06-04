@@ -73,6 +73,9 @@ class Villager:
                 food_consumed = init_food - config.food
                 # Add result to log
                 self.turn_log.append(f'{self.name} has consumed {food_consumed} food')
+                # Gain happiness from eating if below 0
+                if self.happiness < 0:
+                    self.gain_happiness(0,1)
             else:
                 # Add result to log
                 self.turn_log.append(f'There is no food for {self.name} to consume')
@@ -109,18 +112,26 @@ class Villager:
             self.turn_log.append(f'{self.name} is quite hungry')
 
     ## Happiness functions ##
+    def gain_happiness(self, min, max):
+        '''Calculate happiness loss and keep within bounds'''
+
+        self.happiness += random.randint(min, max)
+
+        # Check boundries 
+        if self.happiness > config.happiness_max:
+            self.happiness = config.happiness_max
+
+        self.return_happiness_log()
+
+
     def lose_happiness(self, min, max):
         '''Calculate happiness loss and keep within bounds'''
 
         self.happiness -= random.randint(min, max)
 
         # Check boundries
-        if self.happiness > config.happiness_max:
-            self.happiness = config.happiness_max
-        elif self.happiness < config.happiness_min:
+        if self.happiness < config.happiness_min:
             self.happiness = config.happiness_min
-        # The functions min() and max() don't appear to work so this 
-        # is the best solution I can find to fix it
 
         self.return_happiness_log()
 
@@ -133,6 +144,10 @@ class Villager:
             self.turn_log.append(f'{self.name} is currently very unhappy')
         elif self.happiness <= config.happiness_log_boundry[2]:
             self.turn_log.append(f'{self.name} is unhappy')
+        elif self.happiness >= config.happiness_log_boundry[3]:
+            self.turn_log.append(f'{self.name} is happy')
+        elif self.happiness >= config.happiness_log_boundry[4]:
+            self.turn_log.append(f'{self.name} is extremely happy')
 
     ## Health functions ##
     def lose_health(self, min, max):
