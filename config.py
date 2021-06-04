@@ -5,6 +5,7 @@
 # Last modified on 04/06/21
 #
 
+import random
 import professions
 
 # Initiate the global variables
@@ -90,13 +91,18 @@ def get_responses_dict():
             # Get the values for the dictonary
             elif mode == 'GetValues':
                 # If end of entry find the next item
-                if line.strip() == '{':
+                if line.strip() == '}':
                     response_dict[key] = values
                     key = ''
                     values = []
                     mode = 'FindEntry'
                 else:
                     values.append(line.strip())
+
+def get_response(key):
+    '''Return a randomized response from the response dictionary'''
+
+    return random.choice(response_dict[key])
 
 def save():
     '''Save the variables into files'''
