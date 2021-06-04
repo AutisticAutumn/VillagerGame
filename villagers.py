@@ -98,7 +98,7 @@ class Villager:
             self.lose_happiness(0,2)
 
     def lose_happiness(self, min, max):
-        '''Calculate happiness loss and keep withing bounds'''
+        '''Calculate happiness loss and keep within bounds'''
 
         self.happiness -= random.randint(min, max)
 
@@ -117,6 +117,33 @@ class Villager:
             self.turn_log.append(f'{self.name} is getting very unhappy')
         elif self.happiness <= config.happiness_log_boundry[2]:
             self.turn_log.append(f'{self.name} is getting unhappy')
+
+    def lose_health(self, min, max):
+        '''Calculate health loss'''
+
+        self.health -= random.randint(min, max) 
+
+        # Kill if out of bounds
+        if self.health < 0:
+            self.kill()
+
+        # Add losing health to log if too low
+        if self.health <= config.health_log_boundry[0]:
+            self.turn_log.append(f'{self.name} is dying')
+        elif self.health <= config.health_log_boundry[1]:
+            self.turn_log.append(f'{self.name} is deeply wounded')
+        elif self.health <= config.health_log_boundry[2]:
+            self.turn_log.append(f'{self.name} is moderatly injured')
+        elif self.health <= config.health_log_boundry[3]:
+            self.turn_log.append(f'{self.name} is slightly hurt')
+
+        # Lose happiness as result of injury
+        self.lose_happiness(1,2)
+
+    def kill(self):
+        '''Kills the villager'''
+
+        pass
 
 
 def create_villager():
