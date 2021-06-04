@@ -42,7 +42,6 @@ def init():
     professions_dict = {}
     for profession in professions_list:
         professions_dict.update({profession.name : profession})
-    print(professions_dict)
 
 def save():
     '''Save the variables into files'''
