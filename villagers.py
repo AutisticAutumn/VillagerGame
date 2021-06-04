@@ -38,10 +38,15 @@ class Villager:
     ## Turn functions ##
     def end_turn(self):
 
-        # Run action and log the action
+        # Run profession action and log the action
         action = self.profession.action(self)
         if action != None:
             self.turn_log.append(action)
+        
+        # Random attack villagers if unhappy
+        if self.happiness < 0:
+            if random.randint(1,48) <= self.happiness**2:
+                self.attack_villager()
         
         # Add internal logs to the main log
         for action in self.turn_log:
@@ -85,6 +90,20 @@ class Villager:
         else:
             # Add hunger if no food was consumed
             self.gain_hunger(False)
+    
+    def attack_villager(self):
+        '''Function for dealing with villager combat'''
+
+        target = random.choice(config.villagers)
+        damage = random.randint(1,4)
+        
+        if target == self:
+            self.turn_log.append(f'In a fit of range {self.name} has attack themselves dealing {damage} damage')
+        else:
+            self.turn_log.append(f'In a fit of range {self.name} has attack {target.name} for {damage} health')
+            target.turn_log.append(f'{target.name} has been attacked by {self.name} losing {damage} health')
+        
+        target.lose_health(damage, damage)
 
     ## Hunger functions ##
     def gain_hunger(self, lose_happiness):
