@@ -151,7 +151,7 @@ class GameApp:
 
         self.log_text.config(state=tk.DISABLED)
 
-        config.log.append(line)
+        config.log.append((line, colour))
 
     def end_turn(self):
         '''Run end of turn functions'''
