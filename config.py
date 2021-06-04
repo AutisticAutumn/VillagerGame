@@ -59,6 +59,45 @@ def init():
     for profession in professions_list:
         professions_dict.update({profession.name : profession})
 
+    # Create the list of responses
+    get_responses_dict()
+
+def get_responses_dict():
+    '''Produce the dictionary of villager responses'''
+
+    global response_dict
+    response_dict = {}
+
+    # Open file with the responses
+    with open('villagerResponses', 'r') as f:
+        
+        lines = f.readlines()
+
+        mode = 'FindEntry'
+        key = ''
+        values = []
+
+        for line in lines:
+
+            # Check for the next { to begin writing the next dictonary statement
+            if mode == 'FindEntry':
+                if line.strip() == '{':
+                    mode = 'GetKey'
+            # Find the key for the dictonary item
+            elif mode == 'GetKey':
+                key = line.strip()
+                mode = 'GetValues'
+            # Get the values for the dictonary
+            elif mode == 'GetValues':
+                # If end of entry find the next item
+                if line.strip() == '{':
+                    response_dict[key] = values
+                    key = ''
+                    values = []
+                    mode = 'FindEntry'
+                else:
+                    values.append(line.strip())
+
 def save():
     '''Save the variables into files'''
 
