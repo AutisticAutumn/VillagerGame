@@ -7,6 +7,7 @@
 
 import professions
 
+# Initiate the global variables
 def init():
     '''Initializes the global variables for the program'''
 
@@ -14,6 +15,15 @@ def init():
     global village, villagers
     village = []
     villagers = []
+
+    # Villager stat boundries
+    global health_max, hunger_max
+    health_max = 8
+    hunger_max = 8
+
+    global happiness_max, happiness_min
+    happiness_max = 4
+    happiness_min = -4
 
     # Materials
     global food, wood
