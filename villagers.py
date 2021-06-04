@@ -29,7 +29,7 @@ class Villager:
         self.happiness = 0
 
         # Villager Logs
-        self.log = []
+        self.log = [f'Turn {config.turn}']
         self.turn_log = []
 
         # Frame widget
@@ -51,11 +51,11 @@ class Villager:
     def begin_turn(self):  
         '''Beginning of turn functions'''
 
+        # Appends new turn line directly to villager log
+        self.log.append(f'\nTurn {config.turn+1}')
+
         # Reset the turn log
         self.turn_log = []
-
-        # Appends new turn line directly to villager log
-        self.log.append(f'\nTurn {config.turn}')
 
     def append_villager_log(self, line):
         '''Appends a line to the villager log and prints to main log'''
