@@ -29,7 +29,7 @@ class Villager:
         self.happiness = 0
 
         # Villager Logs
-        self.log = [f'Turn {config.turn}']
+        self.log = [(f'Turn {config.turn}', 'white')]
         self.turn_log = []
 
         # Frame widget
@@ -52,7 +52,7 @@ class Villager:
         '''Beginning of turn functions'''
 
         # Appends new turn line directly to villager log
-        self.log.append(f'\nTurn {config.turn+1}')
+        self.log.append((f'\nTurn {config.turn+1}', 'white'))
 
         # Reset the turn log
         self.turn_log = []
@@ -86,7 +86,7 @@ class Villager:
                     self.gain_happiness(0,1)
             else:
                 # Add result to log
-                self.append_villager_log(f'There is no food for {self.name} to consume', 'gold2')
+                self.append_villager_log(f'There is no food for {self.name} to consume', 'red')
                 # Add hunger if no food was consumed
                 self.gain_hunger(True)
 
@@ -177,14 +177,14 @@ class Villager:
 
         self.health -= random.randint(min, max) 
 
+        self.return_health_log()
+
         # Kill if out of bounds
         if self.health <= 0:
             self.kill()
-
-        self.return_health_log()
-
-        # Lose happiness as result of injury
-        self.lose_happiness(1,2)
+        else:
+            # Lose happiness as result of injury
+            self.lose_happiness(1,2)
 
     def return_health_log(self):
         '''Return output to the log based on health'''
