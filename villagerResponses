@@ -2,14 +2,10 @@ Professions
 {
     farmer_action
     {0} has produced {1} food
-    {0} has farmed {1} food
-    {0} has collected {1} food
 }
 {
     feller_action
     {0} has produced {1} wood
-    {0} has harvested {1} wood
-    {0} has colled {1} wood
 }
 
 Villager
@@ -20,8 +16,6 @@ Villager
 {
     no_food_found
     There is no food for {0} to consume
-    {0} was unable to find any food
-    There was not enough food for {0}
 }
 {
     attack_self
@@ -34,14 +28,12 @@ Villager
     {0} has attacked {1} in a fit of anger dealing {2} damage
 }
 {
-    attacked_villager
+    target_villager
     {1} has been attacked by {0} losing {2} health
     {1} was attacked by {0} dealing {2} damage
 }
 {
     hungry
-    {0} is getting hungry
-    {0} is feeling hungry
     {0} is growing hungry
 }
 {
@@ -51,7 +43,6 @@ Villager
 {
     extremely_happy
     {0} is extremely happy
-    {0} is overjoyed
 }
 {
     happy
@@ -59,7 +50,6 @@ Villager
 }
 {
     mildly_unhappy
-    {0} is growing unhappy
     {0} is getting unhappy
 }
 {
@@ -68,28 +58,20 @@ Villager
 }
 {
     extremely_unhappy
-    {0} is extremely unhappy
     {0} is intensely unhappy
 }
 {
     hurt_mild
     {0} is slightly injured
-    {0} is slightly wounded
-    {0} is slightly hurt
 }
 {
     hurt_moderate
     {0} is moderatly injured
-    {0} is moderatly wounded
-    {0} is moderatly hurt
 }
 {
-    hurt_severely 
+    hurt_severe
     {0} is severely injured
-    {0} is severely wounded
-    {0} is severely hurt
 }
-
 {
     near_death 
     {0} is dying
@@ -97,5 +79,4 @@ Villager
 {
     death
     {0} has been killed
-    {0} is dead
 }
