@@ -140,7 +140,7 @@ class VillagerInfoWindow:
         info_frame = tk.Frame(self.root)
         info_frame.grid(row=0, column=0, columnspan=2, padx=8, pady=4)
 
-        title = tk.Label(info_frame, text=parent.title.get(), width=64)
+        title = tk.Label(info_frame, text=parent.title.get(), width=88)
         title.grid(row=0, column=0, pady=4)
 
         stats = tk.Label(info_frame, text=parent.stats.get())
@@ -156,7 +156,7 @@ class VillagerInfoWindow:
         bio_scrollbar = tk.Scrollbar(bio_frame)
         bio_scrollbar.grid(row=0, column=1, sticky=tk.NSEW)
 
-        bio_text = tk.Text(bio_frame, width=24, height=12, wrap=tk.WORD)
+        bio_text = tk.Text(bio_frame, width=32, height=12, wrap=tk.WORD)
         bio_text.grid(row=0, column=0, padx=4, pady=4)
 
         bio_text.config(yscrollcommand=bio_scrollbar.set)
@@ -168,14 +168,25 @@ class VillagerInfoWindow:
         log_scrollbar = tk.Scrollbar(log_frame)
         log_scrollbar.grid(row=0, column=1, sticky=tk.NSEW)
 
-        log_text = tk.Text(log_frame, width=24, height=12, wrap=tk.WORD)
+        log_text = tk.Text(log_frame, width=32, height=12, wrap=tk.WORD, bg='black')
         log_text.grid(row=0, column=0, padx=4, pady=4)
 
         log_text.config(yscrollcommand=log_scrollbar.set)
         log_scrollbar.config(command=log_text.yview)
 
         for line in villager.log:
-            log_text.insert(tk.END, f'{line}\n')
+            
+            # Insert line
+            print(line)
+            log_text.insert(tk.END, f'{line[0]}\n')
+            log_text.see("end")
+
+            # Colour Text
+            tag_id = int(log_text.index('end-1c').split('.')[0]) - 1
+            log_text.tag_add(tag_id, float(tag_id), float(tag_id+1))
+            log_text.tag_config(tag_id, foreground=line[1])
+
+
         log_text.config(state=tk.DISABLED)
     
     def on_closing(self):
