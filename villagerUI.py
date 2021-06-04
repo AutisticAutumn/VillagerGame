@@ -111,7 +111,7 @@ class VillagerFrame:
         health = self.villager.health
         hunger = self.villager.hunger
         happiness = self.villager.happiness
-        self.stats.set(f'Health: {health}{space}Hunger: {hunger}{space}Happiness:{happiness}')
+        self.stats.set(f'Health: {health}{space}Hunger: {hunger}{space}Happiness: {happiness}')
 
 ## Villager info window ##
 
