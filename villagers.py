@@ -45,10 +45,13 @@ class Villager:
     def begin_turn(self):  
         '''Beginning of turn functions'''
 
-        # Clear the turn log
+        self.log.append(f'\nTurn {config.turn}')
+
+        # Add turn log to main log and clear the turn log
+        for line in self.turn_log:
+            self.log.append(line)
         self.turn_log = []
 
-        self.log.append(f'\nTurn {config.turn}')
 
 def create_villager():
     '''Creates a randomized villager and to the village'''
