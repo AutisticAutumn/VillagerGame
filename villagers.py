@@ -35,6 +35,7 @@ class Villager:
         # Frame widget
         self.frame = None
 
+    ## Turn functions ##
     def end_turn(self):
 
         # Run action and log the action
@@ -56,6 +57,7 @@ class Villager:
             self.log.append(line)
         self.turn_log = []
 
+    ## Internal actions ##
     def feed_villager(self):
         '''Feed the villager and calculate stats'''
         # Only caluate food if needed
@@ -81,6 +83,7 @@ class Villager:
             # Add hunger if no food was consumed
             self.gain_hunger(False)
 
+    ## Hunger functions ##
     def gain_hunger(self, lose_happiness):
         '''Add hunger to villager and keep within bounds'''
 
@@ -91,16 +94,21 @@ class Villager:
         if self.hunger > config.hunger_max:
             self.hunger = config.hunger_max
     
-        # Add getting hungry to log if too high
-        if self.hunger >= config.hunger_log_boundry[0]:
-            self.turn_log.append(f'{self.name} is starving')
-        elif self.hunger >= config.hunger_log_boundry[1]:
-            self.turn_log.append(f'{self.name} is getting quite hungry')
+        self.return_hunger_log()
 
         # Lose happiness if requested
         if lose_happiness:
             self.lose_happiness(0,2)
 
+    def return_hunger_log(self):
+        '''Return an output to the logs depending on hunger level'''
+
+        if self.hunger >= config.hunger_log_boundry[0]:
+            self.turn_log.append(f'{self.name} is starving')
+        elif self.hunger >= config.hunger_log_boundry[1]:
+            self.turn_log.append(f'{self.name} is quite hungry')
+
+    ## Happiness functions ##
     def lose_happiness(self, min, max):
         '''Calculate happiness loss and keep within bounds'''
 
@@ -114,14 +122,19 @@ class Villager:
         # The functions min() and max() don't appear to work so this 
         # is the best solution I can find to fix it
 
-        # Add losing happiness to log if too low
+        self.return_happiness_log()
+
+    def return_happiness_log(self):
+        '''Return an output to the logs depending on happiness level'''
+
         if self.happiness <= config.happiness_log_boundry[0]:
             self.turn_log.append(f'{self.name} is intensely unhappy')
         elif self.happiness <= config.happiness_log_boundry[1]:
-            self.turn_log.append(f'{self.name} is getting very unhappy')
+            self.turn_log.append(f'{self.name} is currently very unhappy')
         elif self.happiness <= config.happiness_log_boundry[2]:
-            self.turn_log.append(f'{self.name} is getting unhappy')
+            self.turn_log.append(f'{self.name} is unhappy')
 
+    ## Health functions ##
     def lose_health(self, min, max):
         '''Calculate health loss'''
 
@@ -131,7 +144,14 @@ class Villager:
         if self.health < 0:
             self.kill()
 
-        # Add losing health to log if too low
+        self.return_happiness_log()
+
+        # Lose happiness as result of injury
+        self.lose_happiness(1,2)
+
+    def return_health_log(self):
+        '''Return output to the log based on health'''
+
         if self.health <= config.health_log_boundry[0]:
             self.turn_log.append(f'{self.name} is dying')
         elif self.health <= config.health_log_boundry[1]:
@@ -140,9 +160,6 @@ class Villager:
             self.turn_log.append(f'{self.name} is moderatly injured')
         elif self.health <= config.health_log_boundry[3]:
             self.turn_log.append(f'{self.name} is slightly hurt')
-
-        # Lose happiness as result of injury
-        self.lose_happiness(1,2)
 
     def kill(self):
         '''Kills the villager'''
