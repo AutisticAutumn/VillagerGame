@@ -55,12 +55,13 @@ class VillagerFrame:
 
         # Stats frame widgets #
         self.title = tk.StringVar()
-        self.name_frame = tk.Label(self.stats_frame, textvariable=self.title, width=30)
-        self.name_frame.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
+        self.name_button = tk.Button(self.stats_frame, textvariable=self.title, 
+                                     width=30, command=self.open_villager_window)
+        self.name_button.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
         self.stats = tk.StringVar()
-        self.stats_frame = tk.Label(self.stats_frame, textvariable=self.stats)
-        self.stats_frame.grid(row=1, column=0, padx=2, pady=6, sticky=tk.NSEW)
+        self.stats_label = tk.Label(self.stats_frame, textvariable=self.stats)
+        self.stats_label.grid(row=1, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
         # Professions frame widgets #
         self.professions_menu_var = tk.StringVar()
@@ -91,6 +92,11 @@ class VillagerFrame:
 
         self.villager.profession = config.professions_dict[profession]
         self.update_stats()
+
+    def open_villager_window(self):
+        '''Opens the window for a detailed villager view'''
+
+        self.villager_window = VillagerInfoWindow(self, self.villager)
     
     def update_stats(self):
         '''Updates the onscreen stats and data for the villager'''
@@ -98,3 +104,79 @@ class VillagerFrame:
         self.ascii_name_var.set(self.villager.name)
         self.title.set(f'{self.villager.name} the {self.villager.profession.name}')
         self.stats.set(f'Health: {self.villager.health}        Hunger: {self.villager.hunger}')
+
+## Villager info window ##
+
+class VillagerInfoWindow:
+    '''Brings up a window with all the information for the villager'''
+
+    def __init__(self, parent, villager):
+
+        self.parent = parent
+        self.villager = villager
+
+        # Disable ending turn and modifying villager while open
+        parent.professions_menu.config(state=tk.DISABLED)
+        parent.kill_button.config(state=tk.DISABLED)
+        parent.name_button.config(state=tk.DISABLED)
+        'Action button to be added'
+        parent.parent.end_turn_button.config(state=tk.DISABLED)
+
+        # Initiate the window
+        self.root = tk.Toplevel(parent.parent.root)
+        self.root.title(parent.title.get())
+        self.root.resizable(width=0, height=0)
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+        # Add the title, stats, biography and logs
+        info_frame = tk.Frame(self.root)
+        info_frame.grid(row=0, column=0, columnspan=2, padx=8, pady=4)
+
+        title = tk.Label(info_frame, text=parent.title.get(), width=64)
+        title.grid(row=0, column=0, pady=4)
+
+        stats = tk.Label(info_frame, text=parent.stats.get())
+        stats.grid(row=1, column=0, pady=4)
+
+        bio_frame = tk.Frame(self.root)
+        bio_frame.grid(row=1, column=0, padx=8, pady=8)
+
+        log_frame = tk.Frame(self.root)
+        log_frame.grid(row=1, column=1, padx=8, pady=8)
+
+        # Biography frame data
+        bio_scrollbar = tk.Scrollbar(bio_frame)
+        bio_scrollbar.grid(row=0, column=1, sticky=tk.NSEW)
+
+        bio_text = tk.Text(bio_frame, width=24, height=12, wrap=tk.WORD)
+        bio_text.grid(row=0, column=0, padx=4, pady=4)
+
+        bio_text.config(yscrollcommand=bio_scrollbar.set)
+        bio_scrollbar.config(command=bio_text.yview)
+
+        bio_text.config(state=tk.DISABLED)
+        
+        # Log frame data
+        log_scrollbar = tk.Scrollbar(log_frame)
+        log_scrollbar.grid(row=0, column=1, sticky=tk.NSEW)
+
+        log_text = tk.Text(log_frame, width=24, height=12, wrap=tk.WORD)
+        log_text.grid(row=0, column=0, padx=4, pady=4)
+
+        log_text.config(yscrollcommand=log_scrollbar.set)
+        log_scrollbar.config(command=log_text.yview)
+
+        for line in villager.log:
+            log_text.insert(tk.END, f'{line}\n')
+        log_text.config(state=tk.DISABLED)
+    
+    def on_closing(self):
+        '''Renable the buttons when window is closed'''
+
+        self.parent.professions_menu.config(state=tk.NORMAL)
+        self.parent.kill_button.config(state=tk.NORMAL)
+        self.parent.name_button.config(state=tk.NORMAL)
+        'Action button to be added'
+        self.parent.parent.end_turn_button.config(state=tk.NORMAL)
+
+        self.root.destroy()
