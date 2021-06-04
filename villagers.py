@@ -62,7 +62,7 @@ class Villager:
 
         if not(line in self.turn_log):
             self.turn_log.append(line)
-            self.log.append(line)
+            self.log.append((line, colour))
             self.frame.parent.append_log(line, colour=colour)
 
     ## Internal actions ##
