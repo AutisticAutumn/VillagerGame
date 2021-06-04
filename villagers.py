@@ -75,13 +75,13 @@ class Villager:
                 # Add result to log
                 self.turn_log.append(f'There is no food for {self.name} to consume')
                 # Add hunger if no food was consumed
-                self.add_hunger(True)
+                self.gain_hunger(True)
 
         else:
             # Add hunger if no food was consumed
-            self.add_hunger(False)
+            self.gain_hunger(False)
 
-    def add_hunger(self, lose_happiness):
+    def gain_hunger(self, lose_happiness):
         '''Add hunger to villager and keep within bounds'''
 
         self.hunger += random.randint(config.hunger_range[0],
