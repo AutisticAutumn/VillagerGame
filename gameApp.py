@@ -142,10 +142,10 @@ class GameApp:
                             config.food += config.food*-1
                         food_consumed = init_food - config.food
                         # Add result to log
-                        villager.log.append(f'{villager.name} has consumed {food_consumed} food')
+                        villager.turn_log.append(f'{villager.name} has consumed {food_consumed} food')
                     else:
                         # Add result to log
-                        villager.log.append(f'There is no food for {villager.name} to consume')
+                        villager.turn_log.append(f'There is no food for {villager.name} to consume')
                         # Add hunger if no food was consumed
                         villager.hunger += random.randint(config.hunger_range[0],
                                                           config.hunger_range[1])
