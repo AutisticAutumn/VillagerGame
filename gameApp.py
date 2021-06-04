@@ -86,7 +86,8 @@ class GameApp:
                                  width=48, 
                                  height=24,
                                  state=tk.DISABLED,
-                                 wrap=tk.WORD)
+                                 wrap=tk.WORD,
+                                 bg='black')
         self.log_text.grid(row=0, column=0, padx=4, pady=4)
 
         self.log_text.config(yscrollcommand=self.log_scrollbar.set)
@@ -134,12 +135,20 @@ class GameApp:
             for villager in feeding:
                 villager.feed_villager()
 
-    def append_log(self, line):
+    def append_log(self, line, colour='white'):
         '''Append a single line to the log'''
 
         self.log_text.config(state=tk.NORMAL)
+
+        # Add line
         self.log_text.insert(tk.END, f'{line}\n')
         self.log_text.see("end")
+
+        # Colour Text
+        tag_id = int(self.log_text.index('end-1c').split('.')[0]) - 1
+        self.log_text.tag_add(tag_id, float(tag_id), float(tag_id+1))
+        self.log_text.tag_config(tag_id, foreground=colour)
+
         self.log_text.config(state=tk.DISABLED)
 
         config.log.append(line)
