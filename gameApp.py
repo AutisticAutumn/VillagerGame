@@ -132,6 +132,14 @@ class GameApp:
             for villager in feeding:
                 villager.feed_villager()
 
+    def append_log(self, line):
+        '''Append a single line to the log'''
+
+        self.log_text.config(state=tk.NORMAL)
+        self.log_text.insert(tk.END, f'{line}\n')
+        self.log_text.see("end")
+        self.log_text.config(state=tk.DISABLED)
+
     def end_turn(self):
         '''Run end of turn functions'''
 
@@ -172,3 +180,5 @@ class GameApp:
 
         # Update the gui
         self.update_stats()
+
+        
