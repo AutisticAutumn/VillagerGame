@@ -141,6 +141,8 @@ class GameApp:
         self.log_text.see("end")
         self.log_text.config(state=tk.DISABLED)
 
+        config.log.append(line)
+
     def end_turn(self):
         '''Run end of turn functions'''
 
@@ -151,20 +153,6 @@ class GameApp:
         # Run through all the villagers and run their actions
         for villager in config.villagers:
             villager.end_turn()
-
-        # Updates onscreen logs
-        self.log_text.config(state=tk.NORMAL)
-
-        for line in config.turn_log:
-            self.log_text.insert(tk.END, f'{line}\n')
-        self.log_text.see("end")
-        
-        self.log_text.config(state=tk.DISABLED)
-
-        # Add the turns log to the main log and reset the turn log
-        for line in config.turn_log:
-            config.log.append(line)
-        config.turn_log = []
 
         # Run the beginning of turn functions just before the next turn begins
         for villager in config.villagers:
