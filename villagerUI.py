@@ -22,6 +22,8 @@ class VillagerFrame:
         self.villager = villager
         self.id = id
 
+        self.villager.frame = self
+
     def create_widgets(self):
         '''Create the widgets onscreen for the villager'''
         
@@ -50,7 +52,8 @@ class VillagerFrame:
         self.ascii_name = tk.Label(self.ascii_frame, textvariable=self.ascii_name_var)
         self.ascii_name.grid(row=1, column=0, padx=2, pady=2, sticky=tk.EW)
 
-        self.kill_button = tk.Button(self.ascii_frame, text='Kill', width=8)
+        self.kill_button = tk.Button(self.ascii_frame, text='Kill', 
+                                     width=8, command=self.villager.kill)
         self.kill_button.grid(row=2, column=0, padx=2, pady=2)
 
         # Stats frame widgets #
@@ -103,7 +106,7 @@ class VillagerFrame:
 
         self.ascii_name_var.set(self.villager.name)
         self.title.set(f'{self.villager.name} the {self.villager.profession.name}')
-        
+
         space = '        '
         health = self.villager.health
         hunger = self.villager.hunger
