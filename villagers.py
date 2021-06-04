@@ -30,6 +30,7 @@ class Villager:
 
         # Villager Logs
         self.log = []
+        self.turn_log = []
 
         # Frame widget
         self.frame = None
@@ -50,14 +51,19 @@ class Villager:
     def begin_turn(self):  
         '''Beginning of turn functions'''
 
+        # Reset the turn log
+        self.turn_log = []
+
         # Appends new turn line directly to villager log
         self.log.append(f'\nTurn {config.turn}')
 
     def append_villager_log(self, line):
         '''Appends a line to the villager log and prints to main log'''
 
-        self.log.append(line)
-        self.frame.parent.append_log(line)
+        if not(line in self.turn_log):
+            self.turn_log.append(line)
+            self.log.append(line)
+            self.frame.parent.append_log(line)
 
     ## Internal actions ##
     def feed_villager(self):
