@@ -2,7 +2,7 @@
 # Villager Game
 # Config Module
 # Written by Madeline Autumn
-# Last modified on 03/06/21
+# Last modified on 04/06/21
 #
 
 import professions
@@ -49,4 +49,5 @@ def save():
 
     # Save the logs
     with open('log.txt', 'w') as f:
-        f.writelines(log)
+        for line in log:
+            f.writelines(f'{line}\n')
