@@ -35,7 +35,7 @@ class Farmer:
     def action(self, villager):
         # Collect food
         
-        food_produced = random.randint(2,5)
+        food_produced = random.randint(2,4)
         config.food += food_produced
 
         return f'{villager.name} has produced {food_produced} food'
@@ -52,7 +52,7 @@ class Feller:
     def action(self, villager):
         # Collect Wood
 
-        wood_produced = random.randint(2,4)
+        wood_produced = random.randint(2,3)
         config.wood += wood_produced
 
         return f'{villager.name} has produced {wood_produced} wood'
