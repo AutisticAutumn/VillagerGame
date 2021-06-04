@@ -85,7 +85,8 @@ class GameApp:
         self.log_text = tk.Text(self.right_frame, 
                                  width=48, 
                                  height=24,
-                                 state=tk.DISABLED)
+                                 state=tk.DISABLED,
+                                 wrap=tk.WORD)
         self.log_text.grid(row=0, column=0, padx=4, pady=4)
 
         self.log_text.config(yscrollcommand=self.log_scrollbar.set)
