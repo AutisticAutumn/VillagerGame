@@ -12,7 +12,7 @@ import config
 import random
 
 ### Classes ##
-class map:
+class MapFrame:
     '''Class to deal with the onscreen map of the village'''
 
     def __init__(self, parent, frame):
@@ -54,6 +54,7 @@ class map:
 
         # Enable the map for editing
         self.map.config(state=tk.NORMAL)
+        self.map.delete('1.0', tk.END)
 
         # Run through every position in the map and add a tag to it
         for y in range(1, config.map_y2-config.map_y1+1):
@@ -76,6 +77,8 @@ class map:
 
         # Deletes Trailing newline
         self.map.delete(f'{config.map_y2+1}.0', tk.END)
+
+        print(len(self.map.tag_names()))
 
         # Turn the map back off for editing 
         self.map.config(state=tk.DISABLED)
