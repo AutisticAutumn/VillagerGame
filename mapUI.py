@@ -1,17 +1,16 @@
 #
 # Villager Game
-# VillageUI Module
+# MapUI Module
 # Written by Madeline Autumn
 # Last modified on 05/06/21
 #
 
 ### Importants and Varibles ###
-from random import random
 import tkinter as tk
-import config
+import config, map
 import random
 
-### Classes ##
+### Classes ###
 class MapFrame:
     '''Class to deal with the onscreen map of the village'''
 
@@ -19,6 +18,9 @@ class MapFrame:
 
         self.parent = parent
         self.frame = frame
+
+        self.map = map.Map(self)
+        self.map.build_building('Wooden Hut')
 
         self.create_map()
         self.draw_map()
@@ -35,26 +37,26 @@ class MapFrame:
         self.map_scrollbar_horizontal.grid(row=1, column=0, sticky=tk.NSEW)
 
         # Create the textbox itself
-        self.map = tk.Text(self.frame, 
+        self.map_box = tk.Text(self.frame, 
                                 width=config.map_x2, 
                                 height=config.map_y2,
                                 state=tk.DISABLED,
                                 bg='black')
-        self.map.grid(row=0, column=0, padx=4, pady=4)
+        self.map_box.grid(row=0, column=0, padx=4, pady=4)
 
         # Place the scrollbars in
-        self.map.config(yscrollcommand=self.map_scrollbar_vertical.set)
-        self.map_scrollbar_vertical.config(command=self.map.yview)
+        self.map_box.config(yscrollcommand=self.map_scrollbar_vertical.set)
+        self.map_scrollbar_vertical.config(command=self.map_box.yview)
 
-        self.map.config(xscrollcommand=self.map_scrollbar_horizontal.set)
-        self.map_scrollbar_horizontal.config(command=self.map.xview)
+        self.map_box.config(xscrollcommand=self.map_scrollbar_horizontal.set)
+        self.map_scrollbar_horizontal.config(command=self.map_box.xview)
 
     def draw_map(self):
         '''Draws the map to the screen'''
 
         # Enable the map for editing
-        self.map.config(state=tk.NORMAL)
-        self.map.delete('1.0', tk.END)
+        self.map_box.config(state=tk.NORMAL)
+        self.map_box.delete('1.0', tk.END)
 
         # Run through every position in the map and add a tag to it
         for y in range(1, config.map_y2-config.map_y1+1):
@@ -67,18 +69,16 @@ class MapFrame:
                 item = config.map[key]
 
                 # Add text to the map
-                self.map.insert(pos, item.get_texture())
+                self.map_box.insert(pos, item.get_texture())
 
                 # Add tag to colour text
-                self.map.tag_add(key, pos, pos+'+1c')
-                self.map.tag_config(key, foreground=item.colour)
+                self.map_box.tag_add(key, pos, pos+'+1c')
+                self.map_box.tag_config(key, foreground=item.colour)
 
-            self.map.insert(tk.END, '\n')
+            self.map_box.insert(tk.END, '\n')
 
         # Deletes Trailing newline
-        self.map.delete(f'{config.map_y2+1}.0', tk.END)
-
-        print(len(self.map.tag_names()))
+        self.map_box.delete(f'{config.map_y2+1}.0', tk.END)
 
         # Turn the map back off for editing 
-        self.map.config(state=tk.DISABLED)
+        self.map_box.config(state=tk.DISABLED)
