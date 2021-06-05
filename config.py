@@ -38,6 +38,14 @@ def init():
     food = 10
     wood = 0
 
+    # Map
+    global map_x1, map_x2, map_y1, map_y2, map_item
+    map_x1 = 0
+    map_y1 = 0
+    map_x2 = 48
+    map_y2 = 21
+    map_item = {}
+
     # Turn Log and  counter
     global log, turn
     log = ['Turn 1']
