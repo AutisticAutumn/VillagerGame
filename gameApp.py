@@ -41,7 +41,7 @@ class GameApp:
                                  height=1,
                                  state=tk.DISABLED,
                                  bg='black')
-        self.stats_box.grid(row=1, column=0, padx=6, pady=2, sticky=tk.W)
+        self.stats_box.grid(row=1, column=0, padx=6, pady=6, sticky=tk.W)
 
         ## Centeral Frame ##
         # Create a scrollable frame for the villager modification section
@@ -132,7 +132,6 @@ class GameApp:
 
         wood_start = str(float(food_end)+0.01)
         wood_end = '1.' + str(int(wood_start[2:]) + len(wood_text))
-        print(wood_start, wood_end)
         self.stats_box.tag_add('wood', wood_start, wood_end)
         self.stats_box.tag_config('wood', 
                                   foreground='chocolate', 
