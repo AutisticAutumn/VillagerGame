@@ -2,7 +2,7 @@
 # Villager Game
 # Main Module
 # Written by Madeline Autumn
-# Last modified on 04/06/21
+# Last modified on 05/06/21
 #
 
 ### Importants and Varibles ###
@@ -13,9 +13,12 @@ import villagers
 # Initialize the globals
 config.init()
 
-# Create innitial villagers
+# Create the innitial villagers
 for i in range(3):
     villagers.create_villager()
+
+# Create the innitial map
+config.create_map()
 
 ### Main Game Loop ###
 
