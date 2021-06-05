@@ -19,7 +19,7 @@ class Grass:
         self.name = 'Grass'
         self.description = 'Grass'
         self.texture = '''  '".,  '''
-        self.colour = 'green'
+        self.colours = ['green']
 
     def get_texture(self, randkey):
         '''returns the texture for the building'''
@@ -29,7 +29,7 @@ class Grass:
         texture = random.choice(self.texture)
         random.seed(config.seed)
         
-        return texture
+        return (texture, self.colours[0])
 
 class WoodenHut:
     '''Simple build that holds two villagers'''
@@ -39,13 +39,17 @@ class WoodenHut:
         self.name = 'Wooden Hut'
         self.description = ''
 
-        self.size = (4,2)
+        self.size = (4,3)
         self.pos = 0
         self.texture = '''
 ┌──┐
+│--│
 └──┘'''
+        self.colour_map = (0,0,0,0,
+                           0,1,1,0,
+                           0,0,0,0)
         
-        self.colour = 'saddle brown'
+        self.colours = ['chocolate3', 'brown4']
 
         self.cost = {'food': 0,
                      'wood' : 10}
@@ -53,5 +57,8 @@ class WoodenHut:
 
     def get_texture(self):
         '''returns the texture for the building'''
+
+        texture = self.texture.replace('\n','')[self.pos]
+        colour = self.colours[self.colour_map[self.pos]]
         
-        return self.texture.replace('\n','')[self.pos]
+        return (texture, colour)
