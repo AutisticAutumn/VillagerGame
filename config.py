@@ -6,7 +6,7 @@
 #
 
 import random
-import professions
+import professions, buildings
 
 # Initiate the global variables
 def init():
@@ -39,12 +39,12 @@ def init():
     wood = 0
 
     # Map
-    global map_x1, map_x2, map_y1, map_y2, map_item
+    global map_x1, map_x2, map_y1, map_y2, map
     map_x1 = 0
     map_y1 = 0
     map_x2 = 48
     map_y2 = 21
-    map_item = {}
+    map = {}
 
     # Turn Log and  counter
     global log, turn
@@ -119,3 +119,12 @@ def save():
     with open('log.txt', 'w') as f:
         for line in log:
             f.writelines(f'{line[0]}\n')
+
+def create_map():
+    '''Creates the blank map grid'''
+
+    for y in range(1, map_y2-map_y1+1):
+        for x in range(map_x2-map_x1):
+            
+            key = f'({y}:{x})'
+            map.update({key : buildings.Grass()})
