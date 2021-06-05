@@ -63,20 +63,9 @@ def init():
                         professions.Farmer(),
                         professions.Feller()]
 
-    # Buildings Dictionary
-    global buildings_dict
-    buildings_list = [buildings.WoodenHut()]
-
-    ## Turn the lists into dictionaries
-    # Professions
     professions_dict = {}
     for profession in professions_list:
         professions_dict.update({profession.name : profession})
-
-    # Buildings
-    buildings_dict = {}
-    for building in buildings_list:
-        buildings_dict.update({building.name : building})
 
     # Create the list of responses
     get_responses_dict()
@@ -121,6 +110,12 @@ def get_response(key):
     '''Return a randomized response from the response dictionary'''
 
     return random.choice(response_dict[key])
+
+def get_building(key):
+    '''Returns a unique building object based on input'''
+
+    if key == buildings.WoodenHut().name:
+        return buildings.WoodenHut()
 
 def save():
     '''Save the variables into files'''
