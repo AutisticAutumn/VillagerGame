@@ -52,7 +52,7 @@ class GameApp:
                                           orient='vertical',
                                           command=self.mod_canvas.yview)
 
-        self.mod_frame_scrollable = tk.Frame(self.mod_canvas)
+        self.mod_frame_scrollable = tk.Frame(self.mod_canvas )
 
         self.mod_frame_scrollable.bind("<Configure>", 
                                            lambda e: self.mod_canvas.configure(
@@ -198,5 +198,4 @@ class GameApp:
 
         # Update the gui
         self.update_stats()
-
-        
+        self.map.draw_map()
