@@ -42,7 +42,8 @@ class WoodenHut:
         
         self.colour = 'saddle brown'
 
-        self.cost = {'wood' : 10}
+        self.cost = {'food': 0,
+                     'wood' : 10}
         self.profession = None
 
     def get_texture(self):
