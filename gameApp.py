@@ -34,7 +34,7 @@ class GameApp:
         # Create the frames for the village
         self.village_frame = tk.Frame(self.left_frame)
         self.village_frame.grid(row=0, column=0, padx=2, pady=2, sticky= tk.NSEW)
-        self.map = mapUI.Map(self, self.village_frame)
+        self.map = mapUI.MapFrame(self, self.village_frame)
         
         self.stats_box = tk.Text(self.left_frame,
                                  width=48, 
