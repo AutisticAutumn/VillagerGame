@@ -17,9 +17,6 @@ config.init()
 for i in range(3):
     villagers.create_villager()
 
-# Create the innitial map
-config.create_map()
-
 ### Main Game Loop ###
 
 if __name__ == '__main__':
