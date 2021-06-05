@@ -48,7 +48,7 @@ def init():
 
     # Turn Log and  counter
     global log, turn
-    log = ['Turn 1']
+    log = []
     turn = 1
 
     # Food priority 
