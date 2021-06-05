@@ -33,8 +33,8 @@ class map:
 
         # Create the textbox itself
         self.map = tk.Text(self.frame, 
-                                width=48, 
-                                height=21,
+                                width=config.map_x2, 
+                                height=config.map_y2,
                                 state=tk.DISABLED,
                                 bg='black')
         self.map.grid(row=0, column=0, padx=4, pady=4)
