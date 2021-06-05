@@ -2,7 +2,7 @@
 # Villager Game
 # Buildings Module
 # Written by Madeline Autumn
-# Last modified on 05/06/21
+# Last modified on 06/06/21
 #
 
 ### Imports and variables ###
@@ -18,8 +18,7 @@ class Grass:
         
         self.name = 'Grass'
         self.description = 'Grass'
-        self.texture = [' ', ' ', ' ', ' ',
-                        '`', '.', ',', '"']
+        self.texture = '''  '".,  '''
         self.colour = 'green'
 
     def get_texture(self, randkey):
@@ -40,10 +39,11 @@ class WoodenHut:
         self.name = 'Wooden Hut'
         self.description = ''
 
-        self.size = (3,2)
+        self.size = (4,2)
         self.pos = 0
-        self.texture = ['┌','─','┐',
-                        '└','─','┘']
+        self.texture = '''
+┌──┐
+└──┘'''
         
         self.colour = 'saddle brown'
 
@@ -54,4 +54,4 @@ class WoodenHut:
     def get_texture(self):
         '''returns the texture for the building'''
         
-        return self.texture[self.pos]
+        return self.texture.replace('\n','')[self.pos]
