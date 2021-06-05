@@ -23,15 +23,25 @@ class map:
     def create_map(self):
         '''Creates the onscreen mapbox'''
 
-        self.map_scrollbar = tk.Scrollbar(self.frame)
-        self.map_scrollbar.grid(row=0, column=1, sticky=tk.NSEW)
+        # Create the scrollbars
+        self.map_scrollbar_vertical = tk.Scrollbar(self.frame)
+        self.map_scrollbar_vertical.grid(row=0, column=1, sticky=tk.NSEW)
 
-        self.map_text = tk.Text(self.frame, 
+        self.map_scrollbar_horizontal = tk.Scrollbar(self.frame, 
+                                                     orient=tk.HORIZONTAL)
+        self.map_scrollbar_horizontal.grid(row=1, column=0, sticky=tk.NSEW)
+
+        # Create the textbox itself
+        self.map = tk.Text(self.frame, 
                                 width=48, 
                                 height=21,
                                 state=tk.DISABLED,
                                 bg='black')
-        self.map_text.grid(row=0, column=0, padx=4, pady=4)
+        self.map.grid(row=0, column=0, padx=4, pady=4)
 
-        self.map_text.config(yscrollcommand=self.map_scrollbar.set)
-        self.map_scrollbar.config(command=self.map_text.yview)
+        # Place the scrollbars in
+        self.map.config(yscrollcommand=self.map_scrollbar_vertical.set)
+        self.map_scrollbar_vertical.config(command=self.map.yview)
+
+        self.map.config(xscrollcommand=self.map_scrollbar_horizontal.set)
+        self.map_scrollbar_horizontal.config(command=self.map.xview)
