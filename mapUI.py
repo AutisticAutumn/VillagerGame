@@ -6,8 +6,10 @@
 #
 
 ### Importants and Varibles ###
+from random import random
 import tkinter as tk
 import config
+import random
 
 ### Classes ##
 class map:
@@ -19,6 +21,7 @@ class map:
         self.frame = frame
 
         self.create_map()
+        self.draw_map()
 
     def create_map(self):
         '''Creates the onscreen mapbox'''
@@ -45,3 +48,34 @@ class map:
 
         self.map.config(xscrollcommand=self.map_scrollbar_horizontal.set)
         self.map_scrollbar_horizontal.config(command=self.map.xview)
+
+    def draw_map(self):
+        '''Draws the map to the screen'''
+
+        # Enable the map for editing
+        self.map.config(state=tk.NORMAL)
+
+        # Run through every position in the map and add a tag to it
+        for y in range(1, config.map_y2-config.map_y1+1):
+            for x in range(1, config.map_x2-config.map_x1+1):
+                
+                # Get the position and key
+                pos = f'{y}.{x-1}'
+                key = f'({y}:{x})'
+
+                item = random.choice([' ',' ','.',',','`'])
+
+                # Add text to the map
+                self.map.insert(pos, item)
+
+                # Add tag to colour text
+                self.map.tag_add(key, pos, pos+'+1c')
+                self.map.tag_config(key, foreground='dark green')
+
+            self.map.insert(tk.END, '\n')
+
+        # Deletes Trailing newline
+        self.map.delete(f'{config.map_y2+1}.0', tk.END)
+
+        # Turn the map back off for editing 
+        self.map.config(state=tk.DISABLED)
