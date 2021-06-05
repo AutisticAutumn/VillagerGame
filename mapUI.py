@@ -57,20 +57,20 @@ class map:
 
         # Run through every position in the map and add a tag to it
         for y in range(1, config.map_y2-config.map_y1+1):
-            for x in range(1, config.map_x2-config.map_x1+1):
+            for x in range(config.map_x2-config.map_x1):
                 
                 # Get the position and key
                 pos = f'{y}.{x-1}'
                 key = f'({y}:{x})'
 
-                item = random.choice([' ',' ','.',',','`'])
+                item = config.map[key]
 
                 # Add text to the map
-                self.map.insert(pos, item)
+                self.map.insert(pos, item.get_texture())
 
                 # Add tag to colour text
                 self.map.tag_add(key, pos, pos+'+1c')
-                self.map.tag_config(key, foreground='dark green')
+                self.map.tag_config(key, foreground=item.colour)
 
             self.map.insert(tk.END, '\n')
 
