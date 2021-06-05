@@ -66,15 +66,20 @@ class MapFrame:
                 pos = f'{y}.{x-1}'
                 key = f'({y}:{x})'
 
-                item = config.map[key]
-
-                # Add text to the map
-                self.map_box.insert(pos, item.get_texture())
+                # Draw a building if it exists. Place grass if else
+                try:
+                    item = config.map[key]
+                    # Add text to the map
+                    self.map_box.insert(pos, item.get_texture())
+                except:
+                    item = config.get_building('Grass')
+                    # Add text to the map
+                    self.map_box.insert(pos, item.get_texture(y + x*123456))
 
                 # Add tag to colour text
                 self.map_box.tag_add(key, pos, pos+'+1c')
                 self.map_box.tag_config(key, foreground=item.colour)
-
+            
             self.map_box.insert(tk.END, '\n')
 
         # Deletes Trailing newline
