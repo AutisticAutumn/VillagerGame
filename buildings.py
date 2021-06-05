@@ -34,5 +34,18 @@ class WoodenHut:
 
         self.name = 'Wooden Hut'
         self.description = ''
+
+        self.size = (3,2)
+        self.pos = 0
+        self.texture = ['┌','─','┐',
+                        '└','─','┘']
+        
+        self.colour = 'saddle brown'
+
         self.cost = {'wood' : 10}
         self.profession = None
+
+    def get_texture(self):
+        '''returns the texture for the building'''
+        
+        return self.texture[self.pos]
