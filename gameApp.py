@@ -2,7 +2,7 @@
 # Villager Game
 # Main Game Application Module
 # Written by Madeline Autumn
-# Last modified on 05/06/21
+# Last modified on 04/06/21
 #
 
 ### Importants and Varibles ###
@@ -35,32 +35,30 @@ class GameApp:
         self.village_frame = tk.Frame(self.left_frame)
         self.village_frame.grid(row=0, column=0, padx=2, pady=2, sticky= tk.NSEW)
         self.map = mapUI.map(self, self.village_frame)
-
-        # Create the frame for the statistics
-        self.stats_frame = tk.LabelFrame(self.left_frame, text='Statistics')
-        self.stats_frame.grid(row=1, column=0, padx=2, pady=2)
-
-        # Create the labels for the statistics
-        self.food_stat_var = tk.StringVar()
-        self.food_stat_label = tk.Label(self.stats_frame, textvariable=self.food_stat_var)
-        self.food_stat_label.grid(row=1, column=0, padx=8, pady=2, sticky=tk.NSEW)
-
-        self.wood_stat_var = tk.StringVar()
-        self.wood_stat_label = tk.Label(self.stats_frame, textvariable=self.wood_stat_var)
-        self.wood_stat_label.grid(row=1, column=1, padx=8, pady=2, sticky=tk.NSEW)
+        
+        self.stats_box = tk.Text(self.left_frame,
+                                 width=48, 
+                                 height=1,
+                                 state=tk.DISABLED,
+                                 bg='black')
+        self.stats_box.grid(row=1, column=0, padx=6, pady=2, sticky=tk.W)
 
         ## Centeral Frame ##
         # Create a scrollable frame for the villager modification section
         self.mod_frame = tk.Frame(self.center_frame)
 
-        self.mod_canvas = tk.Canvas(self.mod_frame)
+        self.mod_canvas = tk.Canvas(self.mod_frame, height= 320)
         self.mod_scrollbar = tk.Scrollbar(self.mod_frame,
                                           orient='vertical',
                                           command=self.mod_canvas.yview)
 
         self.mod_frame_scrollable = tk.Frame(self.mod_canvas)
 
-        self.mod_frame_scrollable.bind("<Configure>", lambda e: self.mod_canvas.configure(scrollregion=self.mod_canvas.bbox("all")))
+        self.mod_frame_scrollable.bind("<Configure>", 
+                                           lambda e: self.mod_canvas.configure(
+                                               scrollregion=self.mod_canvas.bbox("all")
+                                            )
+                                        )
 
         self.mod_canvas.create_window((0, 0), window=self.mod_frame_scrollable, anchor="nw")
         self.mod_canvas.configure(yscrollcommand=self.mod_scrollbar.set)
@@ -114,9 +112,35 @@ class GameApp:
     def update_stats(self):
         '''Updates the onscreen stats'''
 
-        self.food_stat_var.set(f'Total Food: {config.food}')
-        self.wood_stat_var.set(f'Total Wood: {config.wood}')
+        # Update the stats 
+        food_text = f'Total Food: {config.food}    '
+        wood_text = f'Total Wood: {config.wood}'
 
+        self.stats_box.config(state=tk.NORMAL)
+
+        # Add text to the box
+        self.stats_box.delete('1.0', tk.END)
+        self.stats_box.insert(tk.END, food_text + wood_text)
+
+        # Add colour to the stats
+        food_start = '1.0'
+        food_end = '1.' + str(len(food_text)-1)
+        self.stats_box.tag_add('food', food_start, food_end)
+        self.stats_box.tag_config('food', 
+                                  foreground='lime', 
+                                  justify=tk.CENTER)
+
+        wood_start = str(float(food_end)+0.01)
+        wood_end = '1.' + str(int(wood_start[2:]) + len(wood_text))
+        print(wood_start, wood_end)
+        self.stats_box.tag_add('wood', wood_start, wood_end)
+        self.stats_box.tag_config('wood', 
+                                  foreground='chocolate', 
+                                  justify=tk.CENTER)
+
+        self.stats_box.config(state=tk.DISABLED)
+
+        # Update the villagers
         for villager_frame in self.villager_frames:
             villager_frame.update_stats()
 
