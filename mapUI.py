@@ -20,7 +20,7 @@ class MapFrame:
         self.frame = frame
 
         self.map = map.Map(self)
-        self.map.build_building('Wooden Hut')
+        self.map.build_building('Wooden Hut', False)
 
         self.create_map()
         self.draw_map()
@@ -68,17 +68,17 @@ class MapFrame:
 
                 # Draw a building if it exists. Place grass if else
                 try:
-                    item = config.map[key]
+                    item = config.map[key].get_texture()
                     # Add text to the map
-                    self.map_box.insert(pos, item.get_texture())
+                    self.map_box.insert(pos, item[0])
                 except:
-                    item = config.get_building('Grass')
+                    item = config.get_building('Grass').get_texture(y + x*123456)
                     # Add text to the map
-                    self.map_box.insert(pos, item.get_texture(y + x*123456))
+                    self.map_box.insert(pos, item[0])
 
                 # Add tag to colour text
                 self.map_box.tag_add(key, pos, pos+'+1c')
-                self.map_box.tag_config(key, foreground=item.colour)
+                self.map_box.tag_config(key, foreground=item[1])
             
             self.map_box.insert(tk.END, '\n')
 
