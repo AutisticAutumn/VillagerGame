@@ -22,10 +22,15 @@ class Grass:
                         '`', '.', ',', '"']
         self.colour = 'green'
 
-    def get_texture(self):
+    def get_texture(self, randkey):
         '''returns the texture for the building'''
 
-        return random.choice(self.texture)
+        # Make sure texture is psudo-random 
+        random.seed(config.grass_seed + randkey)
+        texture = random.choice(self.texture)
+        random.seed(config.seed)
+        
+        return texture
 
 class WoodenHut:
     '''Simple build that holds two villagers'''
