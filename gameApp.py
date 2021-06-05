@@ -2,12 +2,12 @@
 # Villager Game
 # Main Game Application Module
 # Written by Madeline Autumn
-# Last modified on 04/06/21
+# Last modified on 05/06/21
 #
 
 ### Importants and Varibles ###
 import tkinter as tk
-import config, villagerUI
+import config, villagerUI, mapUI
 import random
 
 ### Classes ###
@@ -32,8 +32,9 @@ class GameApp:
 
         ## Left Frame ##
         # Create the frames for the village
-        self.village_frame = tk.LabelFrame(self.left_frame, text='Village')
-        self.village_frame.grid(row=0, column=0, padx=2, pady=2)
+        self.village_frame = tk.Frame(self.left_frame)
+        self.village_frame.grid(row=0, column=0, padx=2, pady=2, sticky= tk.NSEW)
+        self.map = mapUI.map(self, self.village_frame)
 
         # Create the frame for the statistics
         self.stats_frame = tk.LabelFrame(self.left_frame, text='Statistics')
