@@ -114,6 +114,9 @@ def get_response(key):
 def get_building(key):
     '''Returns a unique building object based on input'''
 
+    if key == buildings.Grass().name:
+        return buildings.Grass()
+    
     if key == buildings.WoodenHut().name:
         return buildings.WoodenHut()
 
@@ -124,12 +127,3 @@ def save():
     with open('log.txt', 'w') as f:
         for line in log:
             f.writelines(f'{line[0]}\n')
-
-def create_map():
-    '''Creates the blank map grid'''
-
-    for y in range(1, map_y2-map_y1+1):
-        for x in range(map_x2-map_x1):
-            
-            key = f'({y}:{x})'
-            map.update({key : buildings.Grass()})
