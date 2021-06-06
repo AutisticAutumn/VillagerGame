@@ -27,7 +27,7 @@ class Grass:
         # Make sure texture is psudo-random 
         random.seed(config.grass_seed + randkey)
         texture = random.choice(self.texture)
-        random.seed(config.seed + config.turn())
+        random.seed(config.seed + config.turn)
         
         return (texture, self.colours[0])
 
