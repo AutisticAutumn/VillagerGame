@@ -1,64 +1,135 @@
 #
 # Villager Game
-# Buildings Module
+# Config Module
 # Written by Madeline Autumn
-# Last modified on 06/06/21
+# Last modified on 04/06/21
 #
 
-### Imports and variables ###
 import random
-import config
+import professions, buildings
 
-### Buildings ###
+# Initiate the global variables
+def init():
+    '''Initializes the global variables for the program'''
+    
+    # Random seeds
+    global seed, grass_seed
+    seed = random.randint(1000000000,9999999999)
+    random.seed(seed)
+    grass_seed = random.randint(1000000000,9999999999)
 
-class Grass:
-    '''Default grass. Does nothing'''
+    # Villagers and housing
+    global village, villagers
+    village = []
+    villagers = []
 
-    def __init__(self):
+    # Villager stat boundries
+    global health_max, hunger_max
+    health_max = 8
+    hunger_max = 8
+
+    global happiness_max, happiness_min
+    happiness_max = 4
+    happiness_min = -4
+
+    # Boundries for when villages returns logs for high stats
+    # Stats at most extreme to least
+    global happiness_log_boundry, hunger_log_boundry, health_log_boundry
+    happiness_log_boundry = [-4, -3, -1, 2, 4]
+    hunger_log_boundry = [7, 4]
+    health_log_boundry = [1, 3, 5, 7]
+
+    # Materials
+    global food, wood
+    food = 10
+    wood = 0
+
+    # Map
+    global map_x1, map_x2, map_y1, map_y2, map
+    map_x1 = 0
+    map_y1 = 0
+    map_x2 = 96
+    map_y2 = 42
+    map = {}
+
+    # Turn Log and  counter
+    global log, turn
+    log = []
+    turn = 1
+
+    # Food priority 
+    global food_priority_values, food_priority, hunger_range
+    food_priority_values = ('High', 'Normal', 'Low')
+    food_priority = [[],[],[]]
+    hunger_range = (1, 3)
+
+    # Professions Dictionary
+    global professions_dict
+    professions_list = [professions.Unemployed(),
+                        professions.Farmer(),
+                        professions.Feller()]
+
+    professions_dict = {}
+    for profession in professions_list:
+        professions_dict.update({profession.name : profession})
+
+    # Create the list of responses
+    get_responses_dict()
+
+def get_responses_dict():
+    '''Produce the dictionary of villager responses'''
+
+    global response_dict
+    response_dict = {}
+
+    # Open file with the responses
+    with open('villagerResponses', 'r') as f:
         
-        self.name = 'Grass'
-        self.description = 'Grass'
-        self.texture = '''  '".,  '''
-        self.colours = ['green']
+        lines = f.readlines()
 
-    def get_texture(self, randkey):
-        '''returns the texture for the building'''
+        mode = 'FindEntry'
+        key = ''
+        values = []
 
-        # Make sure texture is psudo-random 
-        random.seed(config.grass_seed + randkey)
-        texture = random.choice(self.texture)
-        random.seed(config.seed + config.turn)
-        
-        return (texture, self.colours[0])
+        for line in lines:
 
-class WoodenHut:
-    '''Simple build that holds two villagers'''
+            # Check for the next { to begin writing the next dictonary statement
+            if mode == 'FindEntry':
+                if line.strip() == '{':
+                    mode = 'GetKey'
+            # Find the key for the dictonary item
+            elif mode == 'GetKey':
+                key = line.strip()
+                mode = 'GetValues'
+            # Get the values for the dictonary
+            elif mode == 'GetValues':
+                # If end of entry find the next item
+                if line.strip() == '}':
+                    response_dict[key] = values
+                    key = ''
+                    values = []
+                    mode = 'FindEntry'
+                else:
+                    values.append(line.strip())
 
-    def __init__(self):
+def get_response(key):
+    '''Return a randomized response from the response dictionary'''
 
-        self.name = 'Wooden Hut'
-        self.description = ''
+    return random.choice(response_dict[key])
 
-        self.size = (4,3)
-        self.pos = 0
-        self.texture = '''
-┌──┐
-│--│
-└──┘'''
-        self.colour_map = (0,0,0,0,
-                           0,1,1,0,
-                           0,0,0,0)
-        
-        self.colours = ['chocolate3', 'brown4']
+def get_building(key):
+    '''Returns a unique building object based on input'''
 
-        self.cost = {'food': 0,
-                     'wood' : 10}
-        self.profession = None
+    if key == buildings.Grass().name:
+        return buildings.Grass()
+    
+    if key == buildings.WoodenHut().name:
+        return buildings.WoodenHut()
 
-    def get_texture(self):
-        '''returns the texture for the building'''
+def save():
+    '''Save the variables into files'''
 
-        texture = self.texture.replace('\n','')[self.pos]
-        colour = self.colours[self.colour_map[self.pos]]
-        
-        return (texture, colour)
+    # Save the logs
+    with open('log.txt', 'w') as f:
+        for line in log:
+            f.writelines(f'{line[0]}\n')
