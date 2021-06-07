@@ -23,8 +23,8 @@ class Map:
         building = config.get_building(key)
 
         # Get the building position
-        posy = 6
-        posx = 13
+        building.pos_x = 12
+        building.pos_y = 6
 
         # Make payments for building
         if pay:
@@ -45,10 +45,7 @@ class Map:
             for y in range(building.size[1]):
                 
                 # Get unique building object and data 
-                building = config.get_building(key)
-                segment = x + (y*building.size[0])
-                pos_key = f'({posy+y}:{posx+x})'
+                pos_key = f'({building.pos_y+y}:{building.pos_x+x})'
 
                 # Add building to map
                 config.map[pos_key] = building
-                config.map[pos_key].pos = segment
