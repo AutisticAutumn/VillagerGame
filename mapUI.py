@@ -44,7 +44,8 @@ class MapFrame:
                                 width=self.map_size[0], 
                                 height=self.map_size[1],
                                 state=tk.DISABLED,
-                                bg='black')
+                                bg='black',
+                                wrap=tk.NONE)
         self.map_box.grid(row=0, column=0, padx=4, pady=4)
 
         # Place the scrollbars in
