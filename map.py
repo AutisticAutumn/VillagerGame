@@ -26,6 +26,17 @@ class Map:
         building.pos_x = 12
         building.pos_y = 6
 
+        # Check the selected area has enough space
+        for x in range(building.size[0]):
+            for y in range(building.size[1]):
+                
+                # Get unique building object and data 
+                pos_key = f'({building.pos_y+y}:{building.pos_x+x})'
+                
+                if pos_key in config.map.keys():
+                    print('True')
+                    return False
+
         # Make payments for building
         if pay:
             # Check food
