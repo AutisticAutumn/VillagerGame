@@ -2,7 +2,7 @@
 # Villager Game
 # Map Module
 # Written by Madeline Autumn
-# Last modified on 05/06/21
+# Last modified on 07/06/21
 #
 
 ### Importants and Varibles ###
@@ -16,15 +16,9 @@ class Map:
     def __init__(self, frame):
 
         self.frame = frame
-    
-    def build_building(self, key, pay=True):
-        '''Creates a building on the map'''
 
-        building = config.get_building(key)
-
-        # Get the building position
-        building.pos_x = 12
-        building.pos_y = 6
+    def check_free_land(self, building, pos_x, pos_y):
+        '''Checks if the land is free from buildings based on set building'''
 
         # Check the selected area has enough space
         for x in range(building.size[0]):
@@ -36,6 +30,21 @@ class Map:
                 if pos_key in config.map.keys():
                     print('True')
                     return False
+        
+        return True
+    
+    def build_building(self, key, pay=True):
+        '''Creates a building on the map'''
+
+        building = config.get_building(key)
+
+        # Get the building position
+        building.pos_x = 12
+        building.pos_y = 6
+
+        if not(self.check_free_land(building, building.pos_x, building.pos_y)):
+            return False
+
 
         # Make payments for building
         if pay:
