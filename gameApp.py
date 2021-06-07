@@ -8,7 +8,7 @@
 ### Importants and Varibles ###
 import tkinter as tk
 import config, villagerUI, mapUI
-import random
+import random, buildings
 
 ### Classes ###
 class GameApp:
@@ -191,6 +191,13 @@ class GameApp:
         # Run the beginning of turn functions just before the next turn begins
         for villager in config.villagers:
             villager.begin_turn()
+
+        # End game if no villagers are remaining
+        if len(config.villagers) == 0:
+            self.append_log(config.get_response('game_over'))
+            self.append_log('GAME OVER')
+            self.end_turn_button.config(state=tk.DISABLED)
+            return False
 
         # Update turn counter and add to the logs
         config.turn += 1
