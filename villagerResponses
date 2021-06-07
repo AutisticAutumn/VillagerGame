@@ -80,3 +80,7 @@ Villager
     death
     {0} has been killed
 }
+{
+    game_over
+    There are no villagers remaining
+}
