@@ -45,7 +45,7 @@ class WoodenHut:
         self.size = (4,3)
         self.texture = '''
 ┌──┐
-│--│
+│##│
 └──┘'''
         self.colour_map = (0,0,0,0,
                            0,1,1,0,
