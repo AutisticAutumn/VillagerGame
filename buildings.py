@@ -27,7 +27,7 @@ class Grass:
         # Make sure texture is psudo-random 
         random.seed(config.grass_seed + randkey)
         texture = random.choice(self.texture)
-        random.seed(config.seed)
+        random.seed(config.seed + config.turn)
         
         return (texture, self.colours[0])
 
@@ -40,7 +40,6 @@ class WoodenHut:
         self.description = ''
 
         self.size = (4,3)
-        self.pos = 0
         self.texture = '''
 ┌──┐
 │--│
@@ -55,10 +54,10 @@ class WoodenHut:
                      'wood' : 10}
         self.profession = None
 
-    def get_texture(self):
+    def get_texture(self, pos):
         '''returns the texture for the building'''
 
-        texture = self.texture.replace('\n','')[self.pos]
-        colour = self.colours[self.colour_map[self.pos]]
+        texture = self.texture.replace('\n','')[pos]
+        colour = self.colours[self.colour_map[pos]]
         
         return (texture, colour)
