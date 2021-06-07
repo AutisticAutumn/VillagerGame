@@ -20,10 +20,11 @@ class MapFrame:
         self.frame = frame
 
         self.map = map.Map(self)
-        self.map.build_building('Wooden Hut', False)
 
         self.create_map()
         self.draw_map()
+
+        self.map.build_building('Wooden Hut', False)
 
     def create_map(self):
         '''Creates the onscreen mapbox'''
@@ -52,7 +53,7 @@ class MapFrame:
         self.map_scrollbar_horizontal.config(command=self.map_box.xview)
 
     def draw_map(self):
-        '''Draws the map to the screen'''
+        '''Draws the base map to the screen. No buildings are drawn'''
 
         # Enable the map for editing
         self.map_box.config(state=tk.NORMAL)
@@ -66,15 +67,9 @@ class MapFrame:
                 pos = f'{y}.{x-1}'
                 key = f'({y}:{x})'
 
-                # Draw a building if it exists. Place grass if else
-                try:
-                    item = config.map[key].get_texture()
-                    # Add text to the map
-                    self.map_box.insert(pos, item[0])
-                except:
-                    item = config.get_building('Grass').get_texture(y + x*123456)
-                    # Add text to the map
-                    self.map_box.insert(pos, item[0])
+                # Get and add grass texture to map
+                item = config.get_building('Grass').get_texture(y + x*123456)
+                self.map_box.insert(pos, item[0])
 
                 # Add tag to colour text
                 self.map_box.tag_add(key, pos, pos+'+1c')
@@ -85,5 +80,48 @@ class MapFrame:
         # Deletes Trailing newline
         self.map_box.delete(f'{config.map_y2+1}.0', tk.END)
 
-        # Turn the map back off for editing 
+        # Turn the map back off 
         self.map_box.config(state=tk.DISABLED)
+
+    def insert_building(self, pos_key):
+        '''Insert a building onto the map.
+            pos_key should be top right corner of the building'''
+
+        # Maker sure building exists at the position
+        try:
+            # Get the building object from the map
+            building = config.map[pos_key]
+
+            # Enable the map for editing
+            self.map_box.config(state=tk.NORMAL)
+
+            # Get variables for the for loop
+            x0 = building.pos_x
+            x1 = building.pos_x+building.size[0]
+
+            y0 = building.pos_y
+            y1 = building.pos_y+building.size[1]
+
+            # Run through the complete building
+            for y in range(y0, y1):
+                for x in range(x0, x1):
+                    
+                    # Get the position for the building in textbox form
+                    pos_key = f'{y}.{x-1}'
+
+                    # Delete the current text at that position
+                    self.map_box.delete(pos_key, pos_key+'+1c')
+
+                    # Insert new text into the widget and add the tag
+                    pos = (x-x0)+((y-y0)*building.size[0])
+                    print(pos)
+                    texture = building.get_texture(pos)
+                    self.map_box.insert(pos_key, texture[0])
+
+                    self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
+                    self.map_box.tag_config(pos_key, foreground=texture[1])
+            
+            # Turn the map back off 
+            self.map_box.config(state=tk.DISABLED)
+        except:
+            return False
