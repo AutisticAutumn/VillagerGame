@@ -21,6 +21,8 @@ class MapFrame:
 
         self.map = map.Map(self)
 
+        self.map_size = (48, 21)
+
         self.create_map()
         self.draw_map()
 
@@ -39,8 +41,8 @@ class MapFrame:
 
         # Create the textbox itself
         self.map_box = tk.Text(self.frame, 
-                                width=config.map_x2, 
-                                height=config.map_y2,
+                                width=self.map_size[0], 
+                                height=self.map_size[1],
                                 state=tk.DISABLED,
                                 bg='black')
         self.map_box.grid(row=0, column=0, padx=4, pady=4)
