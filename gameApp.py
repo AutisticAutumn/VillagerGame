@@ -205,4 +205,3 @@ class GameApp:
 
         # Update the gui
         self.update_stats()
-        self.map.draw_map()
