@@ -34,7 +34,10 @@ class Grass:
 class WoodenHut:
     '''Simple build that holds two villagers'''
 
-    def __init__(self):
+    def __init__(self, pos_x=None, pos_y=None):
+
+        self.pos_x = pos_x
+        self.pos_y = pos_y
 
         self.name = 'Wooden Hut'
         self.description = ''
