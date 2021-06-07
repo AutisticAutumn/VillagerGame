@@ -2,7 +2,7 @@
 # Villager Game
 # MapUI Module
 # Written by Madeline Autumn
-# Last modified on 05/06/21
+# Last modified on 07/06/21
 #
 
 ### Importants and Varibles ###
@@ -114,7 +114,6 @@ class MapFrame:
 
                     # Insert new text into the widget and add the tag
                     pos = (x-x0)+((y-y0)*building.size[0])
-                    print(pos)
                     texture = building.get_texture(pos)
                     self.map_box.insert(pos_key, texture[0])
 
