@@ -49,3 +49,6 @@ class Map:
 
                 # Add building to map
                 config.map[pos_key] = building
+        
+        # Draw building onscreen
+        self.frame.insert_building(f'({building.pos_y}:{building.pos_x})')
