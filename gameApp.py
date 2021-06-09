@@ -47,7 +47,7 @@ class GameApp:
         # Create a scrollable frame for the villager modification section
         self.mod_frame = tk.Frame(self.center_frame)
 
-        self.mod_canvas = tk.Canvas(self.mod_frame, height= 320, width=416)
+        self.mod_canvas = tk.Canvas(self.mod_frame, height= 320, width=420)
         self.mod_scrollbar = tk.Scrollbar(self.mod_frame,
                                           orient='vertical',
                                           command=self.mod_canvas.yview)
