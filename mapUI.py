@@ -19,7 +19,8 @@ class MapFrame:
         self.parent = parent
         self.frame = frame
 
-        self.map = map.Map(self)
+        self.map = config.map
+        self.map.frame = self
 
         self.map_size = (48, 21)
 
@@ -63,8 +64,8 @@ class MapFrame:
         self.map_box.delete('1.0', tk.END)
 
         # Run through every position in the map and add a tag to it
-        for y in range(1, config.map_y2-config.map_y1+1):
-            for x in range(config.map_x2-config.map_x1):
+        for y in range(1, self.map.map_y2-self.map.map_y1+1):
+            for x in range(self.map.map_x2-self.map.map_x1):
                 
                 # Get the position and key
                 pos = f'{y}.{x-1}'
@@ -81,7 +82,7 @@ class MapFrame:
             self.map_box.insert(tk.END, '\n')
 
         # Deletes Trailing newline
-        self.map_box.delete(f'{config.map_y2+1}.0', tk.END)
+        self.map_box.delete(f'{self.map.map_y2+1}.0', tk.END)
 
         # Turn the map back off 
         self.map_box.config(state=tk.DISABLED)
@@ -93,7 +94,7 @@ class MapFrame:
         # Maker sure building exists at the position
         try:
             # Get the building object from the map
-            building = config.map[pos_key]
+            building = self.map.map[pos_key]
 
             # Enable the map for editing
             self.map_box.config(state=tk.NORMAL)
