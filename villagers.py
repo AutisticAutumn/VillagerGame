@@ -32,6 +32,9 @@ class Villager:
         self.log = [(f'Turn {config.turn}', 'white')]
         self.turn_log = []
 
+        # Turn action
+        self.turn_action = None
+
         # Frame widget
         self.frame = None
 
@@ -54,8 +57,9 @@ class Villager:
         # Appends new turn line directly to villager log
         self.log.append((f'\nTurn {config.turn+1}', 'white'))
 
-        # Reset the turn log
+        # Reset variables
         self.turn_log = []
+        self.turn_action = None
 
     def append_villager_log(self, line, colour='white'):
         '''Appends a line to the villager log and prints to main log'''
