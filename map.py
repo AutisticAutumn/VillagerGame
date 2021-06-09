@@ -2,7 +2,7 @@
 # Villager Game
 # Map Module
 # Written by Madeline Autumn
-# Last modified on 07/06/21
+# Last modified on 09/06/21
 #
 
 ### Importants and Varibles ###
@@ -36,7 +36,7 @@ class Map:
                 # Get unique building object and data 
                 pos_key = f'({building.pos_y+y}:{building.pos_x+x})'
                 
-                if pos_key in config.map.keys():
+                if pos_key in self.map.keys():
                     print('True')
                     return False
         
@@ -77,7 +77,7 @@ class Map:
                 pos_key = f'({building.pos_y+y}:{building.pos_x+x})'
 
                 # Add building to map
-                config.map[pos_key] = building
+                self.map[pos_key] = building
         
         # Draw building onscreen
         self.frame.insert_building(f'({building.pos_y}:{building.pos_x})')
