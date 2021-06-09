@@ -13,9 +13,18 @@ import random
 class Map:
     '''Deals with the functionality of the map'''
 
-    def __init__(self, frame):
+    def __init__(self):
 
-        self.frame = frame
+        # Map variables
+        self.map_x1 = 0
+        self.map_y1 = 0
+        self.map_x2 = 96
+        self.map_y2 = 42
+
+        self.map = {}
+
+        # Map frame
+        self.frame = None
 
     def check_free_land(self, building, pos_x, pos_y):
         '''Checks if the land is free from buildings based on set building'''
