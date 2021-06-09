@@ -6,7 +6,7 @@
 #
 
 import random
-import professions, buildings
+import professions, buildings, map
 
 # Initiate the global variables
 def init():
@@ -45,15 +45,9 @@ def init():
     wood = 0
 
     # Map
-    global map_x1, map_x2, map_y1, map_y2, 
-           map_dict, map,
-    map_x1 = 0
-    map_y1 = 0
-    map_x2 = 96
-    map_y2 = 42
-    map_dict = {}
+    global map
 
-    map = map.Map(self)
+    map = map.Map()
 
     # Turn Log and  counter
     global log, turn
