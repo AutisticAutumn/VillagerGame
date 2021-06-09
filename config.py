@@ -67,7 +67,8 @@ def init():
     global professions_dict
     professions_list = [professions.Unemployed(),
                         professions.Farmer(),
-                        professions.Feller()]
+                        professions.Feller(),
+                        professions.Carpenter()]
 
     professions_dict = {}
     for profession in professions_list:
