@@ -39,7 +39,7 @@ class Farmer:
         config.food += food_produced
 
         response = config.get_response('farmer_action')
-        return (response.format(villager.name, food_produce), 'lime')
+        return (response.format(villager.name, food_produced), 'lime')
 
 class Feller:
     '''The Feller provides Wood for the village'''
@@ -57,7 +57,7 @@ class Feller:
         config.wood += wood_produced
 
         response = config.get_response('feller_action')
-        return (response.format(villager.name, wood_produce), 'lime')
+        return (response.format(villager.name, wood_produced), 'lime')
 
 class Carpenter:
     '''The carpenter builds building with wood'''
@@ -72,4 +72,4 @@ class Carpenter:
         # Build a building if the action was selected
 
         response = config.get_response('carpenter_action')
-        return (response, 'cyan')
+        return (response.format(villager.name), 'cyan')
