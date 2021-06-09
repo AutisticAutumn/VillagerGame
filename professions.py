@@ -2,7 +2,7 @@
 # Villager Game
 # Professions Module
 # Written by Madeline Autumn
-# Last modified on 04/06/21
+# Last modified on 09/06/21
 #
 
 ### Imports and variables ###
@@ -56,3 +56,17 @@ class Feller:
         config.wood += wood_produced
 
         return (f'{villager.name} has produced {wood_produced} wood', 'lime')
+
+class Carpenter:
+    '''The carpenter builds building with wood'''
+
+    def __init__(self):
+
+        self.name = 'Carpenter'
+        self.description = 'Constructs wooden buildings'
+        self.ability = None
+
+    def action(self, villager):
+        # Collect Wood
+
+        return (f'{villager.name} has produced {wood_produced} wood', 'cyan')
