@@ -38,7 +38,8 @@ class Farmer:
         food_produced = random.randint(1,3)
         config.food += food_produced
 
-        return (f'{villager.name} has produced {food_produced} food', 'lime')
+        response = config.get_response('farmer_action')
+        return (response.format(villager.name, food_produce), 'lime')
 
 class Feller:
     '''The Feller provides Wood for the village'''
@@ -55,7 +56,8 @@ class Feller:
         wood_produced = random.randint(2,3)
         config.wood += wood_produced
 
-        return (f'{villager.name} has produced {wood_produced} wood', 'lime')
+        response = config.get_response('feller_action')
+        return (response.format(villager.name, wood_produce), 'lime')
 
 class Carpenter:
     '''The carpenter builds building with wood'''
@@ -67,6 +69,7 @@ class Carpenter:
         self.ability = None
 
     def action(self, villager):
-        # Collect Wood
+        # Build a building if the action was selected
 
-        return (f'{villager.name} has produced {wood_produced} wood', 'cyan')
+        response = config.get_response('carpenter_action')
+        return (response, 'cyan')
