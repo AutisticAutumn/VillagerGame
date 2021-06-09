@@ -8,8 +8,16 @@ Professions
     {0} has produced {1} wood
 }
 {
-    carpenter_action
-    {0} is unable to build anything yet
+    carpenter_action_succeed
+    {0} has built a {1}
+}
+{
+    carpenter_action_no_wood
+    {0} could not find enough wood to build a {1}
+}
+{
+    carpenter_turn_action
+    {0} will build a {1} at the turns end
 }
 
 
