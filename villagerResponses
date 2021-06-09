@@ -7,6 +7,11 @@ Professions
     feller_action
     {0} has produced {1} wood
 }
+{
+    carpenter_action
+    {0} is unable to build anything yet
+}
+
 
 Villager
 {
