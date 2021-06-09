@@ -2,7 +2,7 @@
 # Villager Game
 # VilalgerUI Module
 # Written by Madeline Autumn
-# Last modified on 04/06/21
+# Last modified on 09/06/21
 #
 
 ### Importants and Varibles ###
@@ -28,8 +28,9 @@ class VillagerFrame:
         '''Create the widgets onscreen for the villager'''
         
         # Create the main frame for the villager
-        self.frame = tk.Frame(self.parent.mod_frame_scrollable, relief=tk.GROOVE, borderwidth=2)
-        self.frame.grid(row=self.id, column=0, padx=2, pady=4, sticky=tk.NSEW)
+        self.frame = tk.Frame(self.parent.mod_frame_scrollable, relief=tk.GROOVE, 
+                              borderwidth=2, width=12)
+        self.frame.grid(row=self.id, column=0, padx=2, pady=4, sticky='')
 
         # Creat the four frames for the widgets 
         self.ascii_frame = tk.Frame(self.frame)
@@ -59,7 +60,7 @@ class VillagerFrame:
         # Stats frame widgets #
         self.title = tk.StringVar()
         self.name_button = tk.Button(self.stats_frame, textvariable=self.title, 
-                                     width=30, command=self.open_villager_window)
+                                     width=35, command=self.open_villager_window)
         self.name_button.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
         self.stats = tk.StringVar()
@@ -95,6 +96,21 @@ class VillagerFrame:
 
         self.villager.profession = config.professions_dict[profession]
         self.update_stats()
+
+        # Attempt to add action button for certain professions
+        try:
+            self.action_button.grid_remove()
+        except:
+            pass
+
+        try:
+            self.action_button = tk.Button(self.profession_frame, 
+                                           text=self.villager.profession.action_text,
+                                           width=12,
+                                           command=lambda: self.villager.profession.turn_action(self.villager))
+            self.action_button.grid(row=2, column=1, padx=2, pady=6, sticky=tk.NSEW)
+        except:
+            pass
 
     def open_villager_window(self):
         '''Opens the window for a detailed villager view'''
