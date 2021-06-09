@@ -7,6 +7,7 @@
 
 ### Imports and variables ###
 import config
+import map
 import random
 
 ### Professions ###
@@ -33,7 +34,7 @@ class Farmer:
         self.ability = None
 
     def action(self, villager):
-        # Collect food
+        '''Collect food'''
         
         food_produced = random.randint(1,3)
         config.food += food_produced
@@ -51,7 +52,7 @@ class Feller:
         self.ability = None
 
     def action(self, villager):
-        # Collect Wood
+        '''Collect Wood'''
 
         wood_produced = random.randint(2,3)
         config.wood += wood_produced
@@ -68,8 +69,30 @@ class Carpenter:
         self.description = 'Constructs wooden buildings'
         self.ability = None
 
-    def action(self, villager):
-        # Build a building if the action was selected
+        self.action_text = 'Construct'
 
-        response = config.get_response('carpenter_action')
-        return (response.format(villager.name), 'cyan')
+    def action(self, villager):
+        '''Build a building if the action was selected'''
+
+        # Only attempt to build if action was seleceted
+        if villager.turn_action != None:
+            # if building cannot be build return error
+            build = villager.turn_action[0](villager.turn_action[1])
+            if build:
+                response = config.get_response('carpenter_action_succeed')
+                return (response.format(villager.name, villager.turn_action[1]), 'cyan')
+            else:
+                response = config.get_response('carpenter_action_no_wood')
+                return (response.format(villager.name, villager.turn_action[1]), 'orange')
+
+    def turn_action(self, villager):
+        '''Select which building to place and where'''
+
+        building = 'Wooden Hut'
+        villager.turn_action = (config.map.build_building, building)
+
+        # Return output to logs
+        response = config.get_response('carpenter_turn_action')
+        response = response.format(villager.name,'Wooden Hut')
+        villager.append_villager_log(response, 'lime')
+    
