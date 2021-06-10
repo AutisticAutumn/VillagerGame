@@ -7,6 +7,7 @@
 
 ### Importants and Varibles ###
 import tkinter as tk
+from tkinter.constants import NORMAL
 import config, map
 import random
 
@@ -162,8 +163,11 @@ class MapPopout:
     def add_map_buildings(self):
         '''Run through a list of all buildings and add them to the map'''
 
+        # Enable the box
+        self.map_box.config(state=NORMAL)
+
         for building in config.map.map.values():
-            
+
             # Get variables for the for loop
             x0 = building.pos_x
             x1 = building.pos_x+building.size[0]
@@ -184,6 +188,7 @@ class MapPopout:
                     # Insert new text into the widget and add the tag
                     pos = (x-x0)+((y-y0)*building.size[0])
                     texture = building.get_texture(pos)
+
                     self.map_box.insert(pos_key, texture[0])
 
                     self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
