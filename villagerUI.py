@@ -197,7 +197,7 @@ class VillagerInfoWindow:
         title = tk.Label(info_frame, text=parent.title.get(), width=88)
         title.grid(row=0, column=0, pady=4)
 
-        stats = tk.Label(info_frame, text=parent.stats.get())
+        stats = tk.Label(info_frame, text=parent.stats)
         stats.grid(row=1, column=0, pady=4)
 
         bio_frame = tk.Frame(self.root)
@@ -231,7 +231,6 @@ class VillagerInfoWindow:
         for line in villager.log:
             
             # Insert line
-            print(line)
             log_text.insert(tk.END, f'{line[0]}\n')
             log_text.see("end")
 
