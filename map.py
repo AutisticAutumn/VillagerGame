@@ -48,8 +48,8 @@ class Map:
         building = config.get_building(key)
 
         # Get the building position
-        building.pos_x = 12
-        building.pos_y = 6
+        building.pos_x = random.randint(1, self.map_x2-12)
+        building.pos_y = random.randint(1, self.map_y2-6)
 
         if not(self.check_free_land(building, building.pos_x, building.pos_y)):
             return False
@@ -81,3 +81,5 @@ class Map:
         
         # Draw building onscreen
         self.frame.insert_building(f'({building.pos_y}:{building.pos_x})')
+
+        return True
