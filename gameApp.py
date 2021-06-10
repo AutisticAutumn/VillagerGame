@@ -35,13 +35,7 @@ class GameApp:
         self.village_frame = tk.Frame(self.left_frame)
         self.village_frame.grid(row=0, column=0, padx=2, pady=2, sticky= tk.NSEW)
         self.map = mapUI.MapFrame(self, self.village_frame)
-        
-        self.stats_box = tk.Text(self.left_frame,
-                                 width=48, 
-                                 height=1,
-                                 state=tk.DISABLED,
-                                 bg='black')
-        self.stats_box.grid(row=1, column=0, padx=6, pady=6, sticky=tk.W)
+
 
         ## Centeral Frame ##
         # Create a scrollable frame for the villager modification section
@@ -76,6 +70,14 @@ class GameApp:
                                          width=48, 
                                          command=self.end_turn)
         self.end_turn_button.grid(row=1, column=0, padx=2, pady=4)
+
+        # Stat box
+        self.stats_box = tk.Text(self.center_frame,
+                                 width=52, 
+                                 height=1,
+                                 state=tk.DISABLED,
+                                 bg='black')
+        self.stats_box.grid(row=2, column=0, padx=12, pady=4, sticky=tk.W)
 
         ## Right Frame ##
         self.log_scrollbar = tk.Scrollbar(self.right_frame)
