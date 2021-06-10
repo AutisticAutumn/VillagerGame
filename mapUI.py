@@ -21,6 +21,7 @@ class MapFrame:
 
         self.map = config.map
         self.map.frame = self
+        self.map.popout = MapPopout(self)
 
         self.map_size = (48, 21)
 
@@ -42,11 +43,11 @@ class MapFrame:
 
         # Create the textbox itself
         self.map_box = tk.Text(self.frame, 
-                                width=self.map_size[0], 
-                                height=self.map_size[1],
-                                state=tk.DISABLED,
-                                bg='black',
-                                wrap=tk.NONE)
+                               width=self.map_size[0], 
+                               height=self.map_size[1],
+                               state=tk.DISABLED,
+                               bg='black',
+                               wrap=tk.NONE)
         self.map_box.grid(row=0, column=0, padx=4, pady=4)
 
         # Place the scrollbars in
@@ -128,3 +129,86 @@ class MapFrame:
             self.map_box.config(state=tk.DISABLED)
         except:
             return False
+
+class MapPopout:
+    '''Creates a toplevel tkinter element that displays the full map'''
+
+    def __init__(self, parent):
+
+        self.parent = parent
+
+    def create_toplevel(self):
+        '''Create the toplevel widget for the map popout'''
+
+        # Initialize the root
+        self.root = tk.Toplevel(self.parent.parent.root)
+        self.root.title('World map')
+        self.root.resizable(width=0, height=0)
+
+        # Add the map textbox
+        self.map_box = self.map_box = tk.Text(self.root, 
+                                              width=config.map.map_x2, 
+                                              height=config.map.map_y2,
+                                              bg='black',
+                                              wrap=tk.NONE)
+        self.map_box.grid()
+
+        # Add map contents
+        self.create_map_base()
+        self.add_map_buildings()
+
+        # Turn the map off for editting
+        self.map_box.config(state=tk.DISABLED)
+    
+    def create_map_base(self):
+        '''Create the plain base of grass for the map'''
+        for y in range(1, config.map.map_y2-config.map.map_y1+1):
+            for x in range(config.map.map_x2-config.map.map_x1):
+                
+                # Get the position and key
+                pos = f'{y}.{x-1}'
+                key = f'({y}:{x})'
+
+                # Add grass base
+                item = config.get_building('Grass').get_texture(y + x*123456)
+                self.map_box.insert(pos, item[0])
+
+                # Add tag to colour text
+                self.map_box.tag_add(key, pos, pos+'+1c')
+                self.map_box.tag_config(key, foreground=item[1])
+            
+            self.map_box.insert(tk.END, '\n')
+
+        # Deletes Trailing newline
+        self.map_box.delete(f'{config.map.map_y2+1}.0', tk.END)
+
+    def add_map_buildings(self):
+        '''Run through a list of all buildings and add them to the map'''
+
+        for building in config.map.map.values():
+            print(building)
+
+            # Get variables for the for loop
+            x0 = building.pos_x
+            x1 = building.pos_x+building.size[0]
+
+            y0 = building.pos_y
+            y1 = building.pos_y+building.size[1]
+
+            # Run through the complete building
+            for y in range(y0, y1):
+                for x in range(x0, x1):
+                    
+                    # Get the position for the building in textbox form
+                    pos_key = f'{y}.{x-1}'
+
+                    # Delete the current text at that position
+                    self.map_box.delete(pos_key, pos_key+'+1c')
+
+                    # Insert new text into the widget and add the tag
+                    pos = (x-x0)+((y-y0)*building.size[0])
+                    texture = building.get_texture(pos)
+                    self.map_box.insert(pos_key, texture[0])
+
+                    self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
+                    self.map_box.tag_config(pos_key, foreground=texture[1])
