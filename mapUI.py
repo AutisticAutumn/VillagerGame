@@ -10,6 +10,37 @@ import tkinter as tk
 import config, map
 import random
 
+### Functions ###
+def create_map_base(self):
+        '''Create the plain base of grass for the map'''
+
+        # Enable the map for editing
+        self.map_box.config(state=tk.NORMAL)
+        self.map_box.delete('1.0', tk.END)
+
+        for y in range(1, config.map.map_y2-config.map.map_y1+1):
+            for x in range(config.map.map_x2-config.map.map_x1):
+                
+                # Get the position and key
+                pos = f'{y}.{x-1}'
+                key = f'({y}:{x})'
+
+                # Add grass base
+                item = config.get_building('Grass').get_texture(y + x*123456)
+                self.map_box.insert(pos, item[0])
+
+                # Add tag to colour text
+                self.map_box.tag_add(key, pos, pos+'+1c')
+                self.map_box.tag_config(key, foreground=item[1])
+            
+            self.map_box.insert(tk.END, '\n')
+
+        # Deletes Trailing newline
+        self.map_box.delete(f'{config.map.map_y2+1}.0', tk.END)
+
+        # Turn the map back off 
+        self.map_box.config(state=tk.DISABLED)
+
 ### Classes ###
 class MapFrame:
     '''Class to deal with the onscreen map of the village'''
@@ -26,7 +57,7 @@ class MapFrame:
         self.map_size = (48, 21)
 
         self.create_map()
-        self.draw_map()
+        create_map_base(self)
 
         self.map.build_building('Wooden Hut', False)
 
@@ -56,37 +87,6 @@ class MapFrame:
 
         self.map_box.config(xscrollcommand=self.map_scrollbar_horizontal.set)
         self.map_scrollbar_horizontal.config(command=self.map_box.xview)
-
-    def draw_map(self):
-        '''Draws the base map to the screen. No buildings are drawn'''
-
-        # Enable the map for editing
-        self.map_box.config(state=tk.NORMAL)
-        self.map_box.delete('1.0', tk.END)
-
-        # Run through every position in the map and add a tag to it
-        for y in range(1, self.map.map_y2-self.map.map_y1+1):
-            for x in range(self.map.map_x2-self.map.map_x1):
-                
-                # Get the position and key
-                pos = f'{y}.{x-1}'
-                key = f'({y}:{x})'
-
-                # Get and add grass texture to map
-                item = config.get_building('Grass').get_texture(y + x*123456)
-                self.map_box.insert(pos, item[0])
-
-                # Add tag to colour text
-                self.map_box.tag_add(key, pos, pos+'+1c')
-                self.map_box.tag_config(key, foreground=item[1])
-            
-            self.map_box.insert(tk.END, '\n')
-
-        # Deletes Trailing newline
-        self.map_box.delete(f'{self.map.map_y2+1}.0', tk.END)
-
-        # Turn the map back off 
-        self.map_box.config(state=tk.DISABLED)
 
     def insert_building(self, pos_key):
         '''Insert a building onto the map.
@@ -153,41 +153,17 @@ class MapPopout:
                                               wrap=tk.NONE)
         self.map_box.grid()
 
-        # Add map contents
-        self.create_map_base()
+        create_map_base(self)
         self.add_map_buildings()
 
-        # Turn the map off for editting
+        # Disable editting the map
         self.map_box.config(state=tk.DISABLED)
-    
-    def create_map_base(self):
-        '''Create the plain base of grass for the map'''
-        for y in range(1, config.map.map_y2-config.map.map_y1+1):
-            for x in range(config.map.map_x2-config.map.map_x1):
-                
-                # Get the position and key
-                pos = f'{y}.{x-1}'
-                key = f'({y}:{x})'
-
-                # Add grass base
-                item = config.get_building('Grass').get_texture(y + x*123456)
-                self.map_box.insert(pos, item[0])
-
-                # Add tag to colour text
-                self.map_box.tag_add(key, pos, pos+'+1c')
-                self.map_box.tag_config(key, foreground=item[1])
-            
-            self.map_box.insert(tk.END, '\n')
-
-        # Deletes Trailing newline
-        self.map_box.delete(f'{config.map.map_y2+1}.0', tk.END)
 
     def add_map_buildings(self):
         '''Run through a list of all buildings and add them to the map'''
 
         for building in config.map.map.values():
-            print(building)
-
+            
             # Get variables for the for loop
             x0 = building.pos_x
             x1 = building.pos_x+building.size[0]
