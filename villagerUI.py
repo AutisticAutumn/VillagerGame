@@ -63,9 +63,13 @@ class VillagerFrame:
                                      width=35, command=self.open_villager_window)
         self.name_button.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
-        self.stats = tk.StringVar()
-        self.stats_label = tk.Label(self.stats_frame, textvariable=self.stats)
-        self.stats_label.grid(row=1, column=0, padx=2, pady=6, sticky=tk.NSEW)
+        self.stats_box = tk.Text(self.stats_frame,
+                                  width=36, 
+                                  height=1,
+                                  state=tk.DISABLED,
+                                  bg='black')
+
+        self.stats_box.grid(row=1, column=0, padx=2, pady=0, sticky=tk.NSEW)
 
         # Professions frame widgets #
         self.professions_menu_var = tk.StringVar()
@@ -123,11 +127,45 @@ class VillagerFrame:
         self.ascii_name_var.set(self.villager.name)
         self.title.set(f'{self.villager.name} the {self.villager.profession.name}')
 
-        space = '        '
-        health = self.villager.health
-        hunger = self.villager.hunger
-        happiness = self.villager.happiness
-        self.stats.set(f'Health: {health}{space}Hunger: {hunger}{space}Happiness: {happiness}')
+        # Get the stats varible
+        space = '   '
+        health = f'Health: {self.villager.health}{space}'
+        hunger = f'Hunger: {self.villager.hunger}{space}'
+        happiness = f'Happiness: {self.villager.happiness}'
+
+        self.stats = health + hunger + happiness
+
+        # Insert stats into the statbox
+        self.stats_box.config(state=tk.NORMAL)
+        self.stats_box.delete(1.0, tk.END)
+        self.stats_box.insert(1.0, self.stats)
+
+        # Health colouring
+        health_start = '1.0'
+        health_end = '1.' + str(len(health)-1)
+        self.stats_box.tag_add('Health', health_start, health_end)
+        self.stats_box.tag_config('Health', 
+                                  foreground='red', 
+                                  justify=tk.CENTER)
+
+        # Hunger colouring
+        hunger_start = str(float(health_end))
+        hunger_end = '1.' + str(int(hunger_start[2:]) + len(hunger))
+        self.stats_box.tag_add('Hunger', hunger_start, hunger_end)
+        self.stats_box.tag_config('Hunger', 
+                                  foreground='lime', 
+                                  justify=tk.CENTER)
+
+        # Happiness colouring
+        happiness_start = str(float(hunger_end))
+        happiness_end = '1.' + str(int(happiness_start[2:]) + len(happiness)+1)
+        self.stats_box.tag_add('Happiness', happiness_start, happiness_end)
+        self.stats_box.tag_config('Happiness', 
+                                  foreground='yellow', 
+                                  justify=tk.CENTER)
+
+        # Turn box off at end
+        self.stats_box.config(state=tk.DISABLED)
 
 ## Villager info window ##
 
