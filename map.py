@@ -69,15 +69,10 @@ class Map:
             else:
                 return False
 
-        # Add each segement seperately to the main map dictionary
-        for x in range(building.size[0]):
-            for y in range(building.size[1]):
-                
-                # Get unique building object and data 
-                pos_key = f'({building.pos_y+y}:{building.pos_x+x})'
+        pos_key = f'({building.pos_y}:{building.pos_x})'
 
-                # Add building to map
-                self.map[pos_key] = building
+        # Add building to map
+        self.map[pos_key] = building
         
         # Draw building onscreen
         self.frame.insert_building(f'({building.pos_y}:{building.pos_x})')
