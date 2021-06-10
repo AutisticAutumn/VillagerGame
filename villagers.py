@@ -8,6 +8,7 @@
 ### Imports and Varibles ###
 import config, professions
 import random
+from tkinter import DISABLED, NORMAL
 
 with open("villager_names", 'r') as f:
     names = f.readlines()
@@ -35,6 +36,9 @@ class Villager:
         # Turn action
         self.turn_action = None
 
+        # Profession lock
+        self.profession_lock = 0
+
         # Frame widget
         self.frame = None
 
@@ -45,6 +49,10 @@ class Villager:
         action = self.profession.action(self)
         if action != None:
             self.append_villager_log(action[0], action[1])
+            
+            # Lock profession for three turns if just assigned
+            if self.profession_lock <= 0:
+                self.profession_lock = 3
         
         # Random attack villagers if unhappy
         if self.happiness < 0:
@@ -60,6 +68,15 @@ class Villager:
         # Reset variables
         self.turn_log = []
         self.turn_action = None
+
+        # Villager profession lock
+        print(self.profession_lock)
+        if self.profession_lock > 1:
+            self.profession_lock -= 1
+            self.frame.professions_menu.config(state=DISABLED)
+        else:
+            self.profession_lock = max(0 , self.profession_lock-1)
+            self.frame.professions_menu.config(state=NORMAL)
 
     def append_villager_log(self, line, colour='white'):
         '''Appends a line to the villager log and prints to main log'''
