@@ -36,6 +36,10 @@ class GameApp:
         self.village_frame.grid(row=0, column=0, padx=2, pady=2, sticky= tk.NSEW)
         self.map = mapUI.MapFrame(self, self.village_frame)
 
+        self.map_button = tk.Button(self.left_frame, text='View full map',
+                                    width=16, command=config.map.popout.create_toplevel)
+        self.map_button.grid(row=1, column=0, padx=2, pady=4)
+
 
         ## Centeral Frame ##
         # Create a scrollable frame for the villager modification section
