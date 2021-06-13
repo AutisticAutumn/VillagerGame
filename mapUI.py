@@ -29,6 +29,7 @@ def create_map_base(self):
                 # Add grass base
                 item = config.get_building('Grass').get_texture(y + x*123456)
                 self.map_box.insert(pos, item[0])
+                self.map.texture_map.append(item)
 
                 # Add tag to colour text
                 self.map_box.tag_add(key, pos, pos+'+1c')
@@ -125,6 +126,10 @@ class MapFrame:
 
                     self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
                     self.map_box.tag_config(pos_key, foreground=texture[1])
+
+                    # Update the texture map
+                    pos = x + (y*self.map.map_x2)
+                    self.map.texture_map[pos] = texture
             
             # Turn the map back off 
             self.map_box.config(state=tk.DISABLED)
