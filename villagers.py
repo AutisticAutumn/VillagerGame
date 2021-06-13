@@ -2,7 +2,7 @@
 # Villager Game
 # Villager Module
 # Written by Madeline Autumn
-# Last modified on 04/06/21
+# Last modified on 14/06/21
 #
 
 ### Imports and Varibles ###
@@ -70,7 +70,6 @@ class Villager:
         self.turn_action = None
 
         # Villager profession lock
-        print(self.profession_lock)
         if self.profession_lock > 1:
             self.profession_lock -= 1
             self.frame.professions_menu.config(state=DISABLED)
