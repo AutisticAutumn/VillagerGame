@@ -19,8 +19,8 @@ def create_map_base(self):
         self.map_box.config(state=tk.NORMAL)
         self.map_box.delete('1.0', tk.END)
 
-        for y in range(1, config.map.map_y2-config.map.map_y1+1):
-            for x in range(config.map.map_x2-config.map.map_x1):
+        for y in range(1, self.map.map_y2-self.map.map_y1+1):
+            for x in range(self.map.map_x2-self.map.map_x1):
                 
                 # Get the position and key
                 pos = f'{y}.{x-1}'
@@ -128,7 +128,7 @@ class MapFrame:
                     self.map_box.tag_config(pos_key, foreground=texture[1])
 
                     # Update the texture map
-                    pos = x + (y*self.map.map_x2)
+                    pos = x + ((y-1)*self.map.map_x2)
                     self.map.texture_map[pos] = texture
             
             # Turn the map back off 
@@ -142,6 +142,7 @@ class MapPopout:
     def __init__(self, parent):
 
         self.parent = parent
+        self.map = config.map
 
     def create_toplevel(self):
         '''Create the toplevel widget for the map popout'''
@@ -159,42 +160,29 @@ class MapPopout:
                                               wrap=tk.NONE)
         self.map_box.grid()
 
-        create_map_base(self)
-        self.add_map_buildings()
-
+        # Draw the map textures in 
+        self.draw_map()
+        
         # Disable editting the map
         self.map_box.config(state=tk.DISABLED)
 
-    def add_map_buildings(self):
-        '''Run through a list of all buildings and add them to the map'''
+    def draw_map(self):
+        '''Draws the map from the texture map'''
+        
+        for y in range(1, self.map.map_y2-self.map.map_y1+1):
+            for x in range(self.map.map_x2-self.map.map_x1):
 
-        # Enable the box
-        self.map_box.config(state=NORMAL)
+                # Get position of the texture
+                pos = x + ((y-1)*self.map.map_x2)
+                pos_key = f'{y}.{x-1}'
 
-        for building in config.map.map.values():
+                # insert the texture into the box
+                texture = self.map.texture_map[pos]
 
-            # Get variables for the for loop
-            x0 = building.pos_x
-            x1 = building.pos_x+building.size[0]
+                self.map_box.insert(pos_key, texture[0])
 
-            y0 = building.pos_y
-            y1 = building.pos_y+building.size[1]
+                self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
+                self.map_box.tag_config(pos_key, foreground=texture[1])
 
-            # Run through the complete building
-            for y in range(y0, y1):
-                for x in range(x0, x1):
-                    
-                    # Get the position for the building in textbox form
-                    pos_key = f'{y}.{x-1}'
-
-                    # Delete the current text at that position
-                    self.map_box.delete(pos_key, pos_key+'+1c')
-
-                    # Insert new text into the widget and add the tag
-                    pos = (x-x0)+((y-y0)*building.size[0])
-                    texture = building.get_texture(pos)
-
-                    self.map_box.insert(pos_key, texture[0])
-
-                    self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
-                    self.map_box.tag_config(pos_key, foreground=texture[1])
+            # Add newlines to map
+            self.map_box.insert(tk.END, '\n')
