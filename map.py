@@ -2,7 +2,7 @@
 # Villager Game
 # Map Module
 # Written by Madeline Autumn
-# Last modified on 09/06/21
+# Last modified on 14/06/21
 #
 
 ### Importants and Varibles ###
@@ -22,6 +22,7 @@ class Map:
         self.map_y2 = 42
 
         self.map = {}
+        self.texture_map = []
 
         # Map frame
         self.frame = None
