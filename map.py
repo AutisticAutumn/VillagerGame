@@ -38,7 +38,6 @@ class Map:
                 pos_key = f'({building.pos_y+y}:{building.pos_x+x})'
                 
                 if pos_key in self.map.keys():
-                    print('True')
                     return False
         
         return True
