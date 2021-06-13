@@ -2,13 +2,12 @@
 # Villager Game
 # Main Game Application Module
 # Written by Madeline Autumn
-# Last modified on 09/06/21
 #
 
 ### Importants and Varibles ###
 import tkinter as tk
-import config, villagerUI, mapUI
-import random, buildings
+import config, villagerUI, mapUI, buildings
+import random
 
 ### Classes ###
 class GameApp:
@@ -148,6 +147,9 @@ class GameApp:
         # Update the villagers
         for villager_frame in self.villager_frames:
             villager_frame.update_stats()
+        
+        # Update the map
+        mapUI.draw_map(self.map)
 
     def feed_villagers(self, priotity):
         '''Runs through the list of villagers and uses the frame to
@@ -209,5 +211,5 @@ class GameApp:
         config.turn += 1
         self.append_log(f'\nTurn {config.turn}')
 
-        # Update the gui
+        # Update the gui and map
         self.update_stats()
