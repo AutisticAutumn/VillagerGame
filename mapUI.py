@@ -2,7 +2,7 @@
 # Villager Game
 # MapUI Module
 # Written by Madeline Autumn
-# Last modified on 07/06/21
+# Last modified on 14/06/21
 #
 
 ### Importants and Varibles ###
@@ -50,25 +50,25 @@ def draw_map(self):
     self.map_box.config(state=tk.NORMAL)
         
     for y in range(1, self.map.map_y2-self.map.map_y1+1):
-        for x in range(self.map.map_x2-self.map.map_x1):
+        for x in range(1,self.map.map_x2-self.map.map_x1):
 
             # Get position of the texture
             pos = x + ((y-1)*self.map.map_x2)
             pos_key = f'{y}.{x-1}'
-
-            # insert the texture into the box
             texture = self.map.texture_map[pos]
 
-            self.map_box.insert(pos_key, texture[0])
+            # Check is position has changes
+            pos_change = self.map_box.get(pos_key, pos_key+'+1c') == texture[0]
+            
+            if not(pos_change):
+                # Remove old texture
+                self.map_box.delete(pos_key, pos_key+'+1c')
 
-            self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
-            self.map_box.tag_config(pos_key, foreground=texture[1])
+                # insert the new texture into the box
+                self.map_box.insert(pos_key, texture[0])
 
-        # Add newlines to map
-        self.map_box.insert(tk.END, '\n')
-
-    # Delete Trailing newline
-    self.map_box.delete(f'{config.map.map_y2+1}.0', tk.END)
+                self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
+                self.map_box.tag_config(pos_key, foreground=texture[1])
 
     # Turn the map back off 
     self.map_box.config(state=tk.DISABLED)
