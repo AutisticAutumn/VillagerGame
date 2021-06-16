@@ -2,7 +2,6 @@
 # Villager Game
 # Config Module
 # Written by Madeline Autumn
-# Last modified on 04/06/21
 #
 
 import random
@@ -130,4 +129,4 @@ def save():
     # Save the logs
     with open('log.txt', 'w') as f:
         for line in log:
-            f.writelines(f'{line[0]}\n')
+            f.writelines(f'{line[0]} : ({line[1]})\n')
