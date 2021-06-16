@@ -41,7 +41,7 @@ def create_map_base(self):
         # Turn the map back off 
         self.map_box.config(state=tk.DISABLED)
 
-def draw_map(self, add_newlines=False):
+def draw_map(self):
     '''Draws the map from the texture map'''
 
     # Enable map for editting
@@ -175,5 +175,5 @@ class MapPopout:
 
         # Draw the map textures in 
         create_map_base(self)
-        draw_map(self, True)
+        draw_map(self)
         
