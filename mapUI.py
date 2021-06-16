@@ -273,42 +273,43 @@ class MapPopout:
         self.update_tile_information()
 
     ### Moving selector ###
+    def move_selector(self, dir):
+        '''Move the sector and run any extra functions'''
+
+        # Move is the correct direction and change varibles
+        if dir == 'Right':
+            self.map.selector_x += 1
+        elif dir == 'Left':
+            self.map.selector_x -= 1
+        elif dir == 'Up':
+            self.map.selector_y -= 1
+        elif dir == 'Down':
+            self.map.selector_y += 1
+
+        # Keep stats within range
+        self.map.selector_x = max(0, min(self.map.selector_x, self.map.width))
+        self.map.selector_y = max(1, min(self.map.selector_y, self.map.height))
+
+        # Update the selector
+        self.draw_selector()
+
     def move_selector_right(self, _event=None):
         '''Move the position of the selector right based on keyboard input'''
-
-        # Move position within bounds
-        self.map.selector_x += 1
-        self.map.selector_x = min(self.map.selector_x, self.map.width)
-
-        # Update the selector
-        self.draw_selector()
+    
+        self.move_selector('Right')
 
     def move_selector_left(self, _event=None):
-        '''Move the position of the selector right based on keyboard input'''
+        '''Move the position of the selector left based on keyboard input'''
 
-        # Move position within bounds
-        self.map.selector_x -= 1
-        self.map.selector_x = max(self.map.selector_x, 0)
+        self.move_selector('Left')
 
-        # Update the selector
-        self.draw_selector()
 
     def move_selector_up(self, _event=None):
-        '''Move the position of the selector right based on keyboard input'''
+        '''Move the position of the selector up based on keyboard input'''
 
-        # Move position within bounds
-        self.map.selector_y -= 1
-        self.map.selector_y = max(self.map.selector_y, 1)
-
-        # Update the selector
-        self.draw_selector()
+        self.move_selector('Up')
 
     def move_selector_down(self, _event=None):
-        '''Move the position of the selector right based on keyboard input'''
+        '''Move the position of the selector down based on keyboard input'''
 
-        # Move position within bounds
-        self.map.selector_y += 1
-        self.map.selector_y = min(self.map.selector_y, self.map.height)
-
-        # Update the selector
-        self.draw_selector()
+        self.move_selector('Down')
