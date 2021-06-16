@@ -2,7 +2,6 @@
 # Villager Game
 # Map Module
 # Written by Madeline Autumn
-# Last modified on 14/06/21
 #
 
 ### Importants and Varibles ###
@@ -16,11 +15,10 @@ class Map:
     def __init__(self):
 
         # Map variables
-        self.map_x1 = 0
-        self.map_y1 = 0
-        self.map_x2 = 96
-        self.map_y2 = 42
+        self.map_width = 96
+        self.map_height = 42
 
+        # Map storage
         self.map = {}
         self.texture_map = []
 
