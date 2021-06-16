@@ -40,7 +40,7 @@ class WoodenHut:
         self.pos_y = pos_y
 
         self.name = 'Wooden Hut'
-        self.description = ''
+        self.description = 'A simple wooden hut'
 
         self.size = (4,3)
         self.texture = '''
