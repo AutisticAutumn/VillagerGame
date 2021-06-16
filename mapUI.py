@@ -2,7 +2,6 @@
 # Villager Game
 # MapUI Module
 # Written by Madeline Autumn
-# Last modified on 14/06/21
 #
 
 ### Importants and Varibles ###
@@ -24,18 +23,17 @@ def create_map_base(self):
                 
                 # Get the position and key
                 pos = f'{y}.{x-1}'
-                key = f'({y}:{x})'
 
                 # Add grass base
                 item = config.get_building('Grass').get_texture(y + x*123456)
                 self.map_box.insert(pos, item[0])
                 self.map.texture_map.append(item)
 
-                # Add tag to colour text
-                self.map_box.tag_add(key, pos, pos+'+1c')
-                self.map_box.tag_config(key, foreground=item[1])
-            
             self.map_box.insert(tk.END, '\n')
+
+        # Add grass colour
+        self.map_box.tag_add('Grass', 1.0, tk.END)
+        self.map_box.tag_config('Grass', foreground='green')
 
         # Delete Trailing newline
         self.map_box.delete(f'{config.map.map_y2+1}.0', tk.END)
@@ -43,7 +41,7 @@ def create_map_base(self):
         # Turn the map back off 
         self.map_box.config(state=tk.DISABLED)
 
-def draw_map(self):
+def draw_map(self, add_newlines=False):
     '''Draws the map from the texture map'''
 
     # Enable map for editting
@@ -176,7 +174,6 @@ class MapPopout:
         self.map_box.grid()
 
         # Draw the map textures in 
-        draw_map(self)
+        create_map_base(self)
+        draw_map(self, True)
         
-        # Disable editting the map
-        self.map_box.config(state=tk.DISABLED)
