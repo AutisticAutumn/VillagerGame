@@ -166,12 +166,31 @@ class MapPopout:
         self.root.resizable(width=0, height=0)
 
         # Add the map textbox
-        self.map_box = self.map_box = tk.Text(self.root, 
-                                              width=config.map.width, 
-                                              height=config.map.height,
-                                              bg='black',
-                                              wrap=tk.NONE)
-        self.map_box.grid(padx=8, pady=8)
+        self.map_box = tk.Text(self.root, 
+                               width=config.map.width, 
+                               height=config.map.height,
+                               bg='black',
+                               wrap=tk.NONE)
+        self.map_box.grid(row=0, column= 0, rowspan=2, padx=8, pady=8)
+
+        # Add the tile information boxes
+        self.tile_texture_box = tk.Text(self.root, 
+                                        width=1, 
+                                        height=1,
+                                        bg='black',)
+        self.tile_texture_box.grid(row=0, column= 1,padx=4, pady=8, sticky='N')
+
+        self.tile_name_box = tk.Text(self.root, 
+                                     width=16, 
+                                     height=1,
+                                     bg='black',)
+        self.tile_name_box.grid(row=0, column= 2,padx=4, pady=8, sticky='N')
+
+        self.tile_info_box = tk.Text(self.root, 
+                                     width=20, 
+                                     height=1,
+                                     bg='black',)
+        self.tile_info_box.grid(row=1, column= 1, columnspan=2, padx=4, pady=8)
 
         # Draw the map textures in 
         create_map_base(self)
