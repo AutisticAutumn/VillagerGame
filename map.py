@@ -22,6 +22,10 @@ class Map:
         self.map = {}
         self.texture_map = []
 
+        # Selector positions
+        self.selector_x = int(self.width/2)
+        self.selector_y = int(self.height/2)
+
         # Map frame
         self.frame = None
 
