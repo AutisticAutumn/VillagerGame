@@ -15,8 +15,8 @@ class Map:
     def __init__(self):
 
         # Map variables
-        self.map_width = 96
-        self.map_height = 42
+        self.width = 96
+        self.height = 42
 
         # Map storage
         self.map = {}
@@ -46,8 +46,8 @@ class Map:
         building = config.get_building(key)
 
         # Get the building position
-        building.pos_x = random.randint(1, self.map_x2-12)
-        building.pos_y = random.randint(1, self.map_y2-6)
+        building.pos_x = random.randint(1, self.width-12)
+        building.pos_y = random.randint(1, self.height-6)
 
         if not(self.check_free_land(building, building.pos_x, building.pos_y)):
             return False
