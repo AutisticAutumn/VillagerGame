@@ -232,12 +232,14 @@ class MapPopout:
     def move_selector_right(self, _event=None):
         '''Move the position of the selector right based on keyboard input'''
 
+        # Clear off old selectors
+        draw_map(self)
+
         # Move position within bounds
         self.map.selector_x += 1
         self.map.selector_x = min(self.map.selector_x, self.map.width)
 
         # Update the selector
-        draw_map(self)
         self.draw_selector()
 
     def move_selector_left(self, _event=None):
@@ -248,7 +250,6 @@ class MapPopout:
         self.map.selector_x = max(self.map.selector_x, 0)
 
         # Update the selector
-        draw_map(self)
         self.draw_selector()
 
     def move_selector_up(self, _event=None):
@@ -259,7 +260,6 @@ class MapPopout:
         self.map.selector_y = max(self.map.selector_y, 1)
 
         # Update the selector
-        draw_map(self)
         self.draw_selector()
 
     def move_selector_down(self, _event=None):
@@ -270,5 +270,4 @@ class MapPopout:
         self.map.selector_y = min(self.map.selector_y, self.map.height)
 
         # Update the selector
-        draw_map(self)
         self.draw_selector()
