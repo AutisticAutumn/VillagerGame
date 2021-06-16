@@ -171,9 +171,34 @@ class MapPopout:
                                               height=config.map.height,
                                               bg='black',
                                               wrap=tk.NONE)
-        self.map_box.grid()
+        self.map_box.grid(padx=8, pady=8)
 
         # Draw the map textures in 
         create_map_base(self)
         draw_map(self)
-        
+        self.draw_selector()
+    
+    def draw_selector(self):
+        '''Draws the selector onscreen that gives information about a tile'''
+
+        # Enable the map for editing
+        self.map_box.config(state=tk.NORMAL)
+
+        # Get the raw positions as x and y
+        x = self.map.selector_x
+        y = self.map.selector_y
+
+        # Get the position key
+        pos_key = f'{y}.{x-1}'
+
+        # Remove old texture
+        self.map_box.delete(pos_key, pos_key+'+1c')
+
+        # insert the new texture into the box
+        self.map_box.insert(pos_key, 'X')
+
+        self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
+        self.map_box.tag_config(pos_key, foreground='white')
+
+        # Turn the map back off 
+        self.map_box.config(state=tk.DISABLED)
