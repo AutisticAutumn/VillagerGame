@@ -7,8 +7,7 @@
 ### Importants and Varibles ###
 import tkinter as tk
 from tkinter.constants import NORMAL
-import config, map
-import random
+import config
 
 ### Functions ###
 def create_map_base(self):
@@ -188,7 +187,7 @@ class MapPopout:
 
         self.tile_info_box = tk.Text(self.root, 
                                      width=20, 
-                                     height=1,
+                                     height=12,
                                      bg='black',)
         self.tile_info_box.grid(row=1, column= 1, columnspan=2, padx=4, pady=8)
 
@@ -203,8 +202,50 @@ class MapPopout:
         self.root.bind('<Up>', self.move_selector_up)
         self.root.bind('<Down>', self.move_selector_down)
     
+    def update_tile_information(self):
+        '''Updates stats for the selected tile'''
+
+        # Get position and position keys
+        x = self.map.selector_x
+        y = self.map.selector_y
+
+        pos = x + ((y-1)*self.map.width)
+        pos_key = f'({y}:{x})'
+
+        # Get texture
+        texture = self.map.texture_map[pos]
+
+        # Attempt to find building at location, else return grass
+        
+        try:
+            building = self.map.map[pos_key]
+        except:
+            building = config.get_building('Grass')
+
+        # Clear all textboxes of previous data
+        self.tile_texture_box.delete(1.0, tk.END)
+        self.tile_name_box.delete(1.0, tk.END)
+        self.tile_info_box.delete(1.0, tk.END)
+
+        # Insert new data to the text boxes
+        self.tile_texture_box.insert(1.0, texture[0])
+        self.tile_name_box.insert(1.0, building.name)
+        self.tile_info_box.insert(1.0, building.description)
+
+        # Add colour tags to the boxes
+        self.tile_texture_box.tag_add('Colour', 1.0, tk.END)
+        self.tile_name_box.tag_add('Colour', 1.0, tk.END)
+        self.tile_info_box.tag_add('Colour', 1.0, tk.END)
+
+        self.tile_texture_box.tag_config('Colour', foreground=texture[1])
+        self.tile_name_box.tag_config('Colour', foreground=texture[1])
+        self.tile_info_box.tag_config('Colour', foreground='white')
+
     def draw_selector(self):
         '''Draws the selector onscreen that gives information about a tile'''
+
+        # Clear off old selectors
+        draw_map(self)
 
         # Enable the map for editing
         self.map_box.config(state=tk.NORMAL)
@@ -228,12 +269,12 @@ class MapPopout:
         # Turn the map back off 
         self.map_box.config(state=tk.DISABLED)
 
+        # Update tile info
+        self.update_tile_information()
+
     ### Moving selector ###
     def move_selector_right(self, _event=None):
         '''Move the position of the selector right based on keyboard input'''
-
-        # Clear off old selectors
-        draw_map(self)
 
         # Move position within bounds
         self.map.selector_x += 1
