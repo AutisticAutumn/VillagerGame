@@ -176,7 +176,13 @@ class MapPopout:
         # Draw the map textures in 
         create_map_base(self)
         draw_map(self)
+
+        # Setup the selector
         self.draw_selector()
+        self.root.bind('<Right>', self.move_selector_right)
+        self.root.bind('<Left>', self.move_selector_left)
+        self.root.bind('<Up>', self.move_selector_up)
+        self.root.bind('<Down>', self.move_selector_down)
     
     def draw_selector(self):
         '''Draws the selector onscreen that gives information about a tile'''
@@ -202,3 +208,48 @@ class MapPopout:
 
         # Turn the map back off 
         self.map_box.config(state=tk.DISABLED)
+
+    ### Moving selector ###
+    def move_selector_right(self, _event=None):
+        '''Move the position of the selector right based on keyboard input'''
+
+        # Move position within bounds
+        self.map.selector_x += 1
+        self.map.selector_x = min(self.map.selector_x, self.map.width)
+
+        # Update the selector
+        draw_map(self)
+        self.draw_selector()
+
+    def move_selector_left(self, _event=None):
+        '''Move the position of the selector right based on keyboard input'''
+
+        # Move position within bounds
+        self.map.selector_x -= 1
+        self.map.selector_x = max(self.map.selector_x, 0)
+
+        # Update the selector
+        draw_map(self)
+        self.draw_selector()
+
+    def move_selector_up(self, _event=None):
+        '''Move the position of the selector right based on keyboard input'''
+
+        # Move position within bounds
+        self.map.selector_y -= 1
+        self.map.selector_y = max(self.map.selector_y, 1)
+
+        # Update the selector
+        draw_map(self)
+        self.draw_selector()
+
+    def move_selector_down(self, _event=None):
+        '''Move the position of the selector right based on keyboard input'''
+
+        # Move position within bounds
+        self.map.selector_y += 1
+        self.map.selector_y = min(self.map.selector_y, self.map.height)
+
+        # Update the selector
+        draw_map(self)
+        self.draw_selector()
