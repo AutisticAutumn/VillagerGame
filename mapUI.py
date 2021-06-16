@@ -159,6 +159,7 @@ class MapPopout:
 
         self.parent = parent
         self.map = config.map
+        self.building = config.get_building('Wooden Hut')
 
     def create_toplevel(self):
         '''Create the toplevel widget for the map popout'''
@@ -246,7 +247,7 @@ class MapPopout:
         self.tile_name_box.tag_config('Colour', foreground=texture[1])
         self.tile_info_box.tag_config('Colour', foreground='white')
 
-    def draw_selector(self, building=False):
+    def draw_selector(self):
         '''Draws the selector onscreen that gives information about a tile'''
 
         # Clear off old selectors
@@ -260,11 +261,11 @@ class MapPopout:
         y = self.map.selector_y
 
         # Get the texture to draw
-        if not(building):
+        if self.building == None:
             texture = ('X', 'white')
             size = (1, 1)
         else:
-            size = building.size
+            size = self.building.size
 
         for yy in range(size[1]):
             for xx in range(size[0]):
@@ -276,8 +277,8 @@ class MapPopout:
                 self.map_box.delete(pos_key, pos_key+'+1c')
 
                 # Get exact texture for building
-                if not(building == False):
-                    texture = (building.get_texture(xx+(yy*size[0]))[0], 'lime')
+                if not(self.building == None):
+                    texture = (self.building.get_texture(xx+(yy*size[0]))[0], 'lime')
 
                 # insert the new texture into the box
                 self.map_box.insert(pos_key, texture[0])
@@ -292,11 +293,17 @@ class MapPopout:
         self.map_box.config(state=tk.DISABLED)
 
         # Update tile info
-        self.update_tile_information(building)
+        self.update_tile_information()
 
     ### Moving selector ###
     def move_selector(self, dir):
         '''Move the sector and run any extra functions'''
+
+        # Get the size of the seletion
+        if self.building != None:
+            size = self.building.size
+        else:
+            size = (0,0)
 
         # Move is the correct direction and change varibles
         if dir == 'Right':
@@ -309,11 +316,13 @@ class MapPopout:
             self.map.selector_y += 1
 
         # Keep stats within range
-        self.map.selector_x = max(0, min(self.map.selector_x, self.map.width))
-        self.map.selector_y = max(1, min(self.map.selector_y, self.map.height))
+        max_x = self.map.width - size[0] + 1
+        max_y = self.map.height - size[1] + 1
+        self.map.selector_x = max(0, min(self.map.selector_x, max_x))
+        self.map.selector_y = max(1, min(self.map.selector_y, max_y))
 
         # Update the selector
-        self.draw_selector(config.get_building('Wooden Hut'))
+        self.draw_selector()
 
     def move_selector_right(self, _event=None):
         '''Move the position of the selector right based on keyboard input'''
