@@ -71,10 +71,17 @@ class Map:
             else:
                 return False
 
-        pos_key = f'({building.pos_y}:{building.pos_x})'
+        
 
         # Add building to map
-        self.map[pos_key] = building
+        building.positions = []
+        for x in range(building.size[0]):
+            for y in range(building.size[1]):
+
+                pos_key = f'({building.pos_y+y}:{building.pos_x+x})'
+
+                building.positions.append(pos_key)
+                self.map[pos_key] = building
         
         # Draw building onscreen
         self.frame.insert_building(f'({building.pos_y}:{building.pos_x})')
