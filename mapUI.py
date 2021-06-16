@@ -18,8 +18,8 @@ def create_map_base(self):
         self.map_box.config(state=tk.NORMAL)
         self.map_box.delete('1.0', tk.END)
 
-        for y in range(1, self.map.map_y2-self.map.map_y1+1):
-            for x in range(self.map.map_x2-self.map.map_x1):
+        for y in range(1, self.map.height+1):
+            for x in range(self.map.width):
                 
                 # Get the position and key
                 pos = f'{y}.{x-1}'
@@ -36,7 +36,7 @@ def create_map_base(self):
         self.map_box.tag_config('Grass', foreground='green')
 
         # Delete Trailing newline
-        self.map_box.delete(f'{config.map.map_y2+1}.0', tk.END)
+        self.map_box.delete(f'{config.map.height+1}.0', tk.END)
 
         # Turn the map back off 
         self.map_box.config(state=tk.DISABLED)
@@ -47,11 +47,11 @@ def draw_map(self):
     # Enable map for editting
     self.map_box.config(state=tk.NORMAL)
         
-    for y in range(1, self.map.map_y2-self.map.map_y1+1):
-        for x in range(1,self.map.map_x2-self.map.map_x1):
+    for y in range(1, self.map.height+1):
+        for x in range(1,self.map.width):
 
             # Get position of the texture
-            pos = x + ((y-1)*self.map.map_x2)
+            pos = x + ((y-1)*self.map.width)
             pos_key = f'{y}.{x-1}'
             texture = self.map.texture_map[pos]
 
@@ -143,7 +143,7 @@ class MapFrame:
                     texture = building.get_texture(pos)
                 
                     # Update the texture map
-                    pos = x + ((y-1)*self.map.map_x2)
+                    pos = x + ((y-1)*self.map.width)
                     self.map.texture_map[pos] = texture
             
         except:
@@ -167,8 +167,8 @@ class MapPopout:
 
         # Add the map textbox
         self.map_box = self.map_box = tk.Text(self.root, 
-                                              width=config.map.map_x2, 
-                                              height=config.map.map_y2,
+                                              width=config.map.width, 
+                                              height=config.map.height,
                                               bg='black',
                                               wrap=tk.NONE)
         self.map_box.grid()
