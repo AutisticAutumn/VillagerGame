@@ -40,7 +40,7 @@ def create_map_base(self):
         # Turn the map back off 
         self.map_box.config(state=tk.DISABLED)
 
-def draw_map(self):
+def draw_map(self, updated_positions=[]):
     '''Draws the map from the texture map'''
 
     # Enable map for editting
@@ -57,7 +57,7 @@ def draw_map(self):
             # Check is position has changes
             pos_change = self.map_box.get(pos_key, pos_key+'+1c') == texture[0]
             
-            if not(pos_change):
+            if not(pos_change) or pos_key in updated_positions:
                 # Remove old texture
                 self.map_box.delete(pos_key, pos_key+'+1c')
 
@@ -69,6 +69,10 @@ def draw_map(self):
 
     # Turn the map back off 
     self.map_box.config(state=tk.DISABLED)
+
+    # Clear positions that need to be updated 
+    if len(updated_positions) > 0:
+        self.updated_positions = []
 
 ### Classes ###
 class MapFrame:
@@ -194,6 +198,7 @@ class MapPopout:
         # Draw the map textures in 
         create_map_base(self)
         draw_map(self)
+        self.updated_positions = []
 
         # Setup the selector
         self.draw_selector()
@@ -241,11 +246,11 @@ class MapPopout:
         self.tile_name_box.tag_config('Colour', foreground=texture[1])
         self.tile_info_box.tag_config('Colour', foreground='white')
 
-    def draw_selector(self):
+    def draw_selector(self, building=False):
         '''Draws the selector onscreen that gives information about a tile'''
 
         # Clear off old selectors
-        draw_map(self)
+        draw_map(self, self.updated_positions)
 
         # Enable the map for editing
         self.map_box.config(state=tk.NORMAL)
@@ -254,23 +259,40 @@ class MapPopout:
         x = self.map.selector_x
         y = self.map.selector_y
 
-        # Get the position key
-        pos_key = f'{y}.{x-1}'
+        # Get the texture to draw
+        if not(building):
+            texture = ('X', 'white')
+            size = (1, 1)
+        else:
+            size = building.size
 
-        # Remove old texture
-        self.map_box.delete(pos_key, pos_key+'+1c')
+        for yy in range(size[1]):
+            for xx in range(size[0]):
+                
+                # Get the position key
+                pos_key = f'{y+yy}.{x+xx-1}'
 
-        # insert the new texture into the box
-        self.map_box.insert(pos_key, 'X')
+                # Remove old texture
+                self.map_box.delete(pos_key, pos_key+'+1c')
 
-        self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
-        self.map_box.tag_config(pos_key, foreground='white')
+                # Get exact texture for building
+                if not(building == False):
+                    texture = (building.get_texture(xx+(yy*size[0]))[0], 'lime')
+
+                # insert the new texture into the box
+                self.map_box.insert(pos_key, texture[0])
+
+                self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
+                self.map_box.tag_config(pos_key, foreground=texture[1])
+
+                # Save the positions that have been updated
+                self.updated_positions.append(pos_key)
 
         # Turn the map back off 
         self.map_box.config(state=tk.DISABLED)
 
         # Update tile info
-        self.update_tile_information()
+        self.update_tile_information(building)
 
     ### Moving selector ###
     def move_selector(self, dir):
@@ -291,7 +313,7 @@ class MapPopout:
         self.map.selector_y = max(1, min(self.map.selector_y, self.map.height))
 
         # Update the selector
-        self.draw_selector()
+        self.draw_selector(config.get_building('Wooden Hut'))
 
     def move_selector_right(self, _event=None):
         '''Move the position of the selector right based on keyboard input'''
@@ -302,7 +324,6 @@ class MapPopout:
         '''Move the position of the selector left based on keyboard input'''
 
         self.move_selector('Left')
-
 
     def move_selector_up(self, _event=None):
         '''Move the position of the selector up based on keyboard input'''
