@@ -123,6 +123,9 @@ def get_building(key):
     if key == buildings.WoodenHut().name:
         return buildings.WoodenHut()
 
+    if key == buildings.WoodenStatue().name:
+        return buildings.WoodenStatue()
+
 def save():
     '''Save the variables into files'''
 
