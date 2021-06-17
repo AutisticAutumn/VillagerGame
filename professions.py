@@ -70,22 +70,23 @@ class Carpenter:
 
         self.action_text = 'Construct'
 
+        # List of available buildings
+        self.buildings = ('Wooden Hut',
+                          'Wooden Statue')
+
     def action(self, villager):
         '''Build a building if the action was selected'''
 
         # Only attempt to build if action was seleceted
         if villager.turn_action != None:
+
             # if building cannot be build return error
-            print(
-                  villager.turn_action[1],
-                  villager.turn_action[2][0],
-                  villager.turn_action[2][1]
-                  )
             build = villager.turn_action[0](
                                             villager.turn_action[1],
                                             villager.turn_action[2][0],
                                             villager.turn_action[2][1]
                                             )
+                                            
             if build:
                 response = config.get_response('carpenter_action_succeed')
                 return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
