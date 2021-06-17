@@ -54,9 +54,44 @@ class WoodenHut:
         self.colours = ['chocolate3', 'brown4']
 
         self.cost = {'food': 0,
-                     'wood' : 10}
+                     'wood': 10}
         self.profession = None
 
+    def get_texture(self, pos):
+        '''returns the texture for the building'''
+
+        texture = self.texture.replace('\n','')[pos]
+        colour = self.colours[self.colour_map[pos]]
+        
+        return (texture, colour)
+
+class WoodenStatue:
+    '''Simple statue that provides an instant boost to happiness
+        slightly increases chance of new villagers'''
+
+    def __init__(self, pos_x=None, pos_y=None):
+
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+
+        self.name = 'Wooden Statue'
+        self.description = 'A simple wooden statue'
+
+        self.size = (3,3)
+        self.texture = '''
+ ± 
+┐┼┌
+≡≡≡'''
+        self.colour_map = (0,2,0,
+                           0,0,0,
+                           1,1,1)
+        
+        self.colours = ['chocolate3', 'brown4', 'navajo white']
+
+        self.cost = {'food': 0,
+                     'wood': 6}
+        self.profession = None
+    
     def get_texture(self, pos):
         '''returns the texture for the building'''
 
