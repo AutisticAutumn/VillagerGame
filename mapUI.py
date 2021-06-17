@@ -92,7 +92,7 @@ class MapFrame:
         self.create_map()
         create_map_base(self)
 
-        self.map.build_building('Wooden Hut', False)
+        self.map.build_building(config.get_building('Wooden Hut'), 16, 16, False)
 
     def create_map(self):
         '''Creates the onscreen mapbox'''
@@ -159,7 +159,11 @@ class MapPopout:
 
         self.parent = parent
         self.map = config.map
-        self.building = config.get_building('Wooden Hut')
+
+        # Functions for building
+        self.building = None
+        self.build_positions = (None, None)
+        self.villager = None
 
     def create_toplevel(self):
         '''Create the toplevel widget for the map popout'''
@@ -176,7 +180,7 @@ class MapPopout:
                                height=config.map.height,
                                bg='black',
                                wrap=tk.NONE)
-        self.map_box.grid(row=0, column= 0, rowspan=2, padx=8, pady=8)
+        self.map_box.grid(row=0, column= 0, rowspan=3, padx=8, pady=8)
 
         # Add the tile information boxes
         self.tile_texture_box = tk.Text(self.root, 
@@ -196,6 +200,15 @@ class MapPopout:
                                      height=12,
                                      bg='black',)
         self.tile_info_box.grid(row=1, column= 1, columnspan=2, padx=4, pady=8)
+
+        # Add construct button is in building mode
+        if self.building != None:
+            self.construct_button = tk.Button(self.root,
+                                              text='Construct building',
+                                              width=20,
+                                              height=2,
+                                              command=self.construct_building)
+            self.construct_button.grid(row=2, column= 1, columnspan=2, padx=4, pady=8, sticky='S')
 
         # Draw the map textures in 
         create_map_base(self)
@@ -283,8 +296,10 @@ class MapPopout:
                     # Get colour for building
                     if self.map.check_free_land(self.building, x, y):
                         texture = (self.building.get_texture(xx+(yy*size[0]))[0], 'lime')
+                        self.can_build = True
                     else:
                         texture = (self.building.get_texture(xx+(yy*size[0]))[0], 'red')
+                        self.can_build = False
 
                 # insert the new texture into the box
                 self.map_box.insert(pos_key, texture[0])
@@ -300,6 +315,28 @@ class MapPopout:
 
         # Update tile info
         self.update_tile_information()
+
+    # Build a building in build mode
+    def construct_building(self):
+        '''Returns if a building can be constructed to a villager
+            function is for self.constuct_button'''
+        
+        if self.can_build == True:
+            self.villager.profession.turn_action_popout_closed(
+                self.villager,
+                self.building,
+                (self.map.selector_x, self.map.selector_y)
+            )
+            
+            # Reset variables out of building mode
+            self.building = None
+            self.build_positions = (None, None)
+            self.villager = None
+
+            # Close the gui
+            self.root.destroy()
+            self.root.update()
+
 
     ### Moving selector ###
     def move_selector(self, dir):
