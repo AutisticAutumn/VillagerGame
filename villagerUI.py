@@ -2,7 +2,6 @@
 # Villager Game
 # VilalgerUI Module
 # Written by Madeline Autumn
-# Last modified on 09/06/21
 #
 
 ### Importants and Varibles ###
@@ -64,7 +63,7 @@ class VillagerFrame:
         self.name_button.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
         self.stats_box = tk.Text(self.stats_frame,
-                                  width=36, 
+                                  width=44, 
                                   height=1,
                                   state=tk.DISABLED,
                                   bg='black')
