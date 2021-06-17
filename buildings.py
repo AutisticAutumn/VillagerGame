@@ -2,7 +2,6 @@
 # Villager Game
 # Buildings Module
 # Written by Madeline Autumn
-# Last modified on 06/06/21
 #
 
 ### Imports and variables ###
@@ -65,6 +64,10 @@ class WoodenHut:
         
         return (texture, colour)
 
+    def on_creation(self):
+        '''Runs functions for when the building is built'''
+        pass 
+
 class WoodenStatue:
     '''Simple statue that provides an instant boost to happiness
         slightly increases chance of new villagers'''
@@ -99,3 +102,10 @@ class WoodenStatue:
         colour = self.colours[self.colour_map[pos]]
         
         return (texture, colour)
+    
+    def on_creation(self):
+        '''Runs functions for when the building is built'''
+        
+        # Run through all villagers and add to their happiness by 1
+        for villager in config.villagers:
+            villager.gain_happiness(1, 1)
