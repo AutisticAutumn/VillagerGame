@@ -276,9 +276,15 @@ class MapPopout:
     def draw_selector(self):
         '''Draws the selector onscreen that gives information about a tile'''
 
+        # Get the size of the seletion
+        if self.building != None:
+            size = self.building.size
+        else:
+            size = (0,0)
+
         # Check the selector is withing bounds
-        max_x = self.map.width - self.building.size[0] + 1
-        max_y = self.map.height - self.building.size[1] + 1
+        max_x = self.map.width - size[0] + 1
+        max_y = self.map.height - size[1] + 1
         self.map.selector_x = max(0, min(self.map.selector_x, max_x))
         self.map.selector_y = max(1, min(self.map.selector_y, max_y))
 
@@ -364,12 +370,6 @@ class MapPopout:
     ### Moving selector ###
     def move_selector(self, dir):
         '''Move the sector and run any extra functions'''
-
-        # Get the size of the seletion
-        if self.building != None:
-            size = self.building.size
-        else:
-            size = (0,0)
 
         # Move is the correct direction and change varibles
         if dir == 'Right':
