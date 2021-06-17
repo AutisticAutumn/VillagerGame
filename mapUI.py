@@ -168,6 +168,7 @@ class MapPopout:
         self.root = tk.Toplevel(self.parent.parent.root)
         self.root.title('World map')
         self.root.resizable(width=0, height=0)
+        self.root.focus()
 
         # Add the map textbox
         self.map_box = tk.Text(self.root, 
