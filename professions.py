@@ -16,9 +16,9 @@ class Unemployed:
 
     def __init__(self):
 
+        # Villager info
         self.name = 'Unemployed'
         self.description = ''
-        self.ability = None
 
     def action(self, villager):
         pass
@@ -28,9 +28,9 @@ class Farmer:
 
     def __init__(self):
 
+        # Villager info
         self.name = 'Farmer'
         self.description = 'Provides 2-4 food each turn'
-        self.ability = None
 
     def action(self, villager):
         '''Collect food'''
@@ -46,9 +46,9 @@ class Feller:
 
     def __init__(self):
 
+        # Villager info
         self.name = 'Feller'
         self.description = 'Provides 2-3 wood each turn'
-        self.ability = None
 
     def action(self, villager):
         '''Collect Wood'''
@@ -63,10 +63,10 @@ class Carpenter:
     '''The carpenter builds building with wood'''
 
     def __init__(self):
-
+        
+        # Villager info
         self.name = 'Carpenter'
         self.description = 'Constructs wooden buildings'
-        self.ability = None
 
         self.action_text = 'Construct'
 
@@ -96,7 +96,7 @@ class Carpenter:
     def turn_action(self, villager):
         '''Opens the popout for the placement'''
 
-        building = config.get_building('Wooden Hut')
+        building = config.get_building('Wooden Statue')
 
         config.map.popout.villager = villager
         config.map.popout.building = building
