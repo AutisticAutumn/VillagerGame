@@ -37,21 +37,19 @@ class Map:
             for y in range(building.size[1]):
                 
                 # Get unique building object and data 
-                pos_key = f'({building.pos_y+y}:{building.pos_x+x})'
+                pos_key = f'({pos_y+y}:{pos_x+x})'
                 
                 if pos_key in self.map.keys():
                     return False
         
         return True
     
-    def build_building(self, key, pay=True):
+    def build_building(self, building, pos_x, pos_y, pay=True):
         '''Creates a building on the map'''
 
-        building = config.get_building(key)
-
         # Get the building position
-        building.pos_x = random.randint(1, self.width-12)
-        building.pos_y = random.randint(1, self.height-6)
+        building.pos_x = pos_x
+        building.pos_y = pos_y
 
         if not(self.check_free_land(building, building.pos_x, building.pos_y)):
             return False
