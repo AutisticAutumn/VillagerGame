@@ -2,7 +2,6 @@
 # Villager Game
 # Professions Module
 # Written by Madeline Autumn
-# Last modified on 09/06/21
 #
 
 ### Imports and variables ###
@@ -77,22 +76,40 @@ class Carpenter:
         # Only attempt to build if action was seleceted
         if villager.turn_action != None:
             # if building cannot be build return error
-            build = villager.turn_action[0](villager.turn_action[1])
+            print(
+                  villager.turn_action[1],
+                  villager.turn_action[2][0],
+                  villager.turn_action[2][1]
+                  )
+            build = villager.turn_action[0](
+                                            villager.turn_action[1],
+                                            villager.turn_action[2][0],
+                                            villager.turn_action[2][1]
+                                            )
             if build:
                 response = config.get_response('carpenter_action_succeed')
-                return (response.format(villager.name, villager.turn_action[1]), 'cyan')
+                return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
             else:
                 response = config.get_response('carpenter_action_no_wood')
-                return (response.format(villager.name, villager.turn_action[1]), 'orange')
+                return (response.format(villager.name, villager.turn_action[1].name), 'orange')
 
     def turn_action(self, villager):
-        '''Select which building to place and where'''
+        '''Opens the popout for the placement'''
 
-        building = 'Wooden Hut'
-        villager.turn_action = (config.map.build_building, building)
+        building = config.get_building('Wooden Hut')
+
+        config.map.popout.villager = villager
+        config.map.popout.building = building
+        config.map.popout.create_toplevel()
+
+    def turn_action_popout_closed(self, villager, building, pos):
+        '''Runs the functions for when the popout closes'''
+
+        # Set the action for the villager
+        villager.turn_action = (config.map.build_building, building, pos)
 
         # Return output to logs
         response = config.get_response('carpenter_turn_action')
-        response = response.format(villager.name,'Wooden Hut')
+        response = response.format(villager.name, building.name)
         villager.append_villager_log(response, 'lime')
     
