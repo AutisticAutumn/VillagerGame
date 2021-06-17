@@ -86,10 +86,14 @@ class Carpenter:
                                             villager.turn_action[2][0],
                                             villager.turn_action[2][1]
                                             )
-                                            
+
             if build:
                 response = config.get_response('carpenter_action_succeed')
                 return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
+                
+                # Run on creation functions for building
+                villager.turn_action[1].on_creation()
+
             else:
                 response = config.get_response('carpenter_action_no_wood')
                 return (response.format(villager.name, villager.turn_action[1].name), 'orange')
