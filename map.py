@@ -84,7 +84,4 @@ class Map:
         # Draw building onscreen
         self.frame.insert_building(f'({building.pos_y}:{building.pos_x})')
 
-        # Run on creation functions for building
-        building.on_creation()
-
         return True
