@@ -279,7 +279,12 @@ class MapPopout:
 
                 # Get exact texture for building
                 if not(self.building == None):
-                    texture = (self.building.get_texture(xx+(yy*size[0]))[0], 'lime')
+                   
+                    # Get colour for building
+                    if self.map.check_free_land(self.building, x, y):
+                        texture = (self.building.get_texture(xx+(yy*size[0]))[0], 'lime')
+                    else:
+                        texture = (self.building.get_texture(xx+(yy*size[0]))[0], 'red')
 
                 # insert the new texture into the box
                 self.map_box.insert(pos_key, texture[0])
