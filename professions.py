@@ -88,11 +88,12 @@ class Carpenter:
                                             )
 
             if build:
-                response = config.get_response('carpenter_action_succeed')
-                return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
                 
                 # Run on creation functions for building
                 villager.turn_action[1].on_creation()
+
+                response = config.get_response('carpenter_action_succeed')
+                return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
 
             else:
                 response = config.get_response('carpenter_action_no_wood')
@@ -101,7 +102,7 @@ class Carpenter:
     def turn_action(self, villager):
         '''Opens the popout for the placement'''
 
-        building = config.get_building('Wooden Statue')
+        building = config.get_building(self.buildings[0])
 
         config.map.popout.villager = villager
         config.map.popout.building = building
