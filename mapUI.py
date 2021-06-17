@@ -180,7 +180,7 @@ class MapPopout:
                                height=config.map.height,
                                bg='black',
                                wrap=tk.NONE)
-        self.map_box.grid(row=0, column= 0, rowspan=3, padx=8, pady=8)
+        self.map_box.grid(row=0, column= 0, rowspan=4, padx=8, pady=8)
 
         # Add the tile information boxes
         self.tile_texture_box = tk.Text(self.root, 
@@ -203,12 +203,24 @@ class MapPopout:
 
         # Add construct button is in building mode
         if self.building != None:
+            
+            # Building selection menu
+            self.selected_building = tk.StringVar()
+            self.selected_building.set(self.building.name)
+
+            self.building_select = tk.OptionMenu(self.root,
+                                                 self.selected_building,
+                                                 *self.villager.profession.buildings,
+                                                 command=self.select_building)
+            self.building_select.grid(row=2, column= 1, columnspan=2, padx=4, pady=8, sticky='S')
+
+            # Building button
             self.construct_button = tk.Button(self.root,
                                               text='Construct building',
                                               width=20,
                                               height=2,
                                               command=self.construct_building)
-            self.construct_button.grid(row=2, column= 1, columnspan=2, padx=4, pady=8, sticky='S')
+            self.construct_button.grid(row=3, column= 1, columnspan=2, padx=4, pady=8, sticky='S')
 
         # Draw the map textures in 
         create_map_base(self)
@@ -263,6 +275,12 @@ class MapPopout:
 
     def draw_selector(self):
         '''Draws the selector onscreen that gives information about a tile'''
+
+        # Check the selector is withing bounds
+        max_x = self.map.width - self.building.size[0] + 1
+        max_y = self.map.height - self.building.size[1] + 1
+        self.map.selector_x = max(0, min(self.map.selector_x, max_x))
+        self.map.selector_y = max(1, min(self.map.selector_y, max_y))
 
         # Clear off old selectors
         draw_map(self, self.updated_positions)
@@ -337,6 +355,11 @@ class MapPopout:
             self.root.destroy()
             self.root.update()
 
+    def select_building(self, building):
+        '''Changes onscreen building based on the selection menu'''
+
+        self.building = config.get_building(building)
+        self.draw_selector()
 
     ### Moving selector ###
     def move_selector(self, dir):
@@ -357,12 +380,6 @@ class MapPopout:
             self.map.selector_y -= 1
         elif dir == 'Down':
             self.map.selector_y += 1
-
-        # Keep stats within range
-        max_x = self.map.width - size[0] + 1
-        max_y = self.map.height - size[1] + 1
-        self.map.selector_x = max(0, min(self.map.selector_x, max_x))
-        self.map.selector_y = max(1, min(self.map.selector_y, max_y))
 
         # Update the selector
         self.draw_selector()
