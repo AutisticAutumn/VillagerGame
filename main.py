@@ -7,7 +7,7 @@
 
 ### Importants and Varibles ###
 import config
-import gameApp
+import gameApp, mapUI
 import villagers
 
 # Initialize the globals
@@ -21,6 +21,14 @@ for i in range(3):
 
 if __name__ == '__main__':
     main_app = gameApp.GameApp()
+    
+    # Create the innitial houses
+    for i in range(3):
+        config.map.build_building(config.get_building('Wooden Hut'), 16+(i*5), 16, False)
+    
+    # Update the map
+    mapUI.draw_map(config.map.frame)
+
     main_app.root.mainloop()
 
     config.save()
