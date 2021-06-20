@@ -10,6 +10,24 @@ import config
 
 ### Buildings ###
 
+class Building:
+    '''Main building class'''
+
+    def __init__(self):
+
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+
+        self.profession = None
+
+    def get_texture(self, pos):
+        '''returns the texture for the building'''
+
+        texture = self.texture.replace('\n','')[pos]
+        colour = self.colours[self.colour_map[pos]]
+        
+        return (texture, colour)
+
 class Grass:
     '''Default grass. Does nothing'''
 
@@ -30,13 +48,10 @@ class Grass:
         
         return (texture, self.colours[0])
 
-class WoodenHut:
+class WoodenHut(Building):
     '''Simple build that holds two villagers'''
 
     def __init__(self, pos_x=None, pos_y=None):
-
-        self.pos_x = pos_x
-        self.pos_y = pos_y
 
         self.name = 'Wooden Hut'
         self.description = 'A simple wooden hut'
@@ -54,28 +69,16 @@ class WoodenHut:
 
         self.cost = {'food': 0,
                      'wood': 10}
-        self.profession = None
-
-    def get_texture(self, pos):
-        '''returns the texture for the building'''
-
-        texture = self.texture.replace('\n','')[pos]
-        colour = self.colours[self.colour_map[pos]]
-        
-        return (texture, colour)
 
     def on_creation(self):
         '''Runs functions for when the building is built'''
         pass 
 
-class WoodenStatue:
+class WoodenStatue(Building):
     '''Simple statue that provides an instant boost to happiness
         slightly increases chance of new villagers'''
 
     def __init__(self, pos_x=None, pos_y=None):
-
-        self.pos_x = pos_x
-        self.pos_y = pos_y
 
         self.name = 'Wooden Statue'
         self.description = 'A simple wooden statue'
@@ -93,15 +96,6 @@ class WoodenStatue:
 
         self.cost = {'food': 0,
                      'wood': 6}
-        self.profession = None
-    
-    def get_texture(self, pos):
-        '''returns the texture for the building'''
-
-        texture = self.texture.replace('\n','')[pos]
-        colour = self.colours[self.colour_map[pos]]
-        
-        return (texture, colour)
     
     def on_creation(self):
         '''Runs functions for when the building is built'''
