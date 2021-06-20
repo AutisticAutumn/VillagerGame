@@ -72,7 +72,8 @@ class WoodenHut(Building):
 
     def on_creation(self):
         '''Runs functions for when the building is built'''
-        pass 
+        
+        config.max_villagers += 1 
 
 class WoodenStatue(Building):
     '''Simple statue that provides an instant boost to happiness
