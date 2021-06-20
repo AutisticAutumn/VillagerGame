@@ -22,6 +22,10 @@ def init():
     village = []
     villagers = []
 
+    # Village stats
+    global max_villagers
+    max_villagers = 0
+
     # Villager stat boundries
     global health_max, hunger_max
     health_max = 8
@@ -45,10 +49,9 @@ def init():
 
     # Map
     global map
-
     map = map.Map()
 
-    # Turn Log and  counter
+    # Turn Log and counter
     global log, turn
     log = []
     turn = 1
@@ -122,7 +125,7 @@ def get_building(key):
     
     if key == buildings.WoodenHut().name:
         return buildings.WoodenHut()
-
+    
     if key == buildings.WoodenStatue().name:
         return buildings.WoodenStatue()
 
