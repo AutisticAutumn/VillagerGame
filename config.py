@@ -25,7 +25,7 @@ def init():
     # Village stats
     global max_villagers, arrival_chance
     max_villagers = 0
-    arrival_chance = 4
+    arrival_chance = 0.25
 
 
     # Villager stat boundries
