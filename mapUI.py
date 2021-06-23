@@ -92,8 +92,6 @@ class MapFrame:
         self.create_map()
         create_map_base(self)
 
-        self.map.build_building(config.get_building('Wooden Hut'), 16, 16, False)
-
     def create_map(self):
         '''Creates the onscreen mapbox'''
 
@@ -130,24 +128,8 @@ class MapFrame:
             # Get the building object from the map
             building = self.map.map[pos_key]
 
-            # Get variables for the for loop
-            x0 = building.pos_x
-            x1 = building.pos_x+building.size[0]
-
-            y0 = building.pos_y
-            y1 = building.pos_y+building.size[1]
-
-            # Run through the complete building
-            for y in range(y0, y1):
-                for x in range(x0, x1):
-                    
-                    # Get position and texture
-                    pos = (x-x0)+((y-y0)*building.size[0])
-                    texture = building.get_texture(pos)
-                
-                    # Update the texture map
-                    pos = x + ((y-1)*self.map.width)
-                    self.map.texture_map[pos] = texture
+            # Update the map texture
+            building.update_texture_map()
             
         except:
             return False
