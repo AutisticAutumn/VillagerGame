@@ -146,7 +146,7 @@ class Farm(Building):
     '''A farm the provides a space for farmers to work
         hold one farmer job'''
 
-    def __init__(self, pos_x=None, pos_y=None):
+    def __init__(self):
         
         # Get inherited data
         Building.__init__(self)
@@ -159,7 +159,7 @@ class Farm(Building):
         self.size = (3,2)
 
         # Produce a randomized colourmap for each object
-        self.colours = ['sienna3', 'chocolate3', 'indianred3', 'goldenrod', 'forest green']
+        self.colours = ['sienna1', 'chocolate3', 'indianred3', 'goldenrod', 'forest green']
 
         self.profession = 'Farmer'
 
@@ -193,3 +193,9 @@ class Farm(Building):
                 self.colour_map.append(random.randint(2, 4))
             else: 
                 self.colour_map.append(random.randint(0, 1))
+
+        # Attempt to update texture on the map if possible
+        try:
+            self.update_texture_map()
+        except:
+            pass
