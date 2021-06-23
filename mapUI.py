@@ -168,20 +168,21 @@ class MapPopout:
         self.tile_texture_box = tk.Text(self.root, 
                                         width=1, 
                                         height=1,
-                                        bg='black',)
+                                        bg='black')
         self.tile_texture_box.grid(row=0, column= 1,padx=4, pady=8, sticky='N')
 
         self.tile_name_box = tk.Text(self.root, 
                                      width=16, 
                                      height=1,
-                                     bg='black',)
+                                     bg='black')
         self.tile_name_box.grid(row=0, column= 2,padx=4, pady=8, sticky='N')
 
         self.tile_info_box = tk.Text(self.root, 
                                      width=20, 
                                      height=12,
-                                     bg='black',)
-        self.tile_info_box.grid(row=1, column= 1, columnspan=2, padx=4, pady=8)
+                                     bg='black',
+                                     wrap=tk.WORD)
+        self.tile_info_box.grid(row=1, column= 1, columnspan=2, padx=4, pady=8, sticky='N')
 
         # Add construct button is in building mode
         if self.building != None:
@@ -236,6 +237,15 @@ class MapPopout:
         except:
             building = config.get_building('Grass')
 
+        # Get advanced building descriptiong
+        description = building.description
+        
+        if building.name != 'Grass':
+            if building.name == 'Farm':
+                description += f'\n\nContains {building.food} crops'
+            if building.worker != None:
+                description += f'\n\nCurrently worked by {building.worker.name}'
+
         # Clear all textboxes of previous data
         self.tile_texture_box.delete(1.0, tk.END)
         self.tile_name_box.delete(1.0, tk.END)
@@ -244,7 +254,7 @@ class MapPopout:
         # Insert new data to the text boxes
         self.tile_texture_box.insert(1.0, texture[0])
         self.tile_name_box.insert(1.0, building.name)
-        self.tile_info_box.insert(1.0, building.description)
+        self.tile_info_box.insert(1.0, description)
 
         # Add colour tags to the boxes
         self.tile_texture_box.tag_add('Colour', 1.0, tk.END)
