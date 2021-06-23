@@ -97,3 +97,10 @@ Villager
     game_over
     There are no villagers remaining
 }
+
+General Functions
+{
+    arrival
+    {0} has arrived in the village
+    {0} has decided to settle in your village
+}
