@@ -20,7 +20,6 @@ Professions
     {0} will build a {1} at the turns end
 }
 
-
 Villager
 {
     consume_food
@@ -103,4 +102,12 @@ General Functions
     arrival
     {0} has arrived in the village
     {0} has decided to settle in your village
+}
+{
+    find_work_building
+    {0} has found a {1} to work in
+}
+{
+    find_work_building_fail
+    {0} was unable to find a {1} to work in
 }
