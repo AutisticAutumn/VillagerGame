@@ -131,7 +131,7 @@ class Feller(Profession):
         config.wood += wood_produced
 
         response = config.get_response('feller_action')
-        return (response.format(villager.name, wood_produced), 'lime')
+        return (response.format(villager.name, wood_produced), 'chocolate')
 
 class Carpenter(Profession):
     '''The carpenter builds building with wood'''
