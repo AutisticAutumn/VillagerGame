@@ -25,6 +25,8 @@ if __name__ == '__main__':
         # Add wooden huts and adjust max villagers accordingly
         config.map.build_building(config.get_building('Wooden Hut'), 16+(i*5), 16, False)
         config.max_villagers += 1
+
+        config.map.build_building(config.get_building('Farm'), 16+(i*5), 20, False)
         
         # Create inital villagers
         config.create_villager()
