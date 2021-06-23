@@ -49,11 +49,20 @@ class Farmer(Profession):
     def action(self, villager):
         '''Collect food'''
         
-        food_produced = random.randint(1,3)
-        config.food += food_produced
+        # Check if the farm can work at a farm
+        if villager.work_building != None:
 
-        response = config.get_response('farmer_action')
-        return (response.format(villager.name, food_produced), 'lime')
+            # Get food from farm
+            food = villager.work_building.food
+            config.food += food
+
+            # Add food to the farm
+            food_produced = random.randint(1,3)
+            villager.work_building.reset_texture(food_produced)
+            
+            # Return output
+            response = config.get_response('farmer_action')
+            return (response.format(villager.name, food), 'lime')
 
 class Feller(Profession):
     '''The Feller provides Wood for the village'''
