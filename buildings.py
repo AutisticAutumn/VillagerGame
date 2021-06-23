@@ -175,13 +175,14 @@ class Farm(Building):
         self.texture = ''
         texture_temp = ''
         self.colour_map = []
+        self.food = 0
 
         # Add crops and dirt
         for i in range(crops):
             texture_temp += '♠'
             self.food += 1
 
-        for i in range((self.size[0]*self.size[0])-crops):
+        for i in range((self.size[0]*self.size[1])-crops):
             texture_temp += '≈'
 
         # Shuffle the string
