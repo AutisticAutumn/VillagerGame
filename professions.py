@@ -102,7 +102,7 @@ class Carpenter:
     def turn_action(self, villager):
         '''Opens the popout for the placement'''
 
-        building = config.get_building(self.buildings[0])
+        building = config.get_building('Wooden Statue')
 
         config.map.popout.villager = villager
         config.map.popout.building = building
