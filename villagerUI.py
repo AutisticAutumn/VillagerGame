@@ -100,6 +100,9 @@ class VillagerFrame:
         self.villager.profession = config.professions_dict[profession]
         self.update_stats()
 
+        if self.villager.profession.building != None:
+            self.villager.assign_work_building()
+
         # Attempt to add action button for certain professions
         try:
             self.action_button.grid_remove()
