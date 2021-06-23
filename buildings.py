@@ -29,6 +29,25 @@ class Building:
         
         return (texture, colour)
 
+    def update_texture_map(self):
+        x0 = self.pos_x
+        x1 = self.pos_x + self.size[0]
+
+        y0 = self.pos_y
+        y1 = self.pos_y + self.size[1]
+
+        # Run through the complete building
+        for y in range(y0, y1):
+            for x in range(x0, x1):
+                    
+                # Get position and texture
+                pos = (x-x0)+((y-y0)*self.size[0])
+                texture = self.get_texture(pos)
+                
+                # Update the texture map
+                pos = x + ((y-1)*config.map.width)
+                config.map.texture_map[pos] = texture
+
     def on_creation(self):
         '''Runs functions for when the building is built'''
         pass
