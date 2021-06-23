@@ -15,8 +15,8 @@ class Building:
 
     def __init__(self):
 
-        self.pos_x = pos_x
-        self.pos_y = pos_y
+        self.pos_x = None
+        self.pos_y = None
 
         self.profession = None
         self.worker = None
@@ -60,8 +60,12 @@ class Grass:
 class WoodenHut(Building):
     '''Simple build that holds two villagers'''
 
-    def __init__(self, pos_x=None, pos_y=None):
+    def __init__(self):
 
+        # Get inherited data
+        Building.__init__(self)
+
+        # Get building data
         self.name = 'Wooden Hut'
         self.description = 'A simple wooden hut'
 
@@ -90,7 +94,11 @@ class WoodenStatue(Building):
         slightly increases chance of new villagers'''
 
     def __init__(self, pos_x=None, pos_y=None):
+        
+        # Get inherited data
+        Building.__init__(self)
 
+        # Get building data
         self.name = 'Wooden Statue'
         self.description = 'A simple wooden statue'
 
@@ -120,7 +128,11 @@ class Farm(Building):
         hold one farmer job'''
 
     def __init__(self, pos_x=None, pos_y=None):
+        
+        # Get inherited data
+        Building.__init__(self)
 
+        # Get building data
         self.name = 'Farm'
         self.description = 'Provides food for the village'
 
