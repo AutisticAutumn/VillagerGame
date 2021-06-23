@@ -135,27 +135,42 @@ class Farm(Building):
         # Get building data
         self.name = 'Farm'
         self.description = 'Provides food for the village'
+        self.food = 0
 
         self.size = (3,2)
-        self.texture = ''
+
         # Produce a randomized colourmap for each object
-        self.colour_map = []
         self.colours = ['sienna3', 'chocolate3', 'indianred3', 'goldenrod', 'forest green']
 
         self.profession = 'Farmer'
 
-        for i in range(self.size[0]*self.size[0]):
-
-            # Add plants to the texture
-            if random.randint(1,4) == 1:
-                self.texture += '♠'
-                self.colour_map.append(random.randint(2, len(self.colours)-1))
-            else:
-                self.texture += '≈'
-                self.colour_map.append(random.randint(0, len(self.colours)-3))
-        
-        
-
+        # add crops to farm
+        self.reset_texture(random.randint(1,3))
         self.cost = {'food': 5,
                      'wood': 0}
 
+    def reset_texture(self, crops):
+        '''Reset the texture to include new crops'''
+
+        # Reset texture data
+        self.texture = ''
+        texture_temp = ''
+        self.colour_map = []
+
+        # Add crops and dirt
+        for i in range(crops):
+            texture_temp += '♠'
+            self.food += 1
+
+        for i in range((self.size[0]*self.size[0])-crops):
+            texture_temp += '≈'
+
+        # Shuffle the string
+        self.texture = ''.join(random.sample(texture_temp ,len(texture_temp)))
+
+        # Add colour to the texture
+        for texture in self.texture:
+            if texture == '♠':
+                self.colour_map.append(random.randint(2, 4))
+            else: 
+                self.colour_map.append(random.randint(0, 1))
