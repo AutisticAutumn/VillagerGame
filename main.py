@@ -13,19 +13,16 @@ init_villagers = 3
 # Initialize the globals
 config.init()
 
-# Create the innitial villagers
-for i in range(init_villagers):
-    config.create_villager()
-
 ### Main Game Loop ###
 
 if __name__ == '__main__':
 
     config.init_app()
     
-    # Create the innitial houses
+    # Create the innitial houses and villagers
     for i in range(init_villagers):
         config.map.build_building(config.get_building('Wooden Hut'), 16+(i*5), 16, False)
+        config.create_villager()
     
     # Update the map
     mapUI.draw_map(config.map.frame)
