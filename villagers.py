@@ -126,9 +126,21 @@ class Villager:
             building_free = building.worker == None
 
             if building_type and building_free:
+
+                # Update stats for villager and building
                 building.worker = self
                 self.work_building = building
+                
+                # Return to logs
+                response = config.get_response('find_work_building').format(self.name, building.name)
+                self.append_villager_log(response, 'lime')
                 break
+        
+        # Return to logs if failed
+        if self.work_building == None:
+            response = config.get_response('find_work_building_fail')
+            response = response.format(self.name, self.profession.building)
+            self.append_villager_log(response, 'red')
 
     def attack_villager(self):
         '''Function for dealing with villager combat'''
