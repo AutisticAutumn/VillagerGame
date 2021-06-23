@@ -11,7 +11,17 @@ import random
 
 ### Professions ###
 
-class Unemployed:
+class Profession:
+    '''Main profession class that deals with globals'''
+
+    def __init__(self):
+
+        self.building = None
+
+    def action(self, villager):
+        pass
+
+class Unemployed(Profession):
     '''Unemployed villagers provide no materials or bonuses but can build buildings'''
 
     def __init__(self):
@@ -20,10 +30,7 @@ class Unemployed:
         self.name = 'Unemployed'
         self.description = ''
 
-    def action(self, villager):
-        pass
-
-class Farmer:
+class Farmer(Profession):
     '''The farmer provides foods for the village at Farms'''
 
     def __init__(self):
@@ -41,7 +48,7 @@ class Farmer:
         response = config.get_response('farmer_action')
         return (response.format(villager.name, food_produced), 'lime')
 
-class Feller:
+class Feller(Profession):
     '''The Feller provides Wood for the village'''
 
     def __init__(self):
@@ -59,7 +66,7 @@ class Feller:
         response = config.get_response('feller_action')
         return (response.format(villager.name, wood_produced), 'lime')
 
-class Carpenter:
+class Carpenter(Profession):
     '''The carpenter builds building with wood'''
 
     def __init__(self):
