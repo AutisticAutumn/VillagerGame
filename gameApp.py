@@ -76,7 +76,7 @@ class GameApp:
 
         # Stat box
         self.stats_box = tk.Text(self.center_frame,
-                                 width=57, 
+                                 width=65, 
                                  height=1,
                                  state=tk.DISABLED,
                                  bg='black')
