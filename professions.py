@@ -26,6 +26,9 @@ class Unemployed(Profession):
 
     def __init__(self):
 
+        # Inherit data
+        Profession.__init__(self)
+
         # Villager info
         self.name = 'Unemployed'
         self.description = ''
@@ -35,9 +38,13 @@ class Farmer(Profession):
 
     def __init__(self):
 
+        # Inherit data
+        Profession.__init__(self)
+
         # Villager info
         self.name = 'Farmer'
         self.description = 'Provides 2-4 food each turn'
+        self.building = 'Farm'
 
     def action(self, villager):
         '''Collect food'''
@@ -52,6 +59,9 @@ class Feller(Profession):
     '''The Feller provides Wood for the village'''
 
     def __init__(self):
+        
+        # Inherit data
+        Profession.__init__(self)
 
         # Villager info
         self.name = 'Feller'
@@ -71,6 +81,9 @@ class Carpenter(Profession):
 
     def __init__(self):
         
+        # Inherit data
+        Profession.__init__(self)
+
         # Villager info
         self.name = 'Carpenter'
         self.description = 'Constructs wooden buildings'
