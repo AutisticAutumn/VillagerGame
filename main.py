@@ -21,8 +21,14 @@ if __name__ == '__main__':
     
     # Create the innitial houses and villagers
     for i in range(init_villagers):
+
+        # Add wooden huts and adjust max villagers accordingly
         config.map.build_building(config.get_building('Wooden Hut'), 16+(i*5), 16, False)
+        config.max_villagers += 1
+        
+        # Create inital villagers
         config.create_villager()
+
     
     # Update the map
     mapUI.draw_map(config.map.frame)
