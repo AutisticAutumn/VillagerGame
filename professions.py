@@ -89,12 +89,12 @@ class Farmer(Profession):
                 # Run on creation functions for building
                 villager.turn_action[1].on_creation()
 
-                response = config.get_response('carpenter_action_succeed')
+                response = config.get_response('build_action_succeed')
                 return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
 
             else:
-                response = config.get_response('carpenter_action_no_wood')
-                return (response.format(villager.name, villager.turn_action[1].name), 'orange')
+                response = config.get_response('farmer_action_build_fail')
+                return (response.format(villager.name, villager.turn_action[1].name), 'red')
 
         else:
             # Check if the farm can work at a farm
@@ -169,9 +169,9 @@ class Carpenter(Profession):
                 # Run on creation functions for building
                 villager.turn_action[1].on_creation()
 
-                response = config.get_response('carpenter_action_succeed')
+                response = config.get_response('build_action_succeed')
                 return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
 
             else:
                 response = config.get_response('carpenter_action_no_wood')
-                return (response.format(villager.name, villager.turn_action[1].name), 'orange')
+                return (response.format(villager.name, villager.turn_action[1].name), 'red')
