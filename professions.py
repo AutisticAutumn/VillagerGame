@@ -67,23 +67,50 @@ class Farmer(Profession):
         self.description = 'Provides 2-4 food each turn'
         self.building = 'Farm'
 
+        # Farm construction info
+        self.action_text = 'Construct farm'
+        self.buildings = ['Farm']
+
     def action(self, villager):
         '''Collect food'''
         
-        # Check if the farm can work at a farm
-        if villager.work_building != None:
+        # Check if a build is going to be build as first priority
+        if villager.turn_action != None:
 
-            # Get food from farm
-            food = villager.work_building.food
-            config.food += food
+            # if building cannot be build return error
+            build = villager.turn_action[0](
+                                            villager.turn_action[1],
+                                            villager.turn_action[2][0],
+                                            villager.turn_action[2][1]
+                                            )
 
-            # Add food to the farm
-            food_produced = random.randint(1,3)
-            villager.work_building.reset_texture(food_produced)
-            
-            # Return output
-            response = config.get_response('farmer_action')
-            return (response.format(villager.name, food), 'lime')
+            if build:
+                
+                # Run on creation functions for building
+                villager.turn_action[1].on_creation()
+
+                response = config.get_response('carpenter_action_succeed')
+                return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
+
+            else:
+                response = config.get_response('carpenter_action_no_wood')
+                return (response.format(villager.name, villager.turn_action[1].name), 'orange')
+
+        else:
+            # Check if the farm can work at a farm
+            if villager.work_building != None:
+
+                # Get food from farm
+                food = villager.work_building.food
+                config.food += food
+
+                # Add food to the farm
+                food_produced = random.randint(1,3)
+                villager.work_building.reset_texture(food_produced)
+                
+                # Return output
+                response = config.get_response('farmer_action')
+                return (response.format(villager.name, food), 'lime')
 
 class Feller(Profession):
     '''The Feller provides Wood for the village'''
