@@ -6,6 +6,7 @@
 
 import random
 import professions, buildings, map
+import villagers as villagers_scr
 
 # Initiate the global variables
 def init():
@@ -27,6 +28,11 @@ def init():
     max_villagers = 0
     arrival_chance = 0.25
 
+    # Villager names
+    global names
+    with open("villager_names", 'r') as f:
+        names = f.readlines()
+    names = [n.strip() for n in names] 
 
     # Villager stat boundries
     global health_max, hunger_max
@@ -130,6 +136,13 @@ def get_building(key):
     
     if key == buildings.WoodenStatue().name:
         return buildings.WoodenStatue()
+
+
+def create_villager():
+    '''Creates a randomized villager and to the village'''
+
+    villagers.append(villagers_scr.Villager(random.choice(names), professions.Unemployed()))
+
 
 def save():
     '''Save the variables into files'''
