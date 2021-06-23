@@ -7,7 +7,6 @@
 ### Importants and Varibles ###
 import config
 import gameApp, mapUI
-import villagers
 
 init_villagers = 3
 
@@ -16,12 +15,13 @@ config.init()
 
 # Create the innitial villagers
 for i in range(init_villagers):
-    villagers.create_villager()
+    config.create_villager()
 
 ### Main Game Loop ###
 
 if __name__ == '__main__':
-    main_app = gameApp.GameApp()
+
+    config.init_app()
     
     # Create the innitial houses
     for i in range(init_villagers):
@@ -30,6 +30,6 @@ if __name__ == '__main__':
     # Update the map
     mapUI.draw_map(config.map.frame)
 
-    main_app.root.mainloop()
+    config.main_app.root.mainloop()
 
     config.save()
