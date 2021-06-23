@@ -207,6 +207,22 @@ class GameApp:
             self.end_turn_button.config(state=tk.DISABLED)
             return False
 
+        # Attempt to add new villagers if there is space
+        if len(config.villagers) < config.max_villagers:
+            
+            chance = int(1 / config.arrival_chance)
+            print(chance)
+
+            # Random chance for villager to arrive
+            if random.randint(1, chance) < 10:
+                config.create_villager()
+
+                print(config.villagers[-1].name)
+                
+                # Return response to log
+                response = config.get_response('arrival').format(config.villagers[-1].name)
+                self.append_log(response, 'cyan')
+
         # Update turn counter and add to the logs
         config.turn += 1
         self.append_log(f'\nTurn {config.turn}')
