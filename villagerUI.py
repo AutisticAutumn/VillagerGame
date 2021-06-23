@@ -100,6 +100,12 @@ class VillagerFrame:
         self.villager.profession = config.professions_dict[profession]
         self.update_stats()
 
+        # Reset stats associated with profession
+        self.villager.turn_action = None
+        if self.villager.work_building != None:
+            self.villager.work_building.worker = None
+            self.villager.work_building = None
+
         if self.villager.profession.building != None:
             self.villager.assign_work_building()
 
