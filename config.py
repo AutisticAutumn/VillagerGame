@@ -23,8 +23,10 @@ def init():
     villagers = []
 
     # Village stats
-    global max_villagers
+    global max_villagers, arrival_chance
     max_villagers = 0
+    arrival_chance = 4
+
 
     # Villager stat boundries
     global health_max, hunger_max
