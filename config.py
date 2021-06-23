@@ -144,6 +144,9 @@ def get_building(key):
     if key == buildings.WoodenStatue().name:
         return buildings.WoodenStatue()
 
+    if key == buildings.Farm().name:
+        return buildings.Farm()
+
 
 def create_villager():
     '''Creates a randomized villager and to the village'''
