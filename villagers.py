@@ -31,8 +31,9 @@ class Villager:
         # Turn action
         self.turn_action = None
 
-        # Profession lock
+        # Profession data
         self.profession_lock = 0
+        self.work_building = None
 
         # Frame widget
         self.frame = None
@@ -114,6 +115,21 @@ class Villager:
             # Add hunger if no food was consumed
             self.gain_hunger(False)
     
+    def assign_work_building(self):
+        '''Finds building for the villager to work in if required'''
+        
+        # Run through the list of buildings on the map and see if any match
+        for building in config.map.map.values():
+            
+            # Check if building is the right type and free
+            building_type = building.profession == self.profession.name
+            building_free = building.worker == None
+
+            if building_type and building_free:
+                building.worker = self
+                self.work_building = building
+                break
+
     def attack_villager(self):
         '''Function for dealing with villager combat'''
 
