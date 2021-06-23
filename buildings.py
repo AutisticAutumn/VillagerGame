@@ -73,6 +73,7 @@ class WoodenHut(Building):
     def on_creation(self):
         '''Runs functions for when the building is built'''
         
+        # Increase the max number of villagers
         config.max_villagers += 1 
 
 class WoodenStatue(Building):
