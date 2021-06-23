@@ -5,7 +5,7 @@
 #
 
 import random
-import professions, buildings, map
+import professions, buildings, map, gameApp
 import villagers as villagers_scr
 
 # Initiate the global variables
@@ -83,6 +83,13 @@ def init():
 
     # Create the list of responses
     get_responses_dict()
+
+def init_app():
+    '''Creates the application globals'''
+    
+    # Game ui
+    global main_app
+    main_app = gameApp.GameApp()
 
 def get_responses_dict():
     '''Produce the dictionary of villager responses'''
