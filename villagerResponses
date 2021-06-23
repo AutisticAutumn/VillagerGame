@@ -8,13 +8,14 @@ Professions
     {0} has produced {1} wood
 }
 {
-    carpenter_action_succeed
-    {0} has built a {1}
-}
-{
     carpenter_action_no_wood
     {0} could not find enough wood to build a {1}
 }
+{
+    farmer_action_build_fail
+    {0} could not source enough food to start a farm
+}
+
 
 Villager
 {
@@ -110,4 +111,8 @@ General Functions
 {
     build_turn_action
     {0} will build a {1} at the turns end
+}
+{
+    build_action_succeed
+    {0} has built a {1}
 }
