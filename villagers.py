@@ -10,10 +10,6 @@ import config, professions
 import random
 from tkinter import DISABLED, NORMAL
 
-with open("villager_names", 'r') as f:
-    names = f.readlines()
-names = [n.strip() for n in names] 
-
 ### Villager class ###
 
 class Villager:
@@ -258,8 +254,3 @@ class Villager:
 
         # Remove self from villager list
         config.villagers.remove(self)
-
-def create_villager():
-    '''Creates a randomized villager and to the village'''
-
-    config.villagers.append(Villager(random.choice(names), professions.Unemployed()))
