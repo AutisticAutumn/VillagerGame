@@ -20,6 +20,27 @@ class Profession:
 
     def action(self, villager):
         pass
+    
+    def turn_action(self, villager):
+        '''Opens the popout for the placement'''
+
+        building = config.get_building(self.buildings[0])
+
+        config.map.popout.villager = villager
+        config.map.popout.building = building
+        config.map.popout.create_toplevel()
+
+    def turn_action_popout_closed(self, villager, building, pos):
+        '''Runs the functions for when the popout closes'''
+
+        # Set the action for the villager
+        villager.turn_action = (config.map.build_building, building, pos)
+
+        # Return output to logs
+        response = config.get_response('build_turn_action')
+        response = response.format(villager.name, building.name)
+        villager.append_villager_log(response, 'lime')
+    
 
 class Unemployed(Profession):
     '''Unemployed villagers provide no materials or bonuses but can build buildings'''
@@ -127,24 +148,3 @@ class Carpenter(Profession):
             else:
                 response = config.get_response('carpenter_action_no_wood')
                 return (response.format(villager.name, villager.turn_action[1].name), 'orange')
-
-    def turn_action(self, villager):
-        '''Opens the popout for the placement'''
-
-        building = config.get_building('Wooden Statue')
-
-        config.map.popout.villager = villager
-        config.map.popout.building = building
-        config.map.popout.create_toplevel()
-
-    def turn_action_popout_closed(self, villager, building, pos):
-        '''Runs the functions for when the popout closes'''
-
-        # Set the action for the villager
-        villager.turn_action = (config.map.build_building, building, pos)
-
-        # Return output to logs
-        response = config.get_response('carpenter_turn_action')
-        response = response.format(villager.name, building.name)
-        villager.append_villager_log(response, 'lime')
-    
