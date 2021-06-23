@@ -28,6 +28,14 @@ class Building:
         
         return (texture, colour)
 
+    def on_creation(self):
+        '''Runs functions for when the building is built'''
+        pass
+
+    def begin_turn(self):
+        '''Run any start of turn functions for the building'''
+        pass
+
 class Grass:
     '''Default grass. Does nothing'''
 
@@ -121,6 +129,8 @@ class Farm(Building):
         self.colour_map = []
         self.colours = ['sienna3', 'chocolate3', 'indianred3', 'goldenrod', 'forest green']
 
+        self.profession = 'Farmer'
+
         for i in range(self.size[0]*self.size[0]):
 
             # Add plants to the texture
@@ -135,10 +145,4 @@ class Farm(Building):
 
         self.cost = {'food': 5,
                      'wood': 0}
-    
-    def on_creation(self):
-        '''Runs functions for when the building is built'''
-        
-        # Run through all villagers and add to their happiness by 1
-        for villager in config.villagers:
-            villager.gain_happiness(1, 1)
+
