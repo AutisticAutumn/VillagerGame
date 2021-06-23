@@ -15,10 +15,6 @@ Professions
     carpenter_action_no_wood
     {0} could not find enough wood to build a {1}
 }
-{
-    carpenter_turn_action
-    {0} will build a {1} at the turns end
-}
 
 Villager
 {
@@ -110,4 +106,8 @@ General Functions
 {
     find_work_building_fail
     {0} was unable to find a {1} to work in
+}
+{
+    build_turn_action
+    {0} will build a {1} at the turns end
 }
