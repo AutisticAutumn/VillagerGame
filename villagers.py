@@ -2,7 +2,6 @@
 # Villager Game
 # Villager Module
 # Written by Madeline Autumn
-# Last modified on 14/06/21
 #
 
 ### Imports and Varibles ###
@@ -37,6 +36,8 @@ class Villager:
 
         # Frame widget
         self.frame = None
+        config.main_app.add_villager_frame(self)
+        self.frame.update_stats()
 
     ## Turn functions ##
     def end_turn(self):
