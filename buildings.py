@@ -19,6 +19,7 @@ class Building:
         self.pos_y = pos_y
 
         self.profession = None
+        self.worker = None
 
     def get_texture(self, pos):
         '''returns the texture for the building'''
