@@ -116,15 +116,20 @@ class Farm(Building):
         self.description = 'Provides food for the village'
 
         self.size = (3,2)
-        self.texture = '''
-≈≈≈
-≈≈≈'''
+        self.texture = ''
         # Produce a randomized colourmap for each object
         self.colour_map = []
-        self.colours = ['sienna3', 'spring green2']
+        self.colours = ['sienna3', 'chocolate3', 'indianred3', 'goldenrod', 'forest green']
 
         for i in range(self.size[0]*self.size[0]):
-            self.colour_map.append(random.randint(0, len(self.colours)-1))
+
+            # Add plants to the texture
+            if random.randint(1,4) == 1:
+                self.texture += '♠'
+                self.colour_map.append(random.randint(2, len(self.colours)-1))
+            else:
+                self.texture += '≈'
+                self.colour_map.append(random.randint(0, len(self.colours)-3))
         
         
 
