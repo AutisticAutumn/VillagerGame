@@ -241,8 +241,14 @@ class MapPopout:
         description = building.description
         
         if building.name != 'Grass':
+            # Add crop numbers for farms
             if building.name == 'Farm':
-                description += f'\n\nContains {building.food} crops'
+                if building.food > 0:
+                    description += f'\n\nContains {building.food} crops'
+                else:
+                    description += f'\n\nContains no crops'
+
+            # Add workers to buildings
             if building.worker != None:
                 description += f'\n\nCurrently worked by {building.worker.name}'
 
