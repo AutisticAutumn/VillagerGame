@@ -108,9 +108,10 @@ class Farmer(Profession):
                 food_produced = random.randint(1,3)
                 villager.work_building.reset_texture(food_produced)
                 
-                # Return output
-                response = config.get_response('farmer_action')
-                return (response.format(villager.name, food), 'lime')
+                # Return output if food was produced
+                if food > 0:
+                    response = config.get_response('farmer_action')
+                    return (response.format(villager.name, food), 'lime')
 
 class Feller(Profession):
     '''The Feller provides Wood for the village'''
