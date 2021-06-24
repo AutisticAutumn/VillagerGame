@@ -75,6 +75,10 @@ class Villager:
             self.profession_lock = max(0 , self.profession_lock-1)
             self.frame.professions_menu.config(state=NORMAL)
 
+        # Attempt to find a building if needed for work
+        if self.profession.building != None and self.work_building == None: 
+            self.assign_work_building()
+
     def append_villager_log(self, line, colour='white'):
         '''Appends a line to the villager log and prints to main log'''
 
@@ -134,6 +138,7 @@ class Villager:
                 # Return to logs
                 response = config.get_response('find_work_building').format(self.name, building.name)
                 self.append_villager_log(response, 'lime')
+
                 break
         
         # Return to logs if failed
