@@ -15,7 +15,7 @@ config.init()
 init_villagers = 3
 init_pos = (random.randint(12, config.map.width-12), 
             random.randint(8, config.map.height-8))
-offset_max = (6,4)
+offset_max = (7, 5)
 
 ### Functions ###
 def get_offset(x_offset, y_offset):
@@ -43,7 +43,7 @@ if __name__ == '__main__':
             pos = get_offset(offset_max[0], offset_max[1])
             build_hut = config.map.build_building(config.get_building('Wooden Hut'), 
                                                   pos[0], pos[1], 
-                                                  False)
+                                                  False, True)
         config.max_villagers += 1
 
         # Add farms
@@ -52,7 +52,7 @@ if __name__ == '__main__':
             pos = get_offset(offset_max[0]+1, offset_max[1]+1)
             build_farm = config.map.build_building(config.get_building('Farm'), 
                                                    pos[0], pos[1], 
-                                                   False)
+                                                   False, True)
         
         # Create inital villagers
         config.create_villager()
