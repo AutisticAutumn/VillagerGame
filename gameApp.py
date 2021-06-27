@@ -196,10 +196,6 @@ class GameApp:
         for villager in config.villagers:
             villager.end_turn()
 
-        # Run the beginning of turn functions just before the next turn begins
-        for villager in config.villagers:
-            villager.begin_turn()
-
         # End game if no villagers are remaining
         if len(config.villagers) == 0:
             self.append_log(config.get_response('game_over'))
@@ -207,10 +203,14 @@ class GameApp:
             self.end_turn_button.config(state=tk.DISABLED)
             return False
 
+        # Update turn counter and add to the logs
+        config.turn += 1
+        self.append_log(f'\nTurn {config.turn}')
+
         # Attempt to add new villagers if there is space
         if len(config.villagers) < config.max_villagers:
             
-            chance = int(1 / config.arrival_chance)
+            chance = int(10 / config.arrival_chance)
 
             # Random chance for villager to arrive
             if random.randint(1, chance) < 10:
@@ -220,9 +220,9 @@ class GameApp:
                 response = config.get_response('arrival').format(config.villagers[-1].name)
                 self.append_log(response, 'cyan')
 
-        # Update turn counter and add to the logs
-        config.turn += 1
-        self.append_log(f'\nTurn {config.turn}')
+        # Run the beginning of turn functions just before the next turn begins
+        for villager in config.villagers:
+            villager.begin_turn()
 
         # Update the gui and map
         self.update_stats()
