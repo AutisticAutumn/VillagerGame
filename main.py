@@ -7,11 +7,26 @@
 ### Importants and Varibles ###
 import config
 import gameApp, mapUI
-
-init_villagers = 3
+import random
 
 # Initialize the globals
 config.init()
+
+init_villagers = 3
+init_pos = (random.randint(12, config.map.width-12), 
+            random.randint(8, config.map.height-8))
+offset_max = (6,4)
+
+### Functions ###
+def get_offset(x_offset, y_offset):
+    '''Return a randomized offset and position for initital buildings'''
+
+    # Get offset in relation to center pos and set pos
+    offset = (random.randint(x_offset*-1, x_offset), 
+              random.randint(y_offset*-1, y_offset))
+    pos = (init_pos[0] + offset[0], init_pos[1] + offset[1])
+
+    return pos
 
 ### Main Game Loop ###
 
@@ -23,14 +38,24 @@ if __name__ == '__main__':
     for i in range(init_villagers):
 
         # Add wooden huts and adjust max villagers accordingly
-        config.map.build_building(config.get_building('Wooden Hut'), 16+(i*5), 16, False)
+        build_hut = False
+        while build_hut == False:
+            pos = get_offset(offset_max[0], offset_max[1])
+            build_hut = config.map.build_building(config.get_building('Wooden Hut'), 
+                                                  pos[0], pos[1], 
+                                                  False)
         config.max_villagers += 1
 
-        config.map.build_building(config.get_building('Farm'), 16+(i*5), 20, False)
+        # Add farms
+        build_farm = False
+        while build_farm == False: 
+            pos = get_offset(offset_max[0]+1, offset_max[1]+1)
+            build_farm = config.map.build_building(config.get_building('Farm'), 
+                                                   pos[0], pos[1], 
+                                                   False)
         
         # Create inital villagers
         config.create_villager()
-
     
     # Update the map
     mapUI.draw_map(config.map.frame)
