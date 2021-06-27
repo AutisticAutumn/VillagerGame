@@ -29,12 +29,22 @@ class Map:
         # Map frame
         self.frame = None
 
-    def check_free_land(self, building, pos_x, pos_y):
+    def check_free_land(self, building, pos_x, pos_y, extra_space=False):
         '''Checks if the land is free from buildings based on set building'''
 
+        # Check if extra space padding is required
+        if extra_space == True:
+            pos_x -= 1
+            pos_y -= 1
+            building_range = (building.size[0]+2,
+                              building.size[1]+2)
+        else:
+            building_range = (building.size[0],
+                              building.size[1])
+
         # Check the selected area has enough space
-        for x in range(building.size[0]):
-            for y in range(building.size[1]):
+        for x in range(building_range[0]):
+            for y in range(building_range[1]):
                 
                 # Get unique building object and data 
                 pos_key = f'({pos_y+y}:{pos_x+x})'
@@ -44,16 +54,15 @@ class Map:
         
         return True
     
-    def build_building(self, building, pos_x, pos_y, pay=True):
+    def build_building(self, building, pos_x, pos_y, pay=True, extra_space=False):
         '''Creates a building on the map'''
 
         # Get the building position
         building.pos_x = pos_x
         building.pos_y = pos_y
 
-        if not(self.check_free_land(building, building.pos_x, building.pos_y)):
+        if not(self.check_free_land(building, building.pos_x, building.pos_y, extra_space)):
             return False
-
 
         # Make payments for building
         if pay:
@@ -68,8 +77,6 @@ class Map:
                 config.wood -= building.cost['wood']
             else:
                 return False
-
-        
 
         # Add building to map
         building.positions = []
