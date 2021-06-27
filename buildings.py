@@ -122,7 +122,9 @@ class WoodenStatue(Building):
 
         # Get building data
         self.name = 'Wooden Statue'
-        self.description = 'A simple wooden statue'
+        self.description = ''.join(['A simple wooden statue that provides a ',
+                           'small one time happiness boost and slightly increases ',
+                           'the chance of new villagers appearing'])
         self.type = 'Misc'
 
         self.size = (3,3)
