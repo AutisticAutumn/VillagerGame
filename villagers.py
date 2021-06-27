@@ -40,6 +40,9 @@ class Villager:
         config.main_app.add_villager_frame(self)
         self.frame.update_stats()
 
+        # Find house
+        self.house = self.find_house()
+
     ## Turn functions ##
     def end_turn(self):
 
@@ -146,6 +149,24 @@ class Villager:
             response = config.get_response('find_work_building_fail')
             response = response.format(self.name, self.profession.building)
             self.append_villager_log(response, 'red')
+
+    def find_house(self):
+        '''Finds a house for the villager if it has none'''
+
+        # Run through the list of buildings on the map and see if any match
+        for building in config.map.map.values():
+            
+            # Check if building is the right type and free
+            building_type = building.type == 'House'
+            if building_type:
+
+                building_free = building.villager == None
+                if building_free:
+
+                    # Update stats for the building and return the building object
+                    building.villager = self
+
+                    return building
 
     def attack_villager(self):
         '''Function for dealing with villager combat'''
