@@ -179,7 +179,7 @@ class MapPopout:
 
         self.tile_info_box = tk.Text(self.root, 
                                      width=20, 
-                                     height=12,
+                                     height=24,
                                      bg='black',
                                      wrap=tk.WORD)
         self.tile_info_box.grid(row=1, column= 1, columnspan=2, padx=4, pady=8, sticky='N')
@@ -238,19 +238,7 @@ class MapPopout:
             building = config.get_building('Grass')
 
         # Get advanced building descriptiong
-        description = building.description
-        
-        if building.name != 'Grass':
-            # Add crop numbers for farms
-            if building.name == 'Farm':
-                if building.food > 0:
-                    description += f'\n\nContains {building.food} crops'
-                else:
-                    description += f'\n\nContains no crops'
-
-            # Add workers to buildings
-            if building.worker != None:
-                description += f'\n\nCurrently worked by {building.worker.name}'
+        description = self.get_building_description(building)
 
         # Clear all textboxes of previous data
         self.tile_texture_box.delete(1.0, tk.END)
@@ -270,6 +258,40 @@ class MapPopout:
         self.tile_texture_box.tag_config('Colour', foreground=texture[1])
         self.tile_name_box.tag_config('Colour', foreground=texture[1])
         self.tile_info_box.tag_config('Colour', foreground='white')
+
+    def get_building_description(self, building):
+        '''Gets a complete description for a building'''
+    
+        description = building.description
+            
+        if building.name != 'Grass':
+                
+            # Add descriptions for work buildings
+            if building.type == 'Work':
+
+                # Add crop numbers for farms
+                if building.name == 'Farm':
+                    if building.food > 0:
+                        description += f'\n\nContains {building.food} crops'
+                    else:
+                        description += '\n\nContains no crops'
+
+                # Add workers to description
+                if building.worker != None:
+                    description += f'\n\nCurrently worked by {building.worker.name}'
+            
+            elif building.type == 'House':
+
+                # Add villagers to description
+                if building.villager != None:
+                    name = building.villager.name
+                    job = building.villager.profession.name
+                    description += f'\n\nCurrently occupied by {name} the {job}'
+                else:
+                    description += '\n\nCurrently unoccupied'
+        
+        # Return the complete description
+        return description
 
     def draw_selector(self):
         '''Draws the selector onscreen that gives information about a tile'''
