@@ -13,9 +13,9 @@ import random
 config.init()
 
 init_villagers = 3
-init_pos = (random.randint(12, config.map.width-12), 
-            random.randint(8, config.map.height-8))
-offset_max = (7, 5)
+init_pos = (random.randint(24, config.map.width-24), 
+            random.randint(16, config.map.height-16))
+offset_max = (7, 4)
 
 ### Functions ###
 def get_offset(x_offset, y_offset):
