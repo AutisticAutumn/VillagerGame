@@ -13,8 +13,6 @@ import random
 config.init()
 
 init_villagers = 3
-init_pos = (random.randint(24, config.map.width-24), 
-            random.randint(16, config.map.height-16))
 offset_max = (6, 4)
 
 total_ponds = random.randint(3,6)
@@ -38,6 +36,18 @@ if __name__ == '__main__':
 
     # Add ponds to the map
     config.map.create_ponds(5)
+
+    # Get the starting position
+    init_pos = None
+    while init_pos == None:
+        
+        x = random.randint(24, config.map.width-24)
+        y = random.randint(16, config.map.height-16)
+
+        pos = ((y-1)*config.map.width)
+        
+        if config.map.terrain_map[pos] == 0:
+            init_pos = (x, y)
     
     # Create the innitial houses and villagers
     for i in range(init_villagers):
