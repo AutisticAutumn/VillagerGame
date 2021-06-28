@@ -80,6 +80,14 @@ class Grass(Terraian):
         self.texture = '''  '".,  '''
         self.colours = ['green']
 
+class PondWater(Terraian):
+
+    def __init__(self):
+        
+        self.name = 'Pond Water'
+        self.description = 'Stagnant Water'
+        self.texture = '≈~.'
+        self.colours = ['blue', 'blue2']
 
 ## Villager Buildings
 class WoodenHut(Building):
