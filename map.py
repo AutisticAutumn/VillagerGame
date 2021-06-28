@@ -5,8 +5,20 @@
 #
 
 ### Importants and Varibles ###
+from math import cos, pi
 import config
 import random
+
+### Functions ###
+def cos_lerp(a, b, x):
+    '''Lerps between two points (a,b) with cosine function'''
+
+    ft = x*pi
+    f =  (1 - cos(ft))*0.5
+
+    return a*(1-f) + b*f
+
+
 
 ### Classes ###
 class Map:
@@ -92,3 +104,69 @@ class Map:
         self.frame.insert_building(f'({building.pos_y}:{building.pos_x})')
 
         return True
+
+    ## Generation functions ##
+    def create_ponds(self, total_ponds):
+        '''Adds ponds to the map'''
+
+        # Get a list of pond coords
+        pond_positions = self.get_pond_positions(total_ponds)
+
+        # Loop and add the ponds to the map
+        for pond in pond_positions:
+            
+            pond_size = (random.randint(6,8), random.randint(2,4))
+            pond_x = pond[0]
+            pond_y = pond[1]
+
+            # Run through the pond's area and add water
+            for x in range(pond_x-pond_size[0], pond_x+pond_size[0]):
+                for y in range(pond_y-pond_size[1], pond_y+pond_size[1]):
+
+                    # Get values from center point for tile with cos lerp
+                    xx = cos_lerp(pond_x, pond_size[0]+pond_x, abs(x-pond_x)/pond_size[0])
+                    xx -= pond_x
+
+                    yy = cos_lerp(pond_y, pond_size[1]+pond_y, abs(y-pond_y)/pond_size[1])
+                    yy -= pond_y
+
+                    # Return texture if value is within bounds
+                    print(xx+yy)
+                    if xx+yy < random.randint(24,48)/10:
+                        pos = x + ((y-1)*self.width)
+                        texture = config.get_building('Pond Water').get_texture(y + x*123456)
+
+                        self.texture_map[pos] = texture
+
+    def get_pond_positions(self, total_ponds):
+        '''Get the positions of the ponds for the map'''
+
+        pond_positions = []
+
+        # Run through all ponds
+        for i in range(total_ponds):
+
+            pond_added = False
+
+            # Repeat loop until sutiable location found
+            while pond_added == False:
+            
+                # Get pond positions
+                pos = (random.randint(8, config.map.width-8), 
+                    random.randint(8, config.map.height-8))
+
+                # Check position against other positions to make sure
+                #  ponds are spaced out correctly on the map
+                spacing = -1
+                if len(pond_positions) > 0:
+                    for pond_pos in pond_positions:
+                        
+                        spacing = abs((pos[0] - pond_pos[0]) +
+                                    (pos[1] - pond_pos[1]))
+                            
+                if spacing > 16 or spacing < 0:
+                    pond_added = True
+            
+            pond_positions.append(pos)
+
+        return pond_positions
