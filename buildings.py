@@ -66,7 +66,7 @@ class Terraian:
         texture = random.choice(self.texture)
         random.seed(config.seed + config.turn)
         
-        return (texture, self.colours[0])
+        return (texture, random.choice(self.colours))
 
 ### Building Classes ###
 ## Terrain ##
@@ -86,8 +86,8 @@ class PondWater(Terraian):
         
         self.name = 'Pond Water'
         self.description = 'Stagnant Water'
-        self.texture = '≈~.'
-        self.colours = ['blue', 'blue2']
+        self.texture = '≈≈~'
+        self.colours = ['blue', 'blue3']
 
 ## Villager Buildings
 class WoodenHut(Building):
