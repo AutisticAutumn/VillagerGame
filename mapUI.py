@@ -27,6 +27,7 @@ def create_map_base(self):
                 item = config.get_building('Grass').get_texture(y + x*123456)
                 self.map_box.insert(pos, item[0])
                 self.map.texture_map.append(item)
+                self.map.terrain_map.append(0)
 
             self.map_box.insert(tk.END, '\n')
 
