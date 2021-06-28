@@ -8,8 +8,7 @@
 import random
 import config
 
-### Buildings ###
-
+### Parent Classes ###
 class Building:
     '''Main building class'''
 
@@ -56,15 +55,8 @@ class Building:
         '''Run any start of turn functions for the building'''
         pass
 
-class Grass:
-    '''Default grass. Does nothing'''
-
-    def __init__(self):
-        
-        self.name = 'Grass'
-        self.description = 'Grass'
-        self.texture = '''  '".,  '''
-        self.colours = ['green']
+class Terraian:
+    '''Global terrain class'''
 
     def get_texture(self, randkey):
         '''returns the texture for the building'''
@@ -76,6 +68,20 @@ class Grass:
         
         return (texture, self.colours[0])
 
+### Building Classes ###
+## Terrain ##
+class Grass(Terraian):
+    '''Default grass. Does nothing'''
+
+    def __init__(self):
+        
+        self.name = 'Grass'
+        self.description = 'Grass'
+        self.texture = '''  '".,  '''
+        self.colours = ['green']
+
+
+## Villager Buildings
 class WoodenHut(Building):
     '''Simple build that holds two villagers'''
 
