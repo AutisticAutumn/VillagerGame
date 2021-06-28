@@ -6,7 +6,7 @@
 
 ### Importants and Varibles ###
 import config
-import gameApp, mapUI
+import mapUI
 import random
 
 # Initialize the globals
@@ -16,6 +16,8 @@ init_villagers = 3
 init_pos = (random.randint(24, config.map.width-24), 
             random.randint(16, config.map.height-16))
 offset_max = (6, 4)
+
+total_ponds = random.randint(3,6)
 
 ### Functions ###
 def get_offset(x_offset, y_offset):
@@ -33,6 +35,9 @@ def get_offset(x_offset, y_offset):
 if __name__ == '__main__':
 
     config.init_app()
+
+    # Add ponds to the map
+    config.map.create_ponds(5)
     
     # Create the innitial houses and villagers
     for i in range(init_villagers):
