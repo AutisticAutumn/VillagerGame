@@ -137,6 +137,9 @@ def get_building(key):
 
     if key == buildings.Grass().name:
         return buildings.Grass()
+
+    if key == buildings.PondWater().name:
+        return buildings.PondWater()
     
     if key == buildings.WoodenHut().name:
         return buildings.WoodenHut()
