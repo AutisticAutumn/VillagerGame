@@ -33,6 +33,7 @@ class Map:
         # Map storage
         self.map = {}
         self.texture_map = []
+        self.terrain_map = []
 
         # Selector positions
         self.selector_x = int(self.width/2)
@@ -137,6 +138,7 @@ class Map:
                         texture = config.get_building('Pond Water').get_texture(y + x*123456)
 
                         self.texture_map[pos] = texture
+                        self.terrain_map[pos] = 1
 
     def get_pond_positions(self, total_ponds):
         '''Get the positions of the ponds for the map'''
