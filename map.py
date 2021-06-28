@@ -61,8 +61,9 @@ class Map:
                 
                 # Get unique building object and data 
                 pos_key = f'({pos_y+y}:{pos_x+x})'
+                pos = (pos_x+x) + (((pos_y+y)-1)*self.width)
                 
-                if pos_key in self.map.keys():
+                if pos_key in self.map.keys() or self.terrain_map[pos] != 0:
                     return False
         
         return True
@@ -116,7 +117,7 @@ class Map:
         # Loop and add the ponds to the map
         for pond in pond_positions:
             
-            pond_size = (random.randint(6,8), random.randint(2,4))
+            pond_size = (random.randint(7,9), random.randint(2,3))
             pond_x = pond[0]
             pond_y = pond[1]
 
@@ -131,9 +132,9 @@ class Map:
                     yy = cos_lerp(pond_y, pond_size[1]+pond_y, abs(y-pond_y)/pond_size[1])
                     yy -= pond_y
 
-                    # Return texture if value is within bounds
-                    print(xx+yy)
-                    if xx+yy < random.randint(24,48)/10:
+                    # Return texture if value is within bounds\
+                    size_m = pond_size[0] + pond_size[1]
+                    if (xx+yy)**2 < random.randint(8*size_m, 32*size_m)/10:
                         pos = x + ((y-1)*self.width)
                         texture = config.get_building('Pond Water').get_texture(y + x*123456)
 
