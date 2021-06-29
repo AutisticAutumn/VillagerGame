@@ -78,6 +78,8 @@ class Grass(Terraian):
     '''Default grass. Does nothing'''
 
     def __init__(self):
+
+        Terraian.__init__(self)
         
         self.name = 'Grass'
         self.description = 'Grass'
@@ -87,6 +89,8 @@ class Grass(Terraian):
 class PondWater(Terraian):
 
     def __init__(self):
+
+        Terraian.__init__(self)
         
         self.name = 'Pond Water'
         self.description = 'Stagnant Water'
