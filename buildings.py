@@ -58,6 +58,10 @@ class Building:
 class Terraian:
     '''Global terrain class'''
 
+    def __init__(self):
+
+        self.type = 'Terraian'
+
     def get_texture(self, randkey):
         '''returns the texture for the building'''
 
