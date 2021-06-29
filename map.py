@@ -139,7 +139,7 @@ class Map:
                         texture = config.get_building('Pond Water').get_texture(y + x*123456)
 
                         self.texture_map[pos] = texture
-                        self.terrain_map[pos] = 1
+                        self.terrain_map[pos] = 'Pond Water'
 
     def get_pond_positions(self, total_ponds):
         '''Get the positions of the ponds for the map'''
