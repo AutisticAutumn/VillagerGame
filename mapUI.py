@@ -88,7 +88,9 @@ class MapFrame:
         self.map.frame = self
         self.map.popout = MapPopout(self)
 
-        self.map_size = (48, 21)
+        self.font_size = 14
+        self.map_size = (round(48*(10/self.font_size)), 
+                        round(21*(10/self.font_size)))
 
         self.create_map()
         create_map_base(self)
@@ -110,7 +112,8 @@ class MapFrame:
                                height=self.map_size[1],
                                state=tk.DISABLED,
                                bg='black',
-                               wrap=tk.NONE)
+                               wrap=tk.NONE,
+                               font=('Courier', self.font_size))
         self.map_box.grid(row=0, column=0, padx=4, pady=4)
 
         # Place the scrollbars in
