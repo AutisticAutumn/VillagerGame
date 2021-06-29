@@ -46,9 +46,9 @@ if __name__ == '__main__':
 
         pos = ((y-1)*config.map.width)
         
-        if config.map.terrain_map[pos] == 0:
+        if config.map.terrain_map[pos] == 'Grass':
             init_pos = (x, y)
-    
+
     # Create the innitial houses and villagers
     for i in range(init_villagers):
 
@@ -71,6 +71,7 @@ if __name__ == '__main__':
         
         # Create inital villagers
         config.create_villager()
+
     
     # Update the map
     mapUI.draw_map(config.map.frame)
