@@ -165,6 +165,7 @@ class Villager:
 
                     # Update stats for the building and return the building object
                     building.villager = self
+                    building.update_texture(self)
 
                     return building
 
