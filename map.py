@@ -63,7 +63,7 @@ class Map:
                 pos_key = f'({pos_y+y}:{pos_x+x})'
                 pos = (pos_x+x) + (((pos_y+y)-1)*self.width)
                 
-                if pos_key in self.map.keys() or self.terrain_map[pos] != 0:
+                if pos_key in self.map.keys() or self.terrain_map[pos] != 'Grass':
                     return False
         
         return True
