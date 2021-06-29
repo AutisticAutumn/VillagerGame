@@ -133,11 +133,23 @@ class WoodenHut(Building):
         # Increase the max number of villagers
         config.max_villagers += 1 
 
+    def update_texture(self, villager):
+        '''Adds the resident villager to the texture'''
+
+        # Set new texture as villager face
+        self.texture = list(self.texture)
+        self.texture[random.randint(7,8)] = '☺'
+        self.texture = ''.join(self.texture)
+
+        # Update the texture on the map
+        self.update_texture_map()
+
+
 class WoodenStatue(Building):
     '''Simple statue that provides an instant boost to happiness
         slightly increases chance of new villagers'''
 
-    def __init__(self, pos_x=None, pos_y=None):
+    def __init__(self):
         
         # Get inherited data
         Building.__init__(self)
