@@ -236,7 +236,7 @@ class MapPopout:
         try:
             building = self.map.map[pos_key]
         except:
-            building = config.get_building('Grass')
+            building = config.get_building(self.map.terrain_map[pos])
 
         # Get advanced building descriptiong
         description = self.get_building_description(building)
@@ -265,7 +265,7 @@ class MapPopout:
     
         description = building.description
             
-        if building.name != 'Grass':
+        if building.type != 'Terrain':
                 
             # Add descriptions for work buildings
             if building.type == 'Work':
