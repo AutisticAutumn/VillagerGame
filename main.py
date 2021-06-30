@@ -76,6 +76,17 @@ if __name__ == '__main__':
     # Update the map
     mapUI.draw_map(config.map.frame)
 
-    config.main_app.root.mainloop()
+    # Set the scrollbar to center on the map
+    map_frame = config.main_app.map
 
+    x = init_pos[0] / ( config.map.width + ( map_frame.map_size[0]*1.5 ) )
+    y = init_pos[1] / ( config.map.height + ( map_frame.map_size[1]*1.5 ) )
+
+    map_frame.map_box.xview_moveto(x)
+    map_frame.map_box.yview_moveto(y)
+
+    # Run the main loop
+    config.main_app.root.mainloop()
+    
+    # Save upon game closing
     config.save()
