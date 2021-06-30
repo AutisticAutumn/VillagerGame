@@ -248,18 +248,18 @@ class Villager:
         result = None
 
         if self.morale <= config.morale_log_boundry[0]:
-            result = (config.get_response('extremely_unhappy').format(self.name),
+            result = (config.get_response('very_low_morale').format(self.name),
                       'medium orchid')
         elif self.morale <= config.morale_log_boundry[1]:
-            result = (config.get_response('unhappy').format(self.name),
+            result = (config.get_response('low_morale').format(self.name),
                       'medium orchid')
         elif self.morale <= config.morale_log_boundry[2]:
-            result = (config.get_response('mildly_unhappy').format(self.name),
+            result = (config.get_response('dropping_morale').format(self.name),
                       'medium orchid')
         elif self.morale >= config.morale_log_boundry[3]:
-            result = (config.get_response('happy').format(self.name), 'cyan')
+            result = (config.get_response('high_morale').format(self.name), 'cyan')
         elif self.morale >= config.morale_log_boundry[4]:
-            result = (config.get_response('extremely_happy').format(self.name),
+            result = (config.get_response('very_high_morale').format(self.name),
                       'cyan')
 
         if result != None:
