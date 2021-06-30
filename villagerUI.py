@@ -139,9 +139,9 @@ class VillagerFrame:
         space = '   '
         health = f'Health: {self.villager.health}{space}'
         hunger = f'Hunger: {self.villager.hunger}{space}'
-        happiness = f'Happiness: {self.villager.happiness}'
+        morale = f'Morale: {self.villager.morale}'
 
-        self.stats = health + hunger + happiness
+        self.stats = health + hunger + morale
 
         # Insert stats into the statbox
         self.stats_box.config(state=tk.NORMAL)
@@ -164,11 +164,11 @@ class VillagerFrame:
                                   foreground='lime', 
                                   justify=tk.CENTER)
 
-        # Happiness colouring
-        happiness_start = str(float(hunger_end))
-        happiness_end = '1.' + str(int(happiness_start[2:]) + len(happiness)+1)
-        self.stats_box.tag_add('Happiness', happiness_start, happiness_end)
-        self.stats_box.tag_config('Happiness', 
+        # Morale colouring
+        morale_start = str(float(hunger_end))
+        morale_end = '1.' + str(int(morale_start[2:]) + len(morale)+1)
+        self.stats_box.tag_add('Morale', morale_start, morale_end)
+        self.stats_box.tag_config('Morale', 
                                   foreground='yellow', 
                                   justify=tk.CENTER)
 
