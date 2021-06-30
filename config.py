@@ -82,7 +82,8 @@ def init():
         professions_dict.update({profession.name : profession})
 
     # Create the list of responses
-    get_responses_dict()
+    global response_dict
+    response_dict = read_file('villagerResponses')
 
 def init_app():
     '''Creates the application globals'''
@@ -91,14 +92,13 @@ def init_app():
     global main_app
     main_app = gameApp.GameApp()
 
-def get_responses_dict():
+def read_file(file):
     '''Produce the dictionary of villager responses'''
 
-    global response_dict
     response_dict = {}
 
     # Open file with the responses
-    with open('villagerResponses', 'r') as f:
+    with open(file, 'r') as f:
         
         lines = f.readlines()
 
@@ -126,6 +126,9 @@ def get_responses_dict():
                     mode = 'FindEntry'
                 else:
                     values.append(line.strip())
+    
+    # Return the final file
+    return response_dict
 
 def get_response(key):
     '''Return a randomized response from the response dictionary'''
