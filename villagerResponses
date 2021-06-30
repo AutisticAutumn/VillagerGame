@@ -50,24 +50,24 @@ Villager
     {0} is starving
 }
 {
-    extremely_happy
-    {0} is extremely happy
+    very_high_morale
+    {0} is ecstatic
 }
 {
-    happy
-    {0} is happy
+    high_morale
+    {0} is enthusiastic
 }
 {
-    mildly_unhappy
-    {0} is getting unhappy
+    dropping_morale
+    {0} is growing displeased
 }
 {
-    unhappy
-    {0} is unhappy
+    low_morale
+    {0} is quite displeased
 }
 {
-    extremely_unhappy
-    {0} is intensely unhappy
+    very_low_morale
+    {0} is intensely displeased
 }
 {
     hurt_mild
