@@ -39,14 +39,14 @@ def init():
     health_max = 8
     hunger_max = 8
 
-    global happiness_max, happiness_min
-    happiness_max = 4
-    happiness_min = -4
+    global morale_max, morale_min
+    morale_max = 4
+    morale_min = -4
 
     # Boundries for when villages returns logs for high stats
     # Stats at most extreme to least
-    global happiness_log_boundry, hunger_log_boundry, health_log_boundry
-    happiness_log_boundry = [-4, -3, -1, 2, 4]
+    global morale_log_boundry, hunger_log_boundry, health_log_boundry
+    morale_log_boundry = [-4, -3, -1, 2, 4]
     hunger_log_boundry = [7, 4]
     health_log_boundry = [1, 3, 5, 7]
 
