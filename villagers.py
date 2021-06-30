@@ -22,7 +22,7 @@ class Villager:
         # Villagers initial stats
         self.hunger = 0
         self.health = config.health_max
-        self.happiness = 0
+        self.morale = 0
 
         # Villager Logs
         self.log = [(f'Turn {config.turn}', 'white')]
@@ -56,8 +56,8 @@ class Villager:
                 self.profession_lock = 3
         
         # Random attack villagers if unhappy
-        if self.happiness < 0:
-            if random.randint(1,48) <= self.happiness**2:
+        if self.morale < 0:
+            if random.randint(1,48) <= self.morale**2:
                 self.attack_villager()
     
     def begin_turn(self):  
@@ -108,9 +108,9 @@ class Villager:
                 result = config.get_response('consume_food')
                 result = result.format(self.name, food_consumed)
                 self.append_villager_log(result,'yellow')
-                # Gain happiness from eating if below 0
-                if self.happiness < 0:
-                    self.gain_happiness(0,1)
+                # Gain morale from eating if below 0
+                if self.morale < 0:
+                    self.gain_morale(0,1)
             else:
                 # Add result to log
                 result = config.get_response('no_food_found').format(self.name)
@@ -190,7 +190,7 @@ class Villager:
         target.lose_health(damage, damage)
 
     ## Hunger functions ##
-    def gain_hunger(self, lose_happiness):
+    def gain_hunger(self, lose_morale):
         '''Add hunger to villager and keep within bounds'''
 
         self.hunger += random.randint(config.hunger_range[0],
@@ -202,9 +202,9 @@ class Villager:
     
         self.return_hunger_log()
 
-        # Lose happiness if requested
-        if lose_happiness:
-            self.lose_happiness(0,2)
+        # Lose morale if requested
+        if lose_morale:
+            self.lose_morale(0,2)
 
     def return_hunger_log(self):
         '''Return an output to the logs depending on hunger level'''
@@ -218,47 +218,47 @@ class Villager:
         if result != None:
             self.append_villager_log(result[0], result[1])
 
-    ## Happiness functions ##
-    def gain_happiness(self, min, max):
-        '''Calculate happiness loss and keep within bounds'''
+    ## Morale functions ##
+    def gain_morale(self, min, max):
+        '''Calculate morale loss and keep within bounds'''
 
-        self.happiness += random.randint(min, max)
+        self.morale += random.randint(min, max)
 
         # Check boundries 
-        if self.happiness > config.happiness_max:
-            self.happiness = config.happiness_max
+        if self.morale > config.morale_max:
+            self.morale = config.morale_max
 
-        self.return_happiness_log()
+        self.return_morale_log()
 
 
-    def lose_happiness(self, min, max):
-        '''Calculate happiness loss and keep within bounds'''
+    def lose_morale(self, min, max):
+        '''Calculate morale loss and keep within bounds'''
 
-        self.happiness -= random.randint(min, max)
+        self.morale -= random.randint(min, max)
 
         # Check boundries
-        if self.happiness < config.happiness_min:
-            self.happiness = config.happiness_min
+        if self.morale < config.morale_min:
+            self.morale = config.morale_min
 
-        self.return_happiness_log()
+        self.return_morale_log()
 
-    def return_happiness_log(self):
-        '''Return an output to the logs depending on happiness level'''
+    def return_morale_log(self):
+        '''Return an output to the logs depending on morale level'''
 
         result = None
 
-        if self.happiness <= config.happiness_log_boundry[0]:
+        if self.morale <= config.morale_log_boundry[0]:
             result = (config.get_response('extremely_unhappy').format(self.name),
                       'medium orchid')
-        elif self.happiness <= config.happiness_log_boundry[1]:
+        elif self.morale <= config.morale_log_boundry[1]:
             result = (config.get_response('unhappy').format(self.name),
                       'medium orchid')
-        elif self.happiness <= config.happiness_log_boundry[2]:
+        elif self.morale <= config.morale_log_boundry[2]:
             result = (config.get_response('mildly_unhappy').format(self.name),
                       'medium orchid')
-        elif self.happiness >= config.happiness_log_boundry[3]:
+        elif self.morale >= config.morale_log_boundry[3]:
             result = (config.get_response('happy').format(self.name), 'cyan')
-        elif self.happiness >= config.happiness_log_boundry[4]:
+        elif self.morale >= config.morale_log_boundry[4]:
             result = (config.get_response('extremely_happy').format(self.name),
                       'cyan')
 
@@ -277,8 +277,8 @@ class Villager:
         if self.health <= 0:
             self.kill()
         else:
-            # Lose happiness as result of injury
-            self.lose_happiness(1,2)
+            # Lose morale as result of injury
+            self.lose_morale(1,2)
 
     def return_health_log(self):
         '''Return output to the log based on health'''
