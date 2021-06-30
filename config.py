@@ -30,9 +30,7 @@ def init():
 
     # Villager names
     global names
-    with open("villager_names", 'r') as f:
-        names = f.readlines()
-    names = [n.strip() for n in names] 
+    names = read_file('villager_names')
 
     # Villager stat boundries
     global health_max, hunger_max
@@ -157,7 +155,9 @@ def get_building(key):
 def create_villager():
     '''Creates a randomized villager and to the village'''
 
-    villagers.append(villagers_scr.Villager(random.choice(names), professions.Unemployed()))
+    name = random.choice(names['First']) + ' ' + random.choice(names['Last'])
+
+    villagers.append(villagers_scr.Villager(name, professions.Unemployed()))
 
 
 def save():
