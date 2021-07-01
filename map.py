@@ -18,8 +18,6 @@ def cos_lerp(a, b, x):
 
     return a*(1-f) + b*f
 
-
-
 ### Classes ###
 class Map:
     '''Deals with the functionality of the map'''
@@ -41,6 +39,14 @@ class Map:
 
         # Map frame
         self.frame = None
+
+    def get_ground_texture(self, x, y):
+        '''Get the texture for the ground base'''
+
+        # Merge position values
+        pos = x + (y * self.width)
+
+        return config.get_building(self.terrain_map[pos]).get_texture(y + x*123456)
 
     def check_free_land(self, building, pos_x, pos_y, extra_space=False):
         '''Checks if the land is free from buildings based on set building'''
