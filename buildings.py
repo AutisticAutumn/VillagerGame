@@ -43,9 +43,11 @@ class Building:
                 pos = (x-x0)+((y-y0)*self.size[0])
                 texture = self.get_texture(pos)
                 
-                # Update the texture map
-                pos = x + ((y-1)*config.map.width)
-                config.map.texture_map[pos] = texture
+                # Don't update texture map if no texture exists
+                if texture[0] != ' ':
+                    # Update the texture map
+                    pos = x + ((y-1)*config.map.width)
+                    config.map.texture_map[pos] = texture
 
     def on_creation(self):
         '''Runs functions for when the building is built'''
