@@ -13,7 +13,7 @@ import random
 config.init()
 
 init_villagers = 3
-offset_max = (6, 4)
+offset_max = (7, 5)
 
 total_ponds = random.randint(3,6)
 
@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
     # Add ponds to the map
     config.map.create_ponds(5)
-
+    
     # Get the starting position
     init_pos = None
     while init_pos == None:
@@ -52,6 +52,8 @@ if __name__ == '__main__':
     # Create the innitial houses and villagers
     for i in range(init_villagers):
 
+        config.seed += 1
+
         # Add wooden huts and adjust max villagers accordingly
         build_hut = False
         while build_hut == False:
@@ -64,7 +66,7 @@ if __name__ == '__main__':
         # Add farms
         build_farm = False
         while build_farm == False: 
-            pos = get_offset(offset_max[0]+1, offset_max[1]+1)
+            pos = get_offset(offset_max[0]+2, offset_max[1]+2)
             build_farm = config.map.build_building(config.get_building('Farm'), 
                                                    pos[0], pos[1], 
                                                    False, True)
