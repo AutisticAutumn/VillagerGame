@@ -26,6 +26,8 @@ class Building:
         texture = self.texture.replace('\n','')[pos]
         colour = self.colours[self.colour_map[pos]]
         
+        print(texture, colour)
+        
         return (texture, colour)
 
     def update_texture_map(self):
@@ -112,15 +114,7 @@ class WoodenHut(Building):
         self.type = 'House'
 
         self.size = (4,3)
-        self.texture = '''
-●──●
-│++│
-●──●'''
-        self.colour_map = (0,0,0,0,
-                           0,1,1,0,
-                           0,0,0,0)
-        
-        self.colours = ('chocolate3', 'brown4')
+        self.reset_texture()
 
         self.cost = {'food': 0,
                      'wood': 10}
@@ -133,16 +127,19 @@ class WoodenHut(Building):
         # Increase the max number of villagers
         config.max_villagers += 1 
 
-    def update_texture(self, villager):
-        '''Adds the resident villager to the texture'''
+    def reset_texture(self):
+        '''Reset texture to default'''
 
-        # Set new texture as villager face
-        self.texture = list(self.texture)
-        self.texture[random.randint(7,8)] = '☺'
-        self.texture = ''.join(self.texture)
-
-        # Update the texture on the map
-        self.update_texture_map()
+        self.texture = '''
+●──●
+│++│
+●──●'''
+        self.colour_map = [0,0,0,0,
+                           0,1,1,0,
+                           0,0,0,0]
+        
+        self.colours = ['chocolate3', 'brown4']
+        
 
 
 class WoodenStatue(Building):
@@ -166,11 +163,11 @@ class WoodenStatue(Building):
  ± 
 ┐┼┌
 ≡≡≡'''
-        self.colour_map = (0,2,0,
+        self.colour_map = [0,2,0,
                            0,0,0,
-                           1,1,1)
+                           1,1,1]
         
-        self.colours = ('chocolate3', 'brown4', 'navajo white')
+        self.colours = ['chocolate3', 'brown4', 'navajo white']
 
         self.cost = {'food': 0,
                      'wood': 6}
@@ -202,7 +199,7 @@ class Farm(Building):
         self.profession = 'Farmer'
 
         # Produce a randomized colourmap for each object
-        self.colours = ('sienna1', 'chocolate3', 'indianred3', 'goldenrod', 'forest green')
+        self.colours = ['sienna1', 'chocolate3', 'indianred3', 'goldenrod', 'forest green']
         self.texture = ''
         self.colour_map = []
         
