@@ -41,6 +41,7 @@ class Villager:
         self.frame.update_stats()
 
         # Find house
+        self.house = None
         self.house = self.find_house()
 
     ## Turn functions ##
@@ -165,7 +166,7 @@ class Villager:
 
                     # Update stats for the building and return the building object
                     building.villager = self
-                    building.update_texture(self)
+                    self.profession.villager_location_set(self)
 
                     return building
 
