@@ -5,6 +5,7 @@
 #
 
 ### Importants and Varibles ###
+from tkinter import NORMAL, DISABLED
 from math import cos, pi
 import config
 import random
@@ -39,6 +40,42 @@ class Map:
 
         # Map frame
         self.frame = None
+
+    # Update the map
+    def draw_map(self, updated_positions=[]):
+        '''Draws the map from the texture map'''
+
+        # Enable map for editting
+        self.map_box.config(state=NORMAL)
+            
+        for y in range(1, self.map.height+1):
+            for x in range(1,self.map.width):
+
+                # Get position of the texture
+                pos = x + ((y-1)*self.map.width)
+                pos_key = f'{y}.{x-1}'
+                texture = self.map.texture_map[pos]
+
+                # Check to see if texture needs to be reset
+                pos_change = self.map_box.get(pos_key, pos_key+'+1c') == texture[0]
+                pos_update = pos_key in updated_positions
+                
+                if not(pos_change) or pos_update:
+                    # Remove old texture
+                    self.map_box.delete(pos_key, pos_key+'+1c')
+
+                    # insert the new texture into the box
+                    self.map_box.insert(pos_key, texture[0])
+
+                    self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
+                    self.map_box.tag_config(pos_key, foreground=texture[1])
+
+        # Turn the map back off 
+        self.map_box.config(state=DISABLED)
+
+        # Clear positions that need to be updated 
+        if len(updated_positions) > 0:
+            self.updated_positions = []
 
     def get_ground_texture(self, x, y):
         '''Get the texture for the ground base'''
