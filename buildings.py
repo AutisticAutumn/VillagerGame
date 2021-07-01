@@ -188,7 +188,7 @@ class WoodenStatue(Building):
         
         # Run through all villagers and add to their happiness by 1
         for villager in config.villagers:
-            villager.gain_happiness(1, 1)
+            villager.gain_morale(1, 1)
 
 class Farm(Building):
     '''A farm the provides a space for farmers to work
