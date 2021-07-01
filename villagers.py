@@ -1,324 +1,262 @@
 #
 # Villager Game
-# Villager Module
+# Professions Module
 # Written by Madeline Autumn
 #
 
-### Imports and Varibles ###
-import config, professions
+### Imports and variables ###
+import config
+import map
 import random
-from tkinter import DISABLED, NORMAL
 
-### Villager class ###
+### Functions ###
 
-class Villager:
-    '''Class the stores the data for each villager'''
+def draw_villager_home(self, villager):
+    '''Draws a villager into their house'''
 
-    def __init__(self, name, profession):
-
-        self.name = name
-        self.profession = profession
-
-        # Villagers initial stats
-        self.hunger = 0
-        self.health = config.health_max
-        self.morale = 0
-
-        # Villager Logs
-        self.log = [(f'Turn {config.turn}', 'white')]
-        self.turn_log = []
-
-        # Turn action
-        self.turn_action = None
-
-        # Profession data
-        self.profession_lock = 0
-        self.work_building = None
-
-        # Frame widget
-        self.frame = None
-        config.main_app.add_villager_frame(self)
-        self.frame.update_stats()
-
-        # Find house
-        self.house = None
-        self.house = self.find_house()
-
-    ## Turn functions ##
-    def end_turn(self):
-
-        # Run profession action and log the action
-        action = self.profession.action(self)
-        if action != None:
-            self.append_villager_log(action[0], action[1])
+    # Make sure villager has a house to display in
+    if villager.house != None:
             
-            # Lock profession for three turns if just assigned
-            if self.profession_lock <= 0:
-                self.profession_lock = 3
-        
-        # Random attack villagers if unhappy
-        if self.morale < 0:
-            if random.randint(1,48) <= self.morale**2:
-                self.attack_villager()
-    
-    def begin_turn(self):  
-        '''Beginning of turn functions'''
+        # Reset house texture
+        villager.house.reset_texture()
 
-        # Appends new turn line directly to villager log
-        self.log.append((f'\nTurn {config.turn+1}', 'white'))
+        # Set new texture as villager face
+        pos = random.randint(7,8)
 
-        # Reset variables
-        self.turn_log = []
-        self.turn_action = None
+        villager.house.texture = list(villager.house.texture)
+        villager.house.texture[pos] = '☺'
+        villager.house.texture = ''.join(villager.house.texture)
 
-        # Villager profession lock
-        if self.profession_lock > 1:
-            self.profession_lock -= 1
-            self.frame.professions_menu.config(state=DISABLED)
-        else:
-            self.profession_lock = max(0 , self.profession_lock-1)
-            self.frame.professions_menu.config(state=NORMAL)
-
-        # Attempt to find a building if needed for work
-        if self.profession.building != None and self.work_building == None: 
-            self.assign_work_building()
-
-    def append_villager_log(self, line, colour='white'):
-        '''Appends a line to the villager log and prints to main log'''
-
-        if not(line in self.turn_log):
-            self.turn_log.append(line)
-            self.log.append((line, colour))
-            self.frame.parent.append_log(line, colour=colour)
-
-    ## Internal actions ##
-    def feed_villager(self):
-        '''Feed the villager and calculate stats'''
-        # Only caluate food if needed
-        if self.hunger > 0:
-            if config.food > 0:
-                init_food = config.food
-                config.food -= self.hunger
-                self.hunger = 0
-                if config.food < 0:
-                    # Add back food and hunger so that food > 0
-                    self.hunger += config.food*-1
-                    config.food += config.food*-1
-                food_consumed = init_food - config.food
-                # Add result to log
-                result = config.get_response('consume_food')
-                result = result.format(self.name, food_consumed)
-                self.append_villager_log(result,'yellow')
-                # Gain morale from eating if below 0
-                if self.morale < 0:
-                    self.gain_morale(0,1)
-            else:
-                # Add result to log
-                result = config.get_response('no_food_found').format(self.name)
-                self.append_villager_log(result, 'red')
-                # Add hunger if no food was consumed
-                self.gain_hunger(True)
-
-        else:
-            # Add hunger if no food was consumed
-            self.gain_hunger(False)
-    
-    def assign_work_building(self):
-        '''Finds building for the villager to work in if required'''
-        
-        # Run through the list of buildings on the map and see if any match
-        for building in config.map.map.values():
+        villager.house.colours.append(self.colour)
+        villager.house.colour_map[pos-2] = len(villager.house.colours)-1
             
-            # Check if building is the right type and free
-            building_type = building.profession == self.profession.name
-            building_free = building.worker == None
+        # Update the texture on the map
+        villager.house.update_texture_map()
 
-            if building_type and building_free:
+### Professions ###
 
-                # Update stats for villager and building
-                building.worker = self
-                self.work_building = building
+class Profession:
+    '''Main profession class that deals with globals'''
+
+    def __init__(self):
+
+        self.building = None
+
+    def action(self, villager):
+        '''Place villager in house if nothing else occurs'''
+
+        self.villager_location_set(villager)
+        
+    
+    def turn_action(self, villager):
+        '''Opens the popout for the placement'''
+
+        building = config.get_building(self.buildings[0])
+
+        config.map.popout.villager = villager
+        config.map.popout.building = building
+        config.map.popout.create_toplevel()
+
+    def turn_action_popout_closed(self, villager, building, pos):
+        '''Runs the functions for when the popout closes'''
+
+        # Set the action for the villager
+        villager.turn_action = (config.map.build_building, building, pos)
+
+        # Return output to logs
+        response = config.get_response('build_turn_action')
+        response = response.format(villager.name, building.name)
+        villager.append_villager_log(response, 'lime')
+
+    def villager_location_set(self, villager):
+        '''Places the villager in there house for their action'''
+
+        draw_villager_home(self, villager)
+    
+
+class Unemployed(Profession):
+    '''Unemployed villagers provide no materials or bonuses but can build buildings'''
+
+    def __init__(self):
+
+        # Inherit data
+        Profession.__init__(self)
+
+        # Villager info
+        self.name = 'Unemployed'
+        self.description = ''
+        self.colour = 'light grey'
+
+class Farmer(Profession):
+    '''The farmer provides foods for the village at Farms'''
+
+    def __init__(self):
+
+        # Inherit data
+        Profession.__init__(self)
+
+        # Villager info
+        self.name = 'Farmer'
+        self.description = 'Provides 2-4 food each turn'
+        self.building = 'Farm'
+        self.colour = 'green yellow'
+
+        # Farm construction info
+        self.action_text = 'Construct farm'
+        self.buildings = ['Farm']
+
+    def action(self, villager):
+        '''Collect food'''
+
+        # Check if a build is going to be build as first priority
+        if villager.turn_action != None:
+
+            # if building cannot be build return error
+            build = villager.turn_action[0](
+                                            villager.turn_action[1],
+                                            villager.turn_action[2][0],
+                                            villager.turn_action[2][1]
+                                            )
+
+            if build:
                 
-                # Return to logs
-                response = config.get_response('find_work_building').format(self.name, building.name)
-                self.append_villager_log(response, 'lime')
+                # Run on creation functions for building
+                villager.turn_action[1].on_creation()
 
-                break
+                response = config.get_response('build_action_succeed')
+                return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
+
+            else:
+                response = config.get_response('farmer_action_build_fail')
+                return (response.format(villager.name, villager.turn_action[1].name), 'red')
+
+        else:
+
+            # Check if the farm can work at a farm
+            if villager.work_building != None:
+
+                # Get food from farm
+                food = villager.work_building.food
+                config.food += food
+
+                # Add food to the farm
+                food_produced = random.randint(1,3)
+                self.villager_location_set(villager, food_produced)
+                
+                # Return output if food was produced
+                if food > 0:
+                    response = config.get_response('farmer_action')
+                    return (response.format(villager.name, food), 'lime')
         
-        # Return to logs if failed
-        if self.work_building == None:
-            response = config.get_response('find_work_building_fail')
-            response = response.format(self.name, self.profession.building)
-            self.append_villager_log(response, 'red')
+    def villager_location_set(self, villager, crops):
+        '''Places villager next to farm'''
 
-    def find_house(self):
-        '''Finds a house for the villager if it has none'''
-
-        # Run through the list of buildings on the map and see if any match
-        for building in config.map.map.values():
+        # Place villager next to farm is it exists, else place next to house
+        if villager.work_building != None:
             
-            # Check if building is the right type and free
-            building_type = building.type == 'House'
-            if building_type:
+            building = villager.work_building
 
-                building_free = building.villager == None
-                if building_free:
+            # Reset house texture
+            building.reset_texture(crops)
 
-                    # Update stats for the building and return the building object
-                    building.villager = self
-                    self.profession.villager_location_set(self)
+            # Find a suitable position next to the farm
+            found_space = False
+            while found_space == False:
 
-                    return building
+                # Get position
+                pos_x = random.randint(0, building.size[0]-1)
+                pos_y = random.randint(0, building.size[1]-1)
+                pos = pos_x + (pos_y*building.size[1])
 
-    def attack_villager(self):
-        '''Function for dealing with villager combat'''
+                # Make sure space is free and not a coner position
+                if building.texture[pos] == ' ':
 
-        target = random.choice(config.villagers)
-        damage = random.randint(1,4)
-        
-        # Return result
-        if target == self:
-            result = config.get_response('attack_self')
-            result = result.format(self.name, damage)
+                    # Set new texture as villager face
+                    building.texture = list(building.texture)
+                    building.texture[pos] = '☺'
+                    building.texture = ''.join(building.texture)
+
+                    building.colours.append(self.colour)
+                    building.colour_map[pos] = len(building.colours)-1
+
+                    found_space = True
+                
+            # Update the texture on the map
+            building.update_texture_map()
+
         else:
-            result = config.get_response('attack_villager')
-            result = result.format(self.name, target.name, damage)
-            target_result = config.get_response('target_villager')
-            target_result.format(self.name, target.name, damage)
-            target.log.append((target_result, 'red2'))
-        self.append_villager_log(result, 'red')
+            draw_villager_home(self, villager)
+
+
+class Feller(Profession):
+    '''The Feller provides Wood for the village'''
+
+    def __init__(self):
         
-        target.lose_health(damage, damage)
+        # Inherit data
+        Profession.__init__(self)
 
-    ## Hunger functions ##
-    def gain_hunger(self, lose_morale):
-        '''Add hunger to villager and keep within bounds'''
+        # Villager info
+        self.name = 'Feller'
+        self.description = 'Provides 2-3 wood each turn'
+        self.colour = 'goldenrod'
 
-        self.hunger += random.randint(config.hunger_range[0],
-                                      config.hunger_range[1])
+    def action(self, villager):
+        '''Collect Wood'''
+
+        # Place villager in house
+        draw_villager_home(self, villager)
+
+        # Collect wood and add to logs
+        wood_produced = random.randint(2,3)
+        config.wood += wood_produced
+
+        response = config.get_response('feller_action')
+        return (response.format(villager.name, wood_produced), 'chocolate')
+
+class Carpenter(Profession):
+    '''The carpenter builds building with wood'''
+
+    def __init__(self):
         
-        # Check boundries
-        if self.hunger > config.hunger_max:
-            self.hunger = config.hunger_max
-    
-        self.return_hunger_log()
+        # Inherit data
+        Profession.__init__(self)
 
-        # Lose morale if requested
-        if lose_morale:
-            self.lose_morale(0,2)
+        # Villager info
+        self.name = 'Carpenter'
+        self.description = 'Constructs wooden buildings'
+        self.colour = 'gold'
 
-    def return_hunger_log(self):
-        '''Return an output to the logs depending on hunger level'''
+        self.action_text = 'Construct'
 
-        result = None
-        if self.hunger >= config.hunger_log_boundry[0]:
-            result = (config.get_response('starving').format(self.name), 'red')
-        elif self.hunger >= config.hunger_log_boundry[1]:
-            result = (config.get_response('hungry').format(self.name), 'yellow')
+        # List of available buildings
+        self.buildings = ('Wooden Hut',
+                          'Wooden Statue')
 
-        if result != None:
-            self.append_villager_log(result[0], result[1])
+    def action(self, villager):
+        '''Build a building if the action was selected'''
 
-    ## Morale functions ##
-    def gain_morale(self, min, max):
-        '''Calculate morale loss and keep within bounds'''
+        # Place villager in house
+        draw_villager_home(self, villager)
 
-        self.morale += random.randint(min, max)
+        # Only attempt to build if action was seleceted
+        if villager.turn_action != None:
 
-        # Check boundries 
-        if self.morale > config.morale_max:
-            self.morale = config.morale_max
+            # if building cannot be build return error
+            build = villager.turn_action[0](
+                                            villager.turn_action[1],
+                                            villager.turn_action[2][0],
+                                            villager.turn_action[2][1]
+                                            )
 
-        self.return_morale_log()
+            if build:
+                
+                # Run on creation functions for building
+                villager.turn_action[1].on_creation()
 
+                response = config.get_response('build_action_succeed')
+                return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
 
-    def lose_morale(self, min, max):
-        '''Calculate morale loss and keep within bounds'''
-
-        self.morale -= random.randint(min, max)
-
-        # Check boundries
-        if self.morale < config.morale_min:
-            self.morale = config.morale_min
-
-        self.return_morale_log()
-
-    def return_morale_log(self):
-        '''Return an output to the logs depending on morale level'''
-
-        result = None
-
-        if self.morale <= config.morale_log_boundry[0]:
-            result = (config.get_response('very_low_morale').format(self.name),
-                      'medium orchid')
-        elif self.morale <= config.morale_log_boundry[1]:
-            result = (config.get_response('low_morale').format(self.name),
-                      'medium orchid')
-        elif self.morale <= config.morale_log_boundry[2]:
-            result = (config.get_response('dropping_morale').format(self.name),
-                      'medium orchid')
-        elif self.morale >= config.morale_log_boundry[3]:
-            result = (config.get_response('high_morale').format(self.name), 'cyan')
-        elif self.morale >= config.morale_log_boundry[4]:
-            result = (config.get_response('very_high_morale').format(self.name),
-                      'cyan')
-
-        if result != None:
-            self.append_villager_log(result[0], result[1])
-
-    ## Health functions ##
-    def lose_health(self, min, max):
-        '''Calculate health loss'''
-
-        self.health -= random.randint(min, max) 
-
-        self.return_health_log()
-
-        # Kill if out of bounds
-        if self.health <= 0:
-            self.kill()
-        else:
-            # Lose morale as result of injury
-            self.lose_morale(1,2)
-
-    def return_health_log(self):
-        '''Return output to the log based on health'''
-
-        result = None
-
-        if self.health <= config.health_log_boundry[0]:
-            result = config.get_response('near_death').format(self.name)
-        elif self.health <= config.health_log_boundry[1]:
-            result = config.get_response('hurt_severe').format(self.name)
-        elif self.health <= config.health_log_boundry[2]:
-            result = config.get_response('hurt_moderate').format(self.name)
-        elif self.health <= config.health_log_boundry[3]:
-            result = config.get_response('hurt_mild').format(self.name)
-        
-        if result != None:
-            self.append_villager_log(result, 'red')
-
-    def kill(self):
-        '''Kills the villager'''
-
-        # Remove frame from screen
-        self.frame.frame.grid_forget()
-        self.frame.parent.villager_frames.remove(self.frame)
-
-        # Remove self from buildings if needed
-        if self.work_building != None:
-            self.work_building.worker = None
-            self.work_building.reset_texture()
-            self.work_building.update_texture_map()
-
-        if self.house != None:
-            self.house.villager = None
-            self.house.reset_texture()
-            self.house.update_texture_map()
-
-        # Add death to logs
-        response = config.get_response('death').format(self.name)
-        self.append_villager_log(response, 'red')
-
-        # Remove self from villager list
-        config.villagers.remove(self)
+            else:
+                response = config.get_response('carpenter_action_no_wood')
+                return (response.format(villager.name, villager.turn_action[1].name), 'red')
