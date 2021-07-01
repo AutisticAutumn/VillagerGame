@@ -5,7 +5,7 @@
 #
 
 ### Imports and variables ###
-import random
+import random, mapUI
 import config
 
 ### Parent Classes ###
@@ -29,11 +29,15 @@ class Building:
         return (texture, colour)
 
     def update_texture_map(self):
+        '''Updates a buildings texture on the map'''
+
         x0 = self.pos_x
         x1 = self.pos_x + self.size[0]
 
         y0 = self.pos_y
         y1 = self.pos_y + self.size[1]
+
+        updated_positions = []
 
         # Run through the complete building
         for y in range(y0, y1):
@@ -42,6 +46,8 @@ class Building:
                 # Get position and texture
                 pos = (x-x0)+((y-y0)*self.size[0])
                 texture = self.get_texture(pos)
+
+                updated_positions.append(f'{y}.{x-1}')
                 
                 # Don't update texture map if no texture exists
                 if texture[0] == ' ':
@@ -50,6 +56,8 @@ class Building:
                 # Update the texture map
                 pos = x + ((y-1)*config.map.width)
                 config.map.texture_map[pos] = texture
+
+        mapUI.draw_map(config.map.frame, updated_positions)
 
     def on_creation(self):
         '''Runs functions for when the building is built'''
