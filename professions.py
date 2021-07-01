@@ -58,8 +58,7 @@ class Profession:
             villager.house.texture = ''.join(villager.house.texture)
 
             villager.house.colours.append(self.colour)
-            villager.house.colour_map[pos] = len(villager.house.colours)-1
-            print(villager.house.colours, villager.house.colour_map)
+            villager.house.colour_map[pos-2] = len(villager.house.colours)-1
             
             # Update the texture on the map
             villager.house.update_texture_map()
