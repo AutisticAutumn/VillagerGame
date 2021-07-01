@@ -25,9 +25,7 @@ class Building:
 
         texture = self.texture.replace('\n','')[pos]
         colour = self.colours[self.colour_map[pos]]
-        
-        print(texture, colour)
-        
+
         return (texture, colour)
 
     def update_texture_map(self):
@@ -211,7 +209,7 @@ class Farm(Building):
         self.cost = {'food': 5,
                      'wood': 0}
 
-    def reset_texture(self, crops):
+    def reset_texture(self, crops=0):
         '''Reset the texture to include new crops'''
 
         # Reset texture data
