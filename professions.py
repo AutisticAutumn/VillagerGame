@@ -50,6 +50,9 @@ class Profession:
         # Make sure villager has a house to display in'''
         if villager.house != None:
             
+            # Reset house texture
+            villager.house.reset_texture()
+
             # Set new texture as villager face
             pos = random.randint(7,8)
 
