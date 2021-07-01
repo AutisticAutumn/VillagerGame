@@ -191,7 +191,7 @@ class Farm(Building):
         self.description = 'Provides food for the village'
         self.type = 'Work'
 
-        self.size = (3,2)
+        self.size = (5, 4)
         
         self.food = 0
         self.profession = 'Farmer'
@@ -201,9 +201,7 @@ class Farm(Building):
         self.texture = ''
         self.colour_map = []
         
-        for i in range((self.size[0]*self.size[1])):
-            self.texture += '≈'
-            self.colour_map.append(random.randint(0, 1))
+        self.reset_texture()
 
         # add crops to farm
         self.cost = {'food': 5,
@@ -213,7 +211,7 @@ class Farm(Building):
         '''Reset the texture to include new crops'''
 
         # Reset texture data
-        self.texture = ''
+        self.texture = []
         texture_temp = ''
         self.colour_map = []
         self.food = 0
@@ -223,11 +221,25 @@ class Farm(Building):
             texture_temp += '♠'
             self.food += 1
 
-        for i in range((self.size[0]*self.size[1])-crops):
+        for i in range( ( (self.size[0]-2) * (self.size[1]-2) ) - crops):
             texture_temp += '≈'
 
-        # Shuffle the string
-        self.texture = ''.join(random.sample(texture_temp ,len(texture_temp)))
+        # Shuffle the string and add to main texture
+        texture_temp = ''.join(random.sample(texture_temp ,len(texture_temp)))
+
+        # Add buffer around main texture
+        for i in range(self.size[0]+1): 
+            self.texture.append(' ')
+        for i in range(self.size[0]-2): 
+            self.texture.append(texture_temp[i])
+        for i in range(2): 
+            self.texture.append(' ')
+        for i in range(self.size[0]-2): 
+            self.texture.append(texture_temp[i+self.size[0]-2])
+        for i in range(self.size[0]+1): 
+            self.texture.append(' ')
+
+        self.texture = ''.join(self.texture)
 
         # Add colour to the texture
         for texture in self.texture:
