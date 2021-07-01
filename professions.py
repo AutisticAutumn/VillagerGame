@@ -19,7 +19,10 @@ class Profession:
         self.building = None
 
     def action(self, villager):
-        pass
+        '''Place villager in house if nothing else occurs'''
+
+        self.villager_location_set(villager)
+        
     
     def turn_action(self, villager):
         '''Opens the popout for the placement'''
@@ -40,6 +43,26 @@ class Profession:
         response = config.get_response('build_turn_action')
         response = response.format(villager.name, building.name)
         villager.append_villager_log(response, 'lime')
+
+    def villager_location_set(self, villager):
+        '''Places the villager in there house for their action'''
+
+        # Make sure villager has a house to display in'''
+        if villager.house != None:
+            
+            # Set new texture as villager face
+            pos = random.randint(7,8)
+
+            villager.house.texture = list(villager.house.texture)
+            villager.house.texture[pos] = '☺'
+            villager.house.texture = ''.join(villager.house.texture)
+
+            villager.house.colours.append(self.colour)
+            villager.house.colour_map[pos] = len(villager.house.colours)-1
+            print(villager.house.colours, villager.house.colour_map)
+            
+            # Update the texture on the map
+            villager.house.update_texture_map()
     
 
 class Unemployed(Profession):
