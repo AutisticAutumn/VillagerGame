@@ -164,9 +164,9 @@ class Farmer(Profession):
             while found_space == False:
 
                 # Get position
-                pos_x = random.randint(0, building.size[0]-1)
-                pos_y = random.randint(0, building.size[1]-1)
-                pos = pos_x + (pos_y*building.size[1])
+                pos_x = random.randint(0, 1)
+                pos_y = random.randint(1, building.size[1]-2)
+                pos = (pos_x*( building.size[0]-1) ) + (pos_y*building.size[0])
 
                 # Make sure space is free and not a coner position
                 if building.texture[pos] == ' ':
@@ -199,11 +199,15 @@ class Feller(Profession):
         # Villager info
         self.name = 'Feller'
         self.description = 'Provides 2-3 wood each turn'
-        self.colour = 'goldenrod'
+        self.colour = 'dark goldenrod3'
 
     def action(self, villager):
         '''Collect Wood'''
 
+        # Place villager in house
+        draw_villager_home(self, villager)
+
+        # Collect wood and add to logs
         wood_produced = random.randint(2,3)
         config.wood += wood_produced
 
@@ -231,6 +235,9 @@ class Carpenter(Profession):
 
     def action(self, villager):
         '''Build a building if the action was selected'''
+
+        # Place villager in house
+        draw_villager_home(self, villager)
 
         # Only attempt to build if action was seleceted
         if villager.turn_action != None:
