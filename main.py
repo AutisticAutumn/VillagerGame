@@ -15,9 +15,26 @@ config.init()
 init_villagers = 3
 offset_max = (7, 5)
 
-total_ponds = random.randint(3,6)
+total_ponds = random.randint(4,7)
 
 ### Functions ###
+def get_starting_pos():
+    '''Gets the starting position for the village'''
+
+    global init_pos
+
+    # Find a position that is on grass terrian
+    init_pos = None
+    while init_pos == None:
+        
+        x = random.randint(24, config.map.width-24)
+        y = random.randint(16, config.map.height-16)
+
+        pos = ((y-1)*config.map.width)
+        
+        if config.map.terrain_map[pos] == 'Grass':
+            init_pos = (x, y)
+
 def get_offset(x_offset, y_offset):
     '''Return a randomized offset and position for initital buildings'''
 
@@ -56,39 +73,30 @@ def create_village():
         config.create_villager()
         config.villagers[-1].profession.action(config.villagers[-1])
 
+def create_map():
+    '''Runs a series of functions that generate the map'''
+
+    # Add ponds to the map
+    config.map.create_ponds(total_ponds)
+
+    # Get villager position
+    get_starting_pos()
+
+    # Add buildings
+    create_village()
+
 ### Main Game Loop ###
 
 if __name__ == '__main__':
 
+    # Initiate the applications
     config.init_app()
 
-    # Add ponds to the map
-    config.map.create_ponds(5)
-    
-    print(True)
+    # Create the world map
+    create_map()
 
-    # Get the starting position
-    init_pos = None
-    while init_pos == None:
-        
-        x = random.randint(24, config.map.width-24)
-        y = random.randint(16, config.map.height-16)
-
-        pos = ((y-1)*config.map.width)
-        
-        if config.map.terrain_map[pos] == 'Grass':
-            init_pos = (x, y)
-
-    print(True)
-
-    create_village()
-    
-    print(True)
-
-    # Update the map
+    # Draw the map
     mapUI.draw_map(config.map.frame)
-
-    print(True)
 
     # Set the scrollbar to center on the map
     map_frame = config.main_app.map
