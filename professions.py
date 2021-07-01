@@ -148,7 +148,7 @@ class Farmer(Profession):
                     response = config.get_response('farmer_action')
                     return (response.format(villager.name, food), 'lime')
         
-    def villager_location_set(self, villager, crops):
+    def villager_location_set(self, villager, crops=0):
         '''Places villager next to farm'''
 
         # Place villager next to farm is it exists, else place next to house
