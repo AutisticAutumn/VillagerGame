@@ -28,28 +28,9 @@ def get_offset(x_offset, y_offset):
 
     return pos
 
-### Main Game Loop ###
+def create_village():
+    '''Creates the innitial houses and villagers'''
 
-if __name__ == '__main__':
-
-    config.init_app()
-
-    # Add ponds to the map
-    config.map.create_ponds(5)
-    
-    # Get the starting position
-    init_pos = None
-    while init_pos == None:
-        
-        x = random.randint(24, config.map.width-24)
-        y = random.randint(16, config.map.height-16)
-
-        pos = ((y-1)*config.map.width)
-        
-        if config.map.terrain_map[pos] == 'Grass':
-            init_pos = (x, y)
-
-    # Create the innitial houses and villagers
     for i in range(init_villagers):
 
         config.seed += 1
@@ -73,10 +54,41 @@ if __name__ == '__main__':
         
         # Create inital villagers
         config.create_villager()
+        config.villagers[-1].profession.action(config.villagers[-1])
 
+### Main Game Loop ###
+
+if __name__ == '__main__':
+
+    config.init_app()
+
+    # Add ponds to the map
+    config.map.create_ponds(5)
     
+    print(True)
+
+    # Get the starting position
+    init_pos = None
+    while init_pos == None:
+        
+        x = random.randint(24, config.map.width-24)
+        y = random.randint(16, config.map.height-16)
+
+        pos = ((y-1)*config.map.width)
+        
+        if config.map.terrain_map[pos] == 'Grass':
+            init_pos = (x, y)
+
+    print(True)
+
+    create_village()
+    
+    print(True)
+
     # Update the map
     mapUI.draw_map(config.map.frame)
+
+    print(True)
 
     # Set the scrollbar to center on the map
     map_frame = config.main_app.map
