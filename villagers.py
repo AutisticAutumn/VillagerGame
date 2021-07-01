@@ -114,6 +114,8 @@ class Villager:
         if self.profession.building != None:
             self.assign_work_building()
 
+        # Update villagers onscreen texture
+        self.profession.villager_location_set(self)
 
     ## Internal actions ##
     def feed_villager(self):
