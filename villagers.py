@@ -305,6 +305,17 @@ class Villager:
         self.frame.frame.grid_forget()
         self.frame.parent.villager_frames.remove(self.frame)
 
+        # Remove self from buildings if needed
+        if self.work_building != None:
+            self.work_building.worker = None
+            self.work_building.reset_texture()
+            self.work_building.update_texture_map()
+
+        if self.house != None:
+            self.house.villager = None
+            self.house.reset_texture()
+            self.house.update_texture_map()
+
         # Add death to logs
         response = config.get_response('death').format(self.name)
         self.append_villager_log(response, 'red')
