@@ -9,6 +9,30 @@ import config
 import map
 import random
 
+### Functions ###
+
+def draw_villager_home(self, villager):
+    '''Draws a villager into their house'''
+
+    # Make sure villager has a house to display in
+    if villager.house != None:
+            
+        # Reset house texture
+        villager.house.reset_texture()
+
+        # Set new texture as villager face
+        pos = random.randint(7,8)
+
+        villager.house.texture = list(villager.house.texture)
+        villager.house.texture[pos] = '☺'
+        villager.house.texture = ''.join(villager.house.texture)
+
+        villager.house.colours.append(self.colour)
+        villager.house.colour_map[pos-2] = len(villager.house.colours)-1
+            
+        # Update the texture on the map
+        villager.house.update_texture_map()
+
 ### Professions ###
 
 class Profession:
@@ -47,24 +71,7 @@ class Profession:
     def villager_location_set(self, villager):
         '''Places the villager in there house for their action'''
 
-        # Make sure villager has a house to display in'''
-        if villager.house != None:
-            
-            # Reset house texture
-            villager.house.reset_texture()
-
-            # Set new texture as villager face
-            pos = random.randint(7,8)
-
-            villager.house.texture = list(villager.house.texture)
-            villager.house.texture[pos] = '☺'
-            villager.house.texture = ''.join(villager.house.texture)
-
-            villager.house.colours.append(self.colour)
-            villager.house.colour_map[pos-2] = len(villager.house.colours)-1
-            
-            # Update the texture on the map
-            villager.house.update_texture_map()
+        draw_villager_home(self, villager)
     
 
 class Unemployed(Profession):
@@ -138,7 +145,49 @@ class Farmer(Profession):
                 # Return output if food was produced
                 if food > 0:
                     response = config.get_response('farmer_action')
-                    return (response.format(villager.name, food), 'lime')
+                    return (response.format(villager.name, food), 'lime')\
+        
+        # Place villager 
+        self.villager_location_set(villager)
+        
+    def villager_location_set(self, villager):
+        '''Places villager next to farm'''
+
+        # Place villager next to farm is it exists, else place next to house
+        if villager.work_building != None:
+            
+            building = villager.work_building
+
+            # Reset house texture
+            building.reset_texture()
+
+            # Find a suitable position next to the farm
+            found_space = False
+            while found_space == False:
+
+                # Get position
+                pos_x = random.randint(0, building.size[0]-1)
+                pos_y = random.randint(0, building.size[1]-1)
+                pos = pos_x + (pos_y*building.size[1])
+
+                if building.texture[pos] == ' ':
+
+                    # Set new texture as villager face
+                    building.texture = list(building.texture)
+                    building.texture[pos] = '☺'
+                    building.texture = ''.join(building.texture)
+
+                    building.colours.append(self.colour)
+                    building.colour_map[pos] = len(building.colours)-1
+
+                    found_space = True
+                
+            # Update the texture on the map
+            building.update_texture_map()
+
+        else:
+            draw_villager_home(self, villager)
+
 
 class Feller(Profession):
     '''The Feller provides Wood for the village'''
