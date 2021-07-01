@@ -164,9 +164,9 @@ class Farmer(Profession):
             while found_space == False:
 
                 # Get position
-                pos_x = random.randint(0, building.size[0]-1)
-                pos_y = random.randint(0, building.size[1]-1)
-                pos = pos_x + (pos_y*building.size[1])
+                pos_x = random.randint(0, 1)
+                pos_y = random.randint(1, building.size[1]-2)
+                pos = (pos_x*( building.size[0]-1) ) + (pos_y*building.size[0])
 
                 # Make sure space is free and not a coner position
                 if building.texture[pos] == ' ':
