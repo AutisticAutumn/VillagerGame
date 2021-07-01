@@ -199,7 +199,6 @@ class Farm(Building):
         self.profession = 'Farmer'
 
         # Produce a randomized colourmap for each object
-        self.colours = ['sienna1', 'chocolate3', 'indianred3', 'goldenrod', 'forest green']
         self.texture = ''
         self.colour_map = []
         
@@ -214,8 +213,10 @@ class Farm(Building):
 
         # Reset texture data
         self.texture = []
-        texture_temp = ''
+        self.colours = ['sienna1', 'chocolate3', 'indianred3', 'goldenrod', 'forest green']
         self.colour_map = []
+        
+        texture_temp = ''
         self.food = 0
 
         # Add crops and dirt
