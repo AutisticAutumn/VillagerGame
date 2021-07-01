@@ -144,9 +144,9 @@ class WoodenHut(Building):
                            0,0,0,0]
         
         self.colours = ['chocolate3', 'brown4']
+
+        self.update_texture_map()
         
-
-
 class WoodenStatue(Building):
     '''Simple statue that provides an instant boost to happiness
         slightly increases chance of new villagers'''
