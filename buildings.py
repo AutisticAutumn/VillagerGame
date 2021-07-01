@@ -44,10 +44,12 @@ class Building:
                 texture = self.get_texture(pos)
                 
                 # Don't update texture map if no texture exists
-                if texture[0] != ' ':
-                    # Update the texture map
-                    pos = x + ((y-1)*config.map.width)
-                    config.map.texture_map[pos] = texture
+                if texture[0] == ' ':
+                    texture = config.map.get_ground_texture(x, y)
+
+                # Update the texture map
+                pos = x + ((y-1)*config.map.width)
+                config.map.texture_map[pos] = texture
 
     def on_creation(self):
         '''Runs functions for when the building is built'''
@@ -70,7 +72,10 @@ class Terraian:
         # Make sure texture is psudo-random 
         random.seed(config.grass_seed + randkey)
         texture = random.choice(self.texture)
-        random.seed(config.seed + config.turn)
+
+        # Add to seed so new number is produced every time
+        config.seed += 1
+        random.seed(config.seed)
         
         return (texture, random.choice(self.colours))
 
