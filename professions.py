@@ -53,6 +53,7 @@ class Unemployed(Profession):
         # Villager info
         self.name = 'Unemployed'
         self.description = ''
+        self.colour = 'light grey'
 
 class Farmer(Profession):
     '''The farmer provides foods for the village at Farms'''
@@ -66,6 +67,7 @@ class Farmer(Profession):
         self.name = 'Farmer'
         self.description = 'Provides 2-4 food each turn'
         self.building = 'Farm'
+        self.colour = 'green yellow'
 
         # Farm construction info
         self.action_text = 'Construct farm'
@@ -124,6 +126,7 @@ class Feller(Profession):
         # Villager info
         self.name = 'Feller'
         self.description = 'Provides 2-3 wood each turn'
+        self.colour = 'goldenrod'
 
     def action(self, villager):
         '''Collect Wood'''
@@ -145,6 +148,7 @@ class Carpenter(Profession):
         # Villager info
         self.name = 'Carpenter'
         self.description = 'Constructs wooden buildings'
+        self.colour = 'gold'
 
         self.action_text = 'Construct'
 
