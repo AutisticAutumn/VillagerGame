@@ -107,7 +107,7 @@ class Farmer(Profession):
 
     def action(self, villager):
         '''Collect food'''
-        
+
         # Check if a build is going to be build as first priority
         if villager.turn_action != None:
 
@@ -131,6 +131,7 @@ class Farmer(Profession):
                 return (response.format(villager.name, villager.turn_action[1].name), 'red')
 
         else:
+
             # Check if the farm can work at a farm
             if villager.work_building != None:
 
@@ -140,17 +141,14 @@ class Farmer(Profession):
 
                 # Add food to the farm
                 food_produced = random.randint(1,3)
-                villager.work_building.reset_texture(food_produced)
+                self.villager_location_set(villager, food_produced)
                 
                 # Return output if food was produced
                 if food > 0:
                     response = config.get_response('farmer_action')
-                    return (response.format(villager.name, food), 'lime')\
+                    return (response.format(villager.name, food), 'lime')
         
-        # Place villager 
-        self.villager_location_set(villager)
-        
-    def villager_location_set(self, villager):
+    def villager_location_set(self, villager, crops):
         '''Places villager next to farm'''
 
         # Place villager next to farm is it exists, else place next to house
@@ -159,7 +157,7 @@ class Farmer(Profession):
             building = villager.work_building
 
             # Reset house texture
-            building.reset_texture()
+            building.reset_texture(crops)
 
             # Find a suitable position next to the farm
             found_space = False
@@ -170,6 +168,7 @@ class Farmer(Profession):
                 pos_y = random.randint(0, building.size[1]-1)
                 pos = pos_x + (pos_y*building.size[1])
 
+                # Make sure space is free and not a coner position
                 if building.texture[pos] == ' ':
 
                     # Set new texture as villager face
