@@ -97,17 +97,8 @@ class VillagerFrame:
     def set_profession(self, profession):
         '''Upates the villager profession based on the profession menu'''
 
-        self.villager.profession = config.professions_dict[profession]
+        self.villager.update_profession(profession)
         self.update_stats()
-
-        # Reset stats associated with profession
-        self.villager.turn_action = None
-        if self.villager.work_building != None:
-            self.villager.work_building.worker = None
-            self.villager.work_building = None
-
-        if self.villager.profession.building != None:
-            self.villager.assign_work_building()
 
         # Attempt to add action button for certain professions
         try:
