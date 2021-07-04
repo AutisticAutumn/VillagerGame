@@ -45,11 +45,11 @@ class VillagerFrame:
         self.profession_frame.grid(row=1, column=1)
         
         # Ascii frame widgets #
-        self.ascii_art = tk.Label(self.ascii_frame, text='', relief=tk.GROOVE, borderwidth=2, width=8)
+        self.ascii_art = tk.Label(self.ascii_frame, text='☺', relief=tk.GROOVE, borderwidth=2, width=8)
         self.ascii_art.grid(row=0, column=0, padx=2, pady=2, sticky=tk.EW)
 
         self.ascii_name_var = tk.StringVar()
-        self.ascii_name = tk.Label(self.ascii_frame, textvariable=self.ascii_name_var)
+        self.ascii_name = tk.Label(self.ascii_frame, textvariable=self.ascii_name_var, width=16)
         self.ascii_name.grid(row=1, column=0, padx=2, pady=2, sticky=tk.EW)
 
         self.kill_button = tk.Button(self.ascii_frame, text='Kill', 
@@ -59,7 +59,7 @@ class VillagerFrame:
         # Stats frame widgets #
         self.title = tk.StringVar()
         self.name_button = tk.Button(self.stats_frame, textvariable=self.title, 
-                                     width=35, command=self.open_villager_window)
+                                     width=48, command=self.open_villager_window)
         self.name_button.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
         self.stats_box = tk.Text(self.stats_frame,
