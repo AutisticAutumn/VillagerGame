@@ -20,36 +20,58 @@ class GameApp:
         self.root.title('Villager game')
         self.root.resizable(width=0, height=0)
 
-        # Create the two frames for the gui
-        self.left_frame = tk.LabelFrame(self.root, text='')
-        self.center_frame = tk.LabelFrame(self.root, text='')
-        self.right_frame = tk.LabelFrame(self.root, text='')
+        # Create the three frames for the gui
+        self.map_frame = tk.LabelFrame(self.root, text='')
+        self.log_frame = tk.LabelFrame(self.root, text='')
+        self.bottom_frame = tk.LabelFrame(self.root, text='')
+        
+        self.map_frame.grid(row=0, column=0, padx=4, pady=4)
+        self.log_frame.grid(row=2, column=0, columnspan=2, padx=4, pady=4)
+        self.bottom_frame.grid(row=0, column=1, padx=4, pady=4)
 
-        self.left_frame.grid(row=0, column=0, padx=4, pady=4)
-        self.center_frame.grid(row=0, column=1, padx=4, pady=4)
-        self.right_frame.grid(row=0, column=2, padx=4, pady=4)
-
-        ## Left Frame ##
+        ## Map Frame ##
         # Create the frames for the village
-        self.village_frame = tk.Frame(self.left_frame)
+        self.village_frame = tk.Frame(self.map_frame)
         self.village_frame.grid(row=0, column=0, padx=2, pady=2, sticky= tk.NSEW)
         self.map = mapUI.MapFrame(self, self.village_frame)
 
-        self.map_button = tk.Button(self.left_frame, text='View full map',
+        self.map_button = tk.Button(self.map_frame, text='View full map',
                                     width=16, command=config.map.popout.create_toplevel)
         self.map_button.grid(row=1, column=0, padx=2, pady=4)
 
+        ## Log Frame ##
+        self.log_scrollbar = tk.Scrollbar(self.log_frame)
+        self.log_scrollbar.grid(row=0, column=1, sticky=tk.NSEW)
 
-        ## Centeral Frame ##
+        self.log_text = tk.Text(self.log_frame, 
+                                width=124, 
+                                height=23,
+                                state=tk.DISABLED,
+                                wrap=tk.WORD,
+                                bg='black')
+        self.log_text.grid(row=0, column=0, padx=5, pady=5)
+
+        self.log_text.config(yscrollcommand=self.log_scrollbar.set)
+        self.log_scrollbar.config(command=self.log_text.yview)
+
+        # Stat box
+        self.stats_box = tk.Text(self.root,
+                                 width=64, 
+                                 height=1,
+                                 state=tk.DISABLED,
+                                 bg='black')
+        self.stats_box.grid(row=1, column=0, columnspan=2, padx=12, pady=4)
+
+        ## Bottom Frame ##
         # Create a scrollable frame for the villager modification section
-        self.mod_frame = tk.Frame(self.center_frame)
+        self.mod_frame = tk.Frame(self.bottom_frame)
 
-        self.mod_canvas = tk.Canvas(self.mod_frame, height= 320, width=524)
+        self.mod_canvas = tk.Canvas(self.mod_frame, height=374, width=574)
         self.mod_scrollbar = tk.Scrollbar(self.mod_frame,
                                           orient='vertical',
                                           command=self.mod_canvas.yview)
 
-        self.mod_frame_scrollable = tk.Frame(self.mod_canvas )
+        self.mod_frame_scrollable = tk.Frame(self.mod_canvas)
 
         self.mod_frame_scrollable.bind("<Configure>", 
                                            lambda e: self.mod_canvas.configure(
@@ -68,34 +90,13 @@ class GameApp:
         self.create_villager_frames()
 
         # Button to end turn
-        self.end_turn_button = tk.Button(self.center_frame, 
+        self.end_turn_button = tk.Button(self.root, 
                                          text='End Turn', 
                                          width=48, 
-                                         command=self.end_turn)
-        self.end_turn_button.grid(row=1, column=0, padx=2, pady=4)
-
-        # Stat box
-        self.stats_box = tk.Text(self.center_frame,
-                                 width=65, 
-                                 height=1,
-                                 state=tk.DISABLED,
-                                 bg='black')
-        self.stats_box.grid(row=2, column=0, padx=12, pady=4, sticky=tk.W)
-
-        ## Right Frame ##
-        self.log_scrollbar = tk.Scrollbar(self.right_frame)
-        self.log_scrollbar.grid(row=0, column=1, sticky=tk.NSEW)
-
-        self.log_text = tk.Text(self.right_frame, 
-                                 width=48, 
-                                 height=24,
-                                 state=tk.DISABLED,
-                                 wrap=tk.WORD,
-                                 bg='black')
-        self.log_text.grid(row=0, column=0, padx=4, pady=4)
-
-        self.log_text.config(yscrollcommand=self.log_scrollbar.set)
-        self.log_scrollbar.config(command=self.log_text.yview)
+                                         command=self.end_turn,
+                                         borderwidth=4,
+                                         bg='grey84')
+        self.end_turn_button.grid(row=3, column=0, columnspan=2, padx=2, pady=4)
 
         self.update_stats()
         self.append_log('Turn 1')
