@@ -15,7 +15,7 @@ config.init()
 init_villagers = 3
 offset_max = (7, 5)
 
-total_ponds = random.randint(4,7)
+total_ponds = random.randint(5, 8)
 
 ### Functions ###
 def get_starting_pos():
@@ -45,52 +45,96 @@ def get_offset(x_offset, y_offset):
 
     return pos
 
+def build_building(pos, building):
+    '''Attemps to place a building on the map'''
+
+    # Attempt to place building
+    global attempts
+    if attempts < 201:
+        get_building = config.map.build_building(config.get_building(building),
+                                                pos[0], pos[1],
+                                                False, True)
+
+        return get_building
+
+    return True
+
 def create_village():
     '''Creates the innitial houses and villagers'''
 
+    global attempts
+    attempts = 0
+
+    # Add wooden huts and adjust max villagers accordingly
+    print('Adding Houses')
     for i in range(init_villagers):
 
-        config.seed += 1
-
-        # Add wooden huts and adjust max villagers accordingly
         build_hut = False
         while build_hut == False:
             pos = get_offset(offset_max[0], offset_max[1])
-            build_hut = config.map.build_building(config.get_building('Wooden Hut'), 
-                                                  pos[0], pos[1], 
-                                                  False, True)
+            build_hut = build_building(pos, 'Wooden Hut')
+            attempts +=1
         config.max_villagers += 1
 
-        # Add farms
+        config.seed += 1
+
+    # Add farms
+    print('Adding Farms')
+    for i in range(init_villagers):  
+
         build_farm = False
         while build_farm == False: 
-            pos = get_offset(offset_max[0]+2, offset_max[1]+2)
-            build_farm = config.map.build_building(config.get_building('Farm'), 
-                                                   pos[0], pos[1], 
-                                                   False, True)
+            pos = get_offset(offset_max[0]+1, offset_max[1]+1)
+            build_farm = build_building(pos, 'Farm')
+            attempts +=1
+
+        config.seed += 1
+    
+    # Create inital villagers
+    print('Adding Villagers')
+
+    for i in range(init_villagers): 
         
-        # Create inital villagers
         config.create_villager()
         config.villagers[-1].profession.action(config.villagers[-1])
 
-def create_map():
+def create_map(reset=False):
     '''Runs a series of functions that generate the map'''
 
+    # Delete the old gameapp if a new one is created
+    if reset:
+        config.main_app.root.destroy()
+
+        # Reset map
+        config.villagers = []
+
+    # Initiate the applications and variables
+    print('Initializing Map')
+    config.get_seed()
+
+    config.map.__init__()
+    config.init_app()
+    
     # Add ponds to the map
+    print('Adding ponds')
     config.map.create_ponds(total_ponds)
 
     # Get villager position
+    print('Finding Village')
     get_starting_pos()
 
     # Add buildings
     create_village()
 
+    # If an error occured earlier reset
+    global attempts
+    if attempts > 200:
+        print('Resetting\n')
+        create_map(True)
+
 ### Main Game Loop ###
 
 if __name__ == '__main__':
-
-    # Initiate the applications
-    config.init_app()
 
     # Create the world map
     create_map()
@@ -109,6 +153,6 @@ if __name__ == '__main__':
 
     # Run the main loop
     config.main_app.root.mainloop()
-    
+
     # Save upon game closing
     config.save()
