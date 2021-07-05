@@ -307,8 +307,8 @@ class MapPopout:
             size = (0,0)
 
         # Check the selector is withing bounds
-        max_x = self.map.width - size[0] + 1
-        max_y = self.map.height - size[1] + 1
+        max_x = self.map.width - size[0]
+        max_y = self.map.height - size[1]
         self.map.selector_x = max(1, min(self.map.selector_x, max_x))
         self.map.selector_y = max(1, min(self.map.selector_y, max_y))
 
