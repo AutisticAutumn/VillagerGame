@@ -11,16 +11,9 @@ import villagers as villagers_scr
 # Initiate the global variables
 def init():
     '''Initializes the global variables for the program'''
-    
-    # Random seeds
-    global seed, grass_seed
-    seed = random.randint(1000000000,9999999999)
-    random.seed(seed)
-    grass_seed = random.randint(1000000000,9999999999)
 
     # Villagers and housing
-    global village, villagers
-    village = []
+    global villagers
     villagers = []
 
     # Village stats
@@ -82,6 +75,15 @@ def init():
     # Create the list of responses
     global response_dict
     response_dict = read_file('villagerResponses')
+
+def  get_seed():
+    '''Returns a randomized seed'''
+
+    # Random seeds
+    global seed, grass_seed
+    seed = random.randint(1000000000,9999999999)
+    random.seed(seed)
+    grass_seed = random.randint(1000000000,9999999999)
 
 def init_app():
     '''Creates the application globals'''
