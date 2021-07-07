@@ -129,7 +129,7 @@ class Villager:
         # Run profession action and log the action
         action = self.profession.action(self)
         if action != None:
-            self.append_villager_log(action[0], action[1])
+            self.append_villager_log(action)
             
             # Lock profession for three turns if just assigned
             if self.profession_lock <= 0:
