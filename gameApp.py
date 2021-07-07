@@ -104,7 +104,7 @@ class GameApp:
     def add_villager_frame(self, villager):
         '''Creates the frame onscreen to display the villager'''
 
-        villager_frame = villagerUI.VillagerFrame(self, villager, len(self.villager_frames))
+        villager_frame = villagerUI.VillagerFrame(self, villager, len(self.villager_frames)*2)
         self.villager_frames.append(villager_frame)
         villager_frame.create_widgets()
 
