@@ -60,25 +60,12 @@ class Villager:
     def draw_villager(self):
         '''Draw the villagers onto the map'''
 
-        # Get variables
-        x = self.pos[0]
-        y = self.pos[1]
-        pos = x + ((y-1)*config.map.width)
-
         # Get colour
-        if self.phantom:
-            colour = 'pale turquoise2'
-        else:
-            if self.colour == None:
-                colour = self.profession.colour
-            else:
-                colour = self.colour
-
-        # Get texture and draw to map
-        texture = (self.texture, colour)
-        config.map.texture_map[pos] = texture
+        if self.colour != 'red' and not(self.phantom):
+            self.colour = self.profession.colour
         
-        mapUI.draw_map(config.map.frame, f'{y}.{x-1}')
+        # Update map
+        mapUI.draw_map(config.map.frame)
 
     def assign_work_building(self):
         '''Finds building for the villager to work in if required'''
@@ -245,6 +232,7 @@ class Villager:
         self.phantom = True
         self.phantom_timer = random.randint(6,12)
         self.texture = config.villager_textures[1]
+        self.colour = 'pale turquoise2'
         self.draw_villager()
 
         # Adjust ui
@@ -264,6 +252,7 @@ class Villager:
         # Adjust stats
         self.phantom = None
         self.texture = config.villager_textures[0]
+        self.colour = None
         self.draw_villager()
 
         # Adjust ui
