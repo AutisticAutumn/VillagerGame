@@ -162,7 +162,7 @@ class Villager:
 
         # Attempt to possess villager
         if self.phantom == None:
-            if random.randint(1, config.phantom_chance-80) == 1:
+            if random.randint(1, config.phantom_chance) == 1:
                 self.get_possessed()
         
         # Remove phantom status if phantom
