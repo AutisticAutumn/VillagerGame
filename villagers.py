@@ -142,11 +142,9 @@ class Villager:
             response = random.choice(config.phantom_responses)
             if response[1] == 1:
                 response = config.get_response(response[0])
-                print(response)
                 response[0] = response[0].format(self.name)
             else:
                 response = config.get_response(response[0])
-                print(response)
                 response[0] = response[0].format(self.name, random.randint(1,4))
             self.append_villager_log(response, True)
 
@@ -240,6 +238,7 @@ class Villager:
         # Adjust stats
         self.phantom = True
         self.phantom_timer = random.randint(6,12)
+        self.texture = config.villager_textures[1]
         self.colour = 'pale turquoise2'
         self.draw_villager()
 
@@ -259,8 +258,12 @@ class Villager:
 
         # Adjust stats
         self.phantom = None
+        self.texture = config.villager_textures[0]
         self.colour = None
         self.draw_villager()
+
+        if self.health <= config.health_log_boundry[1]:
+            self.colour = 'red'
 
         # Adjust ui
         try:
@@ -467,11 +470,13 @@ class Villager:
         if self.health <= config.health_log_boundry[0]:
             result = config.get_response('near_death')
             result[0] = result[0].format(self.name)
-            self.colour = 'red'
+            if not(self.phantom):
+                self.colour = 'red'
         elif self.health <= config.health_log_boundry[1]:
             result = config.get_response('hurt_severe')
             result[0] = result[0].format(self.name)
-            self.colour = 'red'
+            if not(self.phantom):
+                self.colour = 'red'
         elif self.health <= config.health_log_boundry[2]:
             result = config.get_response('hurt_moderate')
             result[0] = result[0].format(self.name)
