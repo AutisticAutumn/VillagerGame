@@ -163,7 +163,10 @@ def read_file(file):
 def get_response(key):
     '''Return a randomized response from the response dictionary'''
 
-    return random.choice(response_dict[key])
+    item = random.randint(1, len(response_dict[key])-1)
+    colour = response_dict[key][0]
+
+    return [item, colour]
 
 def get_phantom_responses():
     '''Gets the lists of possible fake villager responses'''
