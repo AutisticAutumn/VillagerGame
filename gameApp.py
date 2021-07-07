@@ -99,7 +99,9 @@ class GameApp:
         self.end_turn_button.grid(row=3, column=0, columnspan=2, padx=2, pady=4)
 
         self.update_stats()
-        self.append_log('Turn 1')
+        response = config.get_response('new_turn')
+        response[0] = response[0].format(config.turn).strip()
+        self.append_log(response)
 
     def add_villager_frame(self, villager):
         '''Creates the frame onscreen to display the villager'''
@@ -168,23 +170,23 @@ class GameApp:
             for villager in feeding:
                 villager.feed_villager()
 
-    def append_log(self, line, colour='white'):
+    def append_log(self, response):
         '''Append a single line to the log'''
 
         self.log_text.config(state=tk.NORMAL)
 
         # Add line
-        self.log_text.insert(tk.END, f'{line}\n')
+        self.log_text.insert(tk.END, f'{response[0]}\n')
         self.log_text.see("end")
 
         # Colour Text
         tag_id = int(self.log_text.index('end-1c').split('.')[0]) - 1
         self.log_text.tag_add(tag_id, float(tag_id), float(tag_id+1))
-        self.log_text.tag_config(tag_id, foreground=colour)
+        self.log_text.tag_config(tag_id, foreground=response[1])
 
         self.log_text.config(state=tk.DISABLED)
 
-        config.log.append((line, colour))
+        config.log.append(response)
 
     def end_turn(self):
         '''Run end of turn functions'''
@@ -199,8 +201,8 @@ class GameApp:
 
         # End game if no villagers are remaining
         if len(config.villagers) == 0:
-            self.append_log(config.get_response('game_over'))
-            self.append_log('GAME OVER')
+            self.append_log(['\nThere are no villagers remaining', 'white'])
+            self.append_log(['GAME OVER', 'white'])
             self.end_turn_button.config(state=tk.DISABLED)
             return False
 
@@ -210,7 +212,9 @@ class GameApp:
 
         # Update turn counter and add to the logs
         config.turn += 1
-        self.append_log(f'\nTurn {config.turn}')
+        response = config.get_response('new_turn')
+        response[0] = '\n' + response[0].format(config.turn)
+        self.append_log(response)
 
         # Attempt to start a disaster
         disaster_chance = random.randint(1, max(config.disaster_chance, 1)) == 1
@@ -237,8 +241,9 @@ class GameApp:
                 config.create_villager()
 
                 # Return response to log
-                response = config.get_response('arrival').format(config.villagers[-1].name)
-                self.append_log(response, 'cyan')
+                response = config.get_response('arrival')
+                response[0] = response[0].format(config.villagers[-1].name)
+                self.append_log(response)
 
         # Attempt to run start of turn functions for disaster
         if config.disaster != None:
