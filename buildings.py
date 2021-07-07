@@ -28,7 +28,7 @@ class Building:
 
         return (texture, colour)
 
-    def update_texture_map(self):
+    def update_texture_map(self, reset_villager=False):
         '''Updates a buildings texture on the map'''
 
         x0 = self.pos_x
@@ -50,7 +50,7 @@ class Building:
                 updated_positions.append(f'{y}.{x-1}')
 
                 # Ignore tile if villager is placed there
-                if config.map.texture_map[pos][0] != '☺':
+                if config.map.texture_map[pos][0] != '☺' or reset_villager:
 
                     # Don't update texture map if no texture exists
                     if texture[0] == ' ':
