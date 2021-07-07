@@ -175,7 +175,7 @@ def get_phantom_responses():
     '''Gets the lists of possible fake villager responses'''
 
     responses = [('consume_food', 2),
-                 ('no_food_found', 2),
+                 ('no_food_found', 1),
                  ('hungry', 1),
                  ('starving', 1),
                  ('dropping_morale', 2),
@@ -187,7 +187,7 @@ def get_phantom_responses():
                  ('very_low_morale', 1),
                  ('get_hurt', 2),
                  ('heal', 2),
-                 ('get_hurt', 1),
+                 ('get_hurt', 2),
                  ('hurt_mild', 1),
                  ('hurt_moderate', 1),
                  ('hurt_severe', 1),
