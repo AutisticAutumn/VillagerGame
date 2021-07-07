@@ -67,6 +67,7 @@ def create_village():
 
     # Add wooden huts and adjust max villagers accordingly
     print('Adding Houses')
+    config.max_villagers = 0
     for i in range(init_villagers):
 
         build_hut = False
