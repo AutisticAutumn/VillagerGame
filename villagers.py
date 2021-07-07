@@ -129,17 +129,33 @@ class Villager:
     def end_turn(self):
 
         # Run profession action and log the action
-        action = self.profession.action(self)
-        if action != None:
-            self.append_villager_log(action)
-            
-            # Lock profession for three turns if just assigned
-            if self.profession_lock <= 0:
-                self.profession_lock = 3
+        if not(self.phantom):
+            action = self.profession.action(self)
+            if action != None:
+                self.append_villager_log(action)
+                
+                # Lock profession for three turns if just assigned
+                if self.profession_lock <= 0:
+                    self.profession_lock = 3
+        else:
+            # Create a phantom response
+            response = random.choice(config.phantom_responses)
+            if response[1] == 1:
+                response = config.get_response(response[0])
+                print(response)
+                response[0] = response[0].format(self.name)
+            else:
+                response = config.get_response(response[0])
+                print(response)
+                response[0] = response[0].format(self.name, random.randint(1,4))
+            self.append_villager_log(response, True)
 
         # Random attack villagers if unhappy
-        if self.morale < 0:
+        if self.morale < 0 and not(self.phantom):
             if random.randint(1,48) <= self.morale**2:
+                self.attack_villager()
+        elif self.phantom:
+            if random.randint(1,4) == 1:
                 self.attack_villager()
     
     def begin_turn(self):  
@@ -156,7 +172,7 @@ class Villager:
 
         # Attempt to possess villager
         if self.phantom == None:
-            if random.randint(1, config.phantom_chance-32) == 1:
+            if random.randint(1, config.phantom_chance) == 1:
                 self.get_possessed()
         
         # Remove phantom status if phantom
@@ -175,12 +191,17 @@ class Villager:
             self.frame.professions_menu.config(state=NORMAL)
 
         # Attempt to find a building if needed for work
-        if self.profession.building != None and self.work_building == None: 
-            self.assign_work_building()
+        if not(self.phantom):
+            if self.profession.building != None and self.work_building == None: 
+                self.assign_work_building()
 
-    def append_villager_log(self, response):
+    def append_villager_log(self, response, phantom_response=False):
         '''Appends a line to the villager log and prints to main log'''
 
+        if self.phantom:
+            if not(phantom_response):
+                return None
+        
         if not(response in self.turn_log):
             self.turn_log.append(response)
             self.log.append(response)
@@ -231,7 +252,7 @@ class Villager:
         # Return to logs
         response = config.get_response('get_possessed')
         response[0] = response[0].format(self.name)
-        self.append_villager_log(response)
+        self.append_villager_log(response, True)
 
     def get_unpossessed(self):
         '''Runs code for when a villager gets unpossessed'''
@@ -254,6 +275,7 @@ class Villager:
     
     def feed_villager(self):
         '''Feed the villager and calculate stats'''
+
         # Only caluate food if needed
         if self.hunger > 0:
             if config.food > 0:
@@ -426,7 +448,7 @@ class Villager:
             result = config.get_response('get_hurt')
             result[0] = result[0].format(self.name, health_change)
 
-            self.append_villager_log(result)
+            self.append_villager_log(result, True)
             self.return_health_log()
 
             # Kill if out of bounds
@@ -464,7 +486,7 @@ class Villager:
             self.draw_villager()
 
         if result != None:
-            self.append_villager_log(result)
+            self.append_villager_log(result, True)
 
     def kill(self):
         '''Kills the villager'''
