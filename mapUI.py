@@ -46,6 +46,11 @@ def draw_map(self, updated_positions=[]):
 
     # Enable map for editting
     self.map_box.config(state=tk.NORMAL)
+
+    # Get list of villager positions
+    villager_positions = {}
+    for villager in config.villagers:
+        villager_positions.update({villager.pos: villager})
         
     for y in range(1, self.map.height+1):
         for x in range(1,self.map.width):
@@ -57,6 +62,15 @@ def draw_map(self, updated_positions=[]):
 
             # Check is position has changes
             pos_change = self.map_box.get(pos_key, pos_key+'+1c') == texture[0]
+
+            # If tile is a villager tile then draw that instead
+            villager_tile = (x, y) in villager_positions.keys()
+            if villager_tile == True:
+                
+                updated_positions.append(pos_key)
+
+                villager = villager_positions[(x, y)]
+                texture = (villager.texture, villager.colour)
             
             if not(pos_change) or pos_key in updated_positions:
                 # Remove old texture
