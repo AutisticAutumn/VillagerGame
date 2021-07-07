@@ -213,11 +213,14 @@ class GameApp:
         self.append_log(f'\nTurn {config.turn}')
 
         # Attempt to start a disaster
-        disaster_chance = random.randint(1, config.disaster_chance)
-        if disaster_chance == 1 and config.disaster == None:
+        disaster_chance = random.randint(1, max(config.disaster_chance, 1)) == 1
+        disaster_free = config.disaster == None
+
+        if disaster_chance and disaster_free and config.turn > 8:
             
             # Select a random disaster from the list
-            config.disaster = config.get_disaster(random.choice(config.disaster_list))
+            disaster = random.choice(config.disaster_list)
+            config.disaster = config.get_disaster(disaster)
             config.disaster.on_start()
 
         else:
