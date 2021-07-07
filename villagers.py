@@ -61,8 +61,7 @@ class Villager:
         '''Draw the villagers onto the map'''
 
         # Get colour
-        if self.colour != 'red' and not(self.phantom):
-            self.colour = self.profession.colour
+        self.colour = self.get_colour()
         
         # Update map
         mapUI.draw_map(config.map.frame)
@@ -163,7 +162,7 @@ class Villager:
 
         # Attempt to possess villager
         if self.phantom == None:
-            if random.randint(1, config.phantom_chance-90) == 1:
+            if random.randint(1, config.phantom_chance-80) == 1:
                 self.get_possessed()
         
         # Remove phantom status if phantom
@@ -225,6 +224,16 @@ class Villager:
         self.profession.villager_location_set(self)
 
     ## Internal actions ##
+    def get_colour(self):
+        '''Get the villagers colour'''
+
+        if self.phantom:
+            return 'pale turquoise2'
+        elif self.health <= config.health_log_boundry[1]:
+            return 'red'
+        else:
+            return self.profession.colour
+
     def get_possessed(self):
         '''Runs code for when a villager gets possessed'''
 
@@ -511,13 +520,9 @@ class Villager:
         if self.health <= config.health_log_boundry[0]:
             result = config.get_response('near_death')
             result[0] = result[0].format(self.name)
-            if not(self.phantom):
-                self.colour = 'red'
         elif self.health <= config.health_log_boundry[1]:
             result = config.get_response('hurt_severe')
             result[0] = result[0].format(self.name)
-            if not(self.phantom):
-                self.colour = 'red'
         elif self.health <= config.health_log_boundry[2]:
             result = config.get_response('hurt_moderate')
             result[0] = result[0].format(self.name)
