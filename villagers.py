@@ -24,6 +24,10 @@ class Villager:
         self.health = config.health_max
         self.morale = 0
 
+        # Phantom status
+        self.phantom = None
+        self.phantom_timer = 0
+
         # Villager Logs
         response = config.get_response('new_turn')
         response[0] = response[0].format(config.turn).strip()
@@ -44,7 +48,7 @@ class Villager:
 
         # Map data
         self.pos = (None, None)
-        self.texture = '☺'
+        self.texture = config.villager_textures[0]
         self.colour = None
 
         # Find house
@@ -71,8 +75,6 @@ class Villager:
         texture = (self.texture, colour)
         config.map.texture_map[pos] = texture
         
-        #print(config.map.texture_map[pos], f'({x}, {y})')
-
         mapUI.draw_map(config.map.frame, f'{y}.{x-1}')
 
     def assign_work_building(self):
@@ -134,7 +136,7 @@ class Villager:
             # Lock profession for three turns if just assigned
             if self.profession_lock <= 0:
                 self.profession_lock = 3
-        
+
         # Random attack villagers if unhappy
         if self.morale < 0:
             if random.randint(1,48) <= self.morale**2:
@@ -152,8 +154,20 @@ class Villager:
         self.turn_log = []
         self.turn_action = None
 
+        # Attempt to possess villager
+        if self.phantom == None:
+            if random.randint(1, config.phantom_chance-32) == 1:
+                self.get_possessed()
+        
+        # Remove phantom status if phantom
+        if self.phantom:
+            if self.phantom_timer < 1:
+                self.get_unpossessed()
+            else:
+                self.phantom_timer -= 1
+
         # Villager profession lock
-        if self.profession_lock > 1:
+        if self.profession_lock > 1 or self.phantom:
             self.profession_lock -= 1
             self.frame.professions_menu.config(state=DISABLED)
         else:
@@ -199,6 +213,45 @@ class Villager:
         self.profession.villager_location_set(self)
 
     ## Internal actions ##
+    def get_possessed(self):
+        '''Runs code for when a villager gets possessed'''
+
+        # Adjust stats
+        self.phantom = True
+        self.phantom_timer = random.randint(6,12)
+        self.colour = 'pale turquoise2'
+        self.draw_villager()
+
+        # Adjust ui
+        try:
+            self.frame.action_button.config(state=DISABLED)
+        except:
+            pass
+
+        # Return to logs
+        response = config.get_response('get_possessed')
+        response[0] = response[0].format(self.name)
+        self.append_villager_log(response)
+
+    def get_unpossessed(self):
+        '''Runs code for when a villager gets unpossessed'''
+
+        # Adjust stats
+        self.phantom = None
+        self.colour = None
+        self.draw_villager()
+
+        # Adjust ui
+        try:
+            self.frame.action_button.config(state=NORMAL)
+        except:
+            pass
+
+        # Return to logs
+        response = config.get_response('get_unpossessed')
+        response[0] = response[0].format(self.name)
+        self.append_villager_log(response)
+    
     def feed_villager(self):
         '''Feed the villager and calculate stats'''
         # Only caluate food if needed
