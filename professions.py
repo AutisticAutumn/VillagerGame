@@ -66,8 +66,8 @@ class Profession:
 
         # Return output to logs
         response = config.get_response('build_turn_action')
-        response = response.format(villager.name, building.name)
-        villager.append_villager_log(response, 'lime')
+        response[0] = response[0].format(villager.name, building.name)
+        villager.append_villager_log(response)
 
     def villager_location_set(self, villager):
         '''Places the villager in there house for their action'''
@@ -125,11 +125,13 @@ class Farmer(Profession):
                 villager.turn_action[1].on_creation()
 
                 response = config.get_response('build_action_succeed')
-                return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
+                response[0] = response[0].format(villager.name, villager.turn_action[1].name)
+                return response
 
             else:
                 response = config.get_response('farmer_action_build_fail')
-                return (response.format(villager.name, villager.turn_action[1].name), 'red')
+                response[0] = response[0].format(villager.name, villager.turn_action[1].name)
+                return response
 
         else:
 
@@ -151,7 +153,8 @@ class Farmer(Profession):
                 # Return output if food was produced
                 if food > 0:
                     response = config.get_response('farmer_action')
-                    return (response.format(villager.name, food), 'lime')
+                    response[0] = response[0].format(villager.name, food)
+                    return response
         
     def villager_location_set(self, villager, crops=0):
         '''Places villager next to farm'''
@@ -212,7 +215,8 @@ class Feller(Profession):
         config.wood += wood_produced
 
         response = config.get_response('feller_action')
-        return (response.format(villager.name, wood_produced), 'chocolate')
+        response[0] = response[0].format(villager.name, wood_produced)
+        return response
 
 class Carpenter(Profession):
     '''The carpenter builds building with wood'''
@@ -255,8 +259,10 @@ class Carpenter(Profession):
                 villager.turn_action[1].on_creation()
 
                 response = config.get_response('build_action_succeed')
-                return (response.format(villager.name, villager.turn_action[1].name), 'cyan')
+                response[0] = response[0].format(villager.name, villager.turn_action[1].name)
+                return response
 
             else:
                 response = config.get_response('carpenter_action_no_wood')
-                return (response.format(villager.name, villager.turn_action[1].name), 'red')
+                response[0] = response[0].format(villager.name, villager.turn_action[1].name)
+                return response
