@@ -52,7 +52,7 @@ def init():
     # Phantom Responses
     global phantom_responses, phantom_chance
     phantom_responses = get_phantom_responses()
-    phantom_chance = 48
+    phantom_chance = 96
 
     ## Misc Village ##
 
