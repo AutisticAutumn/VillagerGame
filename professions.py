@@ -133,14 +133,18 @@ class Farmer(Profession):
         else:
 
             # Check if the farm can work at a farm
-            if villager.work_building != None:
+            building = villager.work_building
+            if building != None:
 
                 # Get food from farm
-                food = villager.work_building.food
+                food = building.food
                 config.food += food
 
                 # Add food to the farm
-                food_produced = random.randint(1,3)
+                food_produced = random.randint(1,3) + config.food_weight
+                max_food = (building.size[0]-2)*(building.size[1]-2)
+                food_produced = max( min(food_produced, max_food), 0)
+
                 self.villager_location_set(villager, food_produced)
                 
                 # Return output if food was produced
