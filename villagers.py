@@ -145,7 +145,7 @@ class Villager:
 
         # Appends new turn line directly to villager log
         response = config.get_response('new_turn')
-        response[0] = response[0].format(config.turn+1)
+        response[0] = '\n' + response[0].format(config.turn+1)
         self.log.append(response)
 
         # Reset variables
@@ -283,7 +283,7 @@ class Villager:
             result[0] = result[0].format(self.name)
 
         if result != None:
-            self.append_villager_log(result[0], result[1])
+            self.append_villager_log(result)
 
     ## Morale functions ##
     def gain_morale(self, min, max):
