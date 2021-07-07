@@ -49,8 +49,9 @@ def init():
     hunger_range = (1, 3)
 
     # Phantom Responses
-    global phantom_response
-    phantom_response = get_phantom_responses()
+    global phantom_responses, phantom_chance
+    phantom_responses = get_phantom_responses()
+    phantom_chance = 48
 
     ## Misc Village ##
 
