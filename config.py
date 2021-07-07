@@ -5,7 +5,7 @@
 #
 
 import random
-import professions, buildings, map, gameApp
+import professions, buildings, map, gameApp, disasters
 import villagers as villagers_scr
 
 # Initiate the global variables
@@ -52,7 +52,16 @@ def init():
 
     # Weight for food produced
     global food_weight
-    food_weight = -2
+    food_weight = 0
+
+    # Disasters
+    global disaster
+    disaster = None
+
+    global disaster_list, disaster_chance_max, disaster_chance
+    disaster_list = get_disaster_chance()
+    disaster_chance_max = 16
+    disaster_chance = disaster_chance_max
 
     # Boundries for when villages returns logs for high stats
     # Stats at most extreme to least
@@ -91,6 +100,15 @@ def init():
     # Create the list of responses
     global response_dict
     response_dict = read_file('Responses')
+
+def get_seed():
+    '''Returns a randomized seed'''
+
+    # Random seeds
+    global seed, grass_seed
+    seed = random.randint(1000000000,9999999999)
+    random.seed(seed)
+    grass_seed = random.randint(1000000000,9999999999)
 
 def init_app():
     '''Creates the application globals'''
@@ -160,6 +178,25 @@ def get_building(key):
     if key == buildings.Farm().name:
         return buildings.Farm()
 
+# Disasters
+def get_disaster(key):
+    '''Returns a unique disaster object based on input'''
+
+    if key == disasters.Famine().name:
+        return disasters.Famine()
+
+def get_disaster_chance():
+    '''Creates a list of all the different disasters with their weight'''
+
+    disasters = ['Famine']
+    disaster_chance = []
+
+    for disaster in disasters:
+
+        for i in range(get_disaster(disaster).weight):
+            disaster_chance.append(disaster)
+    
+    return disaster_chance
 
 def create_villager():
     '''Creates a randomized villager and to the village'''
