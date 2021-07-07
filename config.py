@@ -48,6 +48,10 @@ def init():
     food_priority = [[],[],[]]
     hunger_range = (1, 3)
 
+    # Phantom Responses
+    global phantom_response
+    phantom_response = get_phantom_responses()
+
     ## Misc Village ##
 
     # Weight for food produced
@@ -68,7 +72,7 @@ def init():
     global morale_log_boundry, hunger_log_boundry, health_log_boundry
     morale_log_boundry = [-4, -3, -1, 2, 4]
     hunger_log_boundry = [7, 4]
-    health_log_boundry = [1, 3, 5, 7]
+    health_log_boundry = [2, 4, 6, 8]
 
     ## Stats ##
     # Materials
@@ -155,10 +159,36 @@ def read_file(file):
     # Return the final file
     return response_dict
 
+# Responses
 def get_response(key):
     '''Return a randomized response from the response dictionary'''
 
     return random.choice(response_dict[key])
+
+def get_phantom_responses():
+    '''Gets the lists of possible fake villager responses'''
+
+    responses = [('consume_food', 2),
+                 ('no_food_found', 2),
+                 ('hungry', 1),
+                 ('starving', 1),
+                 ('dropping_morale', 2),
+                 ('rising_morale', 2),
+                 ('very_high_morale', 1),
+                 ('high_morale', 1),
+                 ('slightly_low_morale', 1),
+                 ('low_morale', 1),
+                 ('very_low_morale', 1),
+                 ('get_hurt', 2),
+                 ('heal', 2),
+                 ('get_hurt', 1),
+                 ('hurt_mild', 1),
+                 ('hurt_moderate', 1),
+                 ('hurt_severe', 1),
+                 ('near_death', 1)
+                 ('death', 1)]
+
+    return responses
 
 def get_building(key):
     '''Returns a unique building object based on input'''
