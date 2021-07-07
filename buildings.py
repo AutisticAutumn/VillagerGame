@@ -48,14 +48,17 @@ class Building:
                 texture = self.get_texture(pos)
 
                 updated_positions.append(f'{y}.{x-1}')
-                
-                # Don't update texture map if no texture exists
-                if texture[0] == ' ':
-                    texture = config.map.get_ground_texture(x, y)
 
-                # Update the texture map
-                pos = x + ((y-1)*config.map.width)
-                config.map.texture_map[pos] = texture
+                # Ignore tile if villager is placed there
+                if config.map.texture_map[pos][0] != '☺':
+
+                    # Don't update texture map if no texture exists
+                    if texture[0] == ' ':
+                        texture = config.map.get_ground_texture(x, y)
+
+                    # Update the texture map
+                    pos = x + ((y-1)*config.map.width)
+                    config.map.texture_map[pos] = texture
 
         mapUI.draw_map(config.map.frame, updated_positions)
 
