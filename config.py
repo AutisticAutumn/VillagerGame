@@ -21,8 +21,9 @@ def init():
 
     ## Villagers ##
     # Villagers and housing
-    global villagers
+    global villagers, villager_textures
     villagers = []
+    villager_textures = ('☺', '☻')
 
     # Village stats
     global max_villagers, arrival_chance
