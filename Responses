@@ -131,6 +131,16 @@ Villager
     {0} has been killed
 }
 {
+    get_possessed
+    pale turquoise2
+    {0} has been possessed
+}
+{
+    get_unpossessed
+    pale turquoise2
+    {0} is no longer possessed
+}
+{
     game_over
     white
 }
