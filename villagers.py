@@ -25,7 +25,9 @@ class Villager:
         self.morale = 0
 
         # Villager Logs
-        self.log = [(f'Turn {config.turn}', 'white')]
+        response = config.get_response('new_turn')
+        response[0] = response[0].format(config.turn).strip()
+        self.log = [response]
         self.turn_log = []
 
         # Turn action
@@ -142,7 +144,9 @@ class Villager:
         '''Beginning of turn functions'''
 
         # Appends new turn line directly to villager log
-        self.log.append((f'\nTurn {config.turn+1}', 'white'))
+        response = config.get_response('new_turn')
+        response[0] = response[0].format(config.turn+1)
+        self.log.append(response)
 
         # Reset variables
         self.turn_log = []
