@@ -163,7 +163,8 @@ def read_file(file):
 def get_response(key):
     '''Return a randomized response from the response dictionary'''
 
-    item = random.randint(1, len(response_dict[key])-1)
+    n = random.randint(1, len(response_dict[key])-1)
+    item = response_dict[key][n]
     colour = response_dict[key][0]
 
     return [item, colour]
@@ -188,7 +189,7 @@ def get_phantom_responses():
                  ('hurt_mild', 1),
                  ('hurt_moderate', 1),
                  ('hurt_severe', 1),
-                 ('near_death', 1)
+                 ('near_death', 1),
                  ('death', 1)]
 
     return responses
