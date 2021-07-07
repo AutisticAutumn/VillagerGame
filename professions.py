@@ -11,7 +11,7 @@ import random
 
 ### Functions ###
 
-def draw_villager_home(self, villager):
+def draw_villager_home(villager):
     '''Draws a villager into their house'''
 
     # Make sure villager has a house to display in
@@ -21,17 +21,18 @@ def draw_villager_home(self, villager):
         villager.house.reset_texture()
 
         # Set new texture as villager face
-        pos = random.randint(7,8)
+        pos_change = random.randint(1,2)
+        pos_x = villager.house.pos_x + pos_change
+        pos_y = villager.house.pos_y + 1
 
-        villager.house.texture = list(villager.house.texture)
-        villager.house.texture[pos] = '☺'
-        villager.house.texture = ''.join(villager.house.texture)
+        draw_villager(villager, pos_x, pos_y)
 
-        villager.house.colours.append(self.colour)
-        villager.house.colour_map[pos-2] = len(villager.house.colours)-1
-            
-        # Update the texture on the map
-        villager.house.update_texture_map()
+def draw_villager(villager, pos_x, pos_y):
+    '''Draws the villager from set building positions'''
+    
+    villager.pos = (pos_x, pos_y)
+    villager.draw_villager()
+
 
 ### Professions ###
 
@@ -71,7 +72,7 @@ class Profession:
     def villager_location_set(self, villager):
         '''Places the villager in there house for their action'''
 
-        draw_villager_home(self, villager)
+        draw_villager_home(villager)
     
 
 class Unemployed(Profession):
@@ -163,33 +164,28 @@ class Farmer(Profession):
             # Reset house texture
             building.reset_texture(crops)
 
+            # Update the texture on the map
+            building.update_texture_map()
+
             # Find a suitable position next to the farm
             found_space = False
             while found_space == False:
 
                 # Get position
                 pos_x = random.randint(0, 1)
+                pos_x = pos_x*( building.size[0]-1)
                 pos_y = random.randint(1, building.size[1]-2)
-                pos = (pos_x*( building.size[0]-1) ) + (pos_y*building.size[0])
+                pos = pos_x + (pos_y*building.size[0])
 
                 # Make sure space is free and not a coner position
                 if building.texture[pos] == ' ':
-
-                    # Set new texture as villager face
-                    building.texture = list(building.texture)
-                    building.texture[pos] = '☺'
-                    building.texture = ''.join(building.texture)
-
-                    building.colours.append(self.colour)
-                    building.colour_map[pos] = len(building.colours)-1
+                    
+                    draw_villager(villager, pos_x+building.pos_x, pos_y+building.pos_y)
 
                     found_space = True
-                
-            # Update the texture on the map
-            building.update_texture_map()
 
         else:
-            draw_villager_home(self, villager)
+            draw_villager_home(villager)
 
 
 class Feller(Profession):
@@ -209,7 +205,7 @@ class Feller(Profession):
         '''Collect Wood'''
 
         # Place villager in house
-        draw_villager_home(self, villager)
+        draw_villager_home(villager)
 
         # Collect wood and add to logs
         wood_produced = random.randint(2,3)
@@ -241,7 +237,7 @@ class Carpenter(Profession):
         '''Build a building if the action was selected'''
 
         # Place villager in house
-        draw_villager_home(self, villager)
+        draw_villager_home(villager)
 
         # Only attempt to build if action was seleceted
         if villager.turn_action != None:
