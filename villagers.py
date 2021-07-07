@@ -71,7 +71,7 @@ class Villager:
         
         #print(config.map.texture_map[pos], f'({x}, {y})')
 
-        mapUI.draw_map(config.map.frame)
+        mapUI.draw_map(config.map.frame, f'{y}.{x-1}')
 
     def assign_work_building(self):
         '''Finds building for the villager to work in if required'''
@@ -373,16 +373,25 @@ class Villager:
         '''Return output to the log based on health'''
 
         result = None
+        start_colour = self.colour
 
         if self.health <= config.health_log_boundry[0]:
             result = config.get_response('near_death').format(self.name)
+            self.colour = 'red'
         elif self.health <= config.health_log_boundry[1]:
             result = config.get_response('hurt_severe').format(self.name)
+            self.colour = 'red'
         elif self.health <= config.health_log_boundry[2]:
             result = config.get_response('hurt_moderate').format(self.name)
+            self.colour = None
         elif self.health <= config.health_log_boundry[3]:
             result = config.get_response('hurt_mild').format(self.name)
+            self.colour = None
         
+        # Update texture if changed
+        if start_colour != self.colour:
+            self.draw_villager()
+
         if result != None:
             self.append_villager_log(result, 'red')
 
