@@ -18,7 +18,7 @@ def draw_villager_home(villager):
     if villager.house != None:
             
         # Reset house texture
-        villager.house.reset_texture()
+        villager.house.update_texture_map(True)
 
         # Set new texture as villager face
         pos_change = random.randint(1,2)
@@ -165,7 +165,7 @@ class Farmer(Profession):
             building.reset_texture(crops)
 
             # Update the texture on the map
-            building.update_texture_map()
+            building.update_texture_map(True)
 
             # Find a suitable position next to the farm
             found_space = False
