@@ -183,6 +183,7 @@ class Farmer(Profession):
                 # Make sure space is free and not a coner position
                 if building.texture[pos] == ' ':
                     
+                    villager.house.update_texture_map(True)
                     draw_villager(villager, pos_x+building.pos_x, pos_y+building.pos_y)
 
                     found_space = True
