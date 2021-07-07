@@ -6,7 +6,7 @@
 
 ### Imports and Varibles ###
 import config, professions, mapUI
-import random
+import random, math
 from tkinter import DISABLED, NORMAL
 
 ### Villager class ###
@@ -66,10 +66,13 @@ class Villager:
         pos = x + ((y-1)*config.map.width)
 
         # Get colour
-        if self.colour == None:
-            colour = self.profession.colour
+        if self.phantom:
+            colour = 'pale turquoise2'
         else:
-            colour = self.colour
+            if self.colour == None:
+                colour = self.profession.colour
+            else:
+                colour = self.colour
 
         # Get texture and draw to map
         texture = (self.texture, colour)
@@ -148,6 +151,9 @@ class Villager:
                 response[0] = response[0].format(self.name, random.randint(1,4))
             self.append_villager_log(response, True)
 
+            # Move phantom villager
+            self.phantom_movement()
+
         # Random attack villagers if unhappy
         if self.morale < 0 and not(self.phantom):
             if random.randint(1,48) <= self.morale**2:
@@ -170,7 +176,7 @@ class Villager:
 
         # Attempt to possess villager
         if self.phantom == None:
-            if random.randint(1, config.phantom_chance) == 1:
+            if random.randint(1, config.phantom_chance-90) == 1:
                 self.get_possessed()
         
         # Remove phantom status if phantom
@@ -239,7 +245,6 @@ class Villager:
         self.phantom = True
         self.phantom_timer = random.randint(6,12)
         self.texture = config.villager_textures[1]
-        self.colour = 'pale turquoise2'
         self.draw_villager()
 
         # Adjust ui
@@ -259,11 +264,7 @@ class Villager:
         # Adjust stats
         self.phantom = None
         self.texture = config.villager_textures[0]
-        self.colour = None
         self.draw_villager()
-
-        if self.health <= config.health_log_boundry[1]:
-            self.colour = 'red'
 
         # Adjust ui
         try:
@@ -275,6 +276,57 @@ class Villager:
         response = config.get_response('get_unpossessed')
         response[0] = response[0].format(self.name)
         self.append_villager_log(response)
+    
+    def phantom_movement(self):
+        '''Move phantom villagers around the map'''
+
+        # Lock onto the position of a villager
+        target_found = False
+        while not(target_found):
+            target = random.choice(config.villagers)
+
+            if target != self:
+                target_found = True
+
+        # Find position around target villager
+        position_found = False
+        while not(position_found):
+            
+            # Get variables
+            delta_real = 3.0
+            delta = math.floor(delta_real)
+
+            x = target.pos[0] + random.randint(delta*-1, delta)
+            y = target.pos[1] + random.randint(delta*-1, delta)
+
+            pos = x + ((y-1)*config.map.width)
+            pos_key = f'{y}.{x-1}'
+
+            # Check to see if tile is valid
+            bounds = True
+            if x > config.map.width-1 or x < 0:
+                if y > config.map.height-1 or y < 0:
+                    bounds = False
+                
+            if bounds:
+                texture = config.map.texture_map[pos]
+                if texture[0] in config.villager_textures:
+                    bounds = False
+
+                terrain_grass = config.map.terrain_map[pos] != 'Grass'
+                terrain_building = pos_key in config.map.map.keys()
+                if terrain_building or terrain_grass:
+                    bounds = False
+            
+            # If tile is free move break loop or increase search range
+            if bounds:
+                position_found = True
+            else:
+                delta_real += 0.2
+
+        # Move villager
+        self.pos = (x, y)
+        self.draw_villager()
     
     def feed_villager(self):
         '''Feed the villager and calculate stats'''
