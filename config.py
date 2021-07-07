@@ -48,6 +48,12 @@ def init():
     food_priority = [[],[],[]]
     hunger_range = (1, 3)
 
+    ## Misc Village ##
+
+    # Weight for food produced
+    global food_weight
+    food_weight = -2
+
     # Boundries for when villages returns logs for high stats
     # Stats at most extreme to least
     global morale_log_boundry, hunger_log_boundry, health_log_boundry
@@ -84,7 +90,7 @@ def init():
 
     # Create the list of responses
     global response_dict
-    response_dict = read_file('villagerResponses')
+    response_dict = read_file('Responses')
 
 def init_app():
     '''Creates the application globals'''
