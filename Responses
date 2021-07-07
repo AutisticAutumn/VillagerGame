@@ -50,6 +50,14 @@ Villager
     {0} is starving
 }
 {
+    dropping_morale
+    {0} has lost {1} morale
+}
+{
+    rising_morale
+    {0} has gained {1} morale
+}
+{
     very_high_morale
     {0} is ecstatic
 }
@@ -58,8 +66,8 @@ Villager
     {0} is enthusiastic
 }
 {
-    dropping_morale
-    {0} is growing displeased
+    slightly_low_morale
+    {0} is mildly displeased
 }
 {
     low_morale
@@ -68,6 +76,14 @@ Villager
 {
     very_low_morale
     {0} is intensely displeased
+}
+{
+    get_hurt
+    {0} has taken {1} damage
+}
+{
+    heal
+    {0} has healed {1} health
 }
 {
     hurt_mild
