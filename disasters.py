@@ -48,7 +48,7 @@ class Famine(Disaster):
         config.food_weight -= self.food_loss
 
         response = config.get_response('famine_begin')
-        config.main_app.append_log(response, 'orange red')
+        config.main_app.append_log(response)
     
     def on_end(self):
         '''Reset food production and send to logs'''
@@ -56,4 +56,4 @@ class Famine(Disaster):
         config.food_weight += self.food_loss 
 
         response = config.get_response('famine_end')
-        config.main_app.append_log(response, 'lawn green')
+        config.main_app.append_log(response)
