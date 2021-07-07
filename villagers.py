@@ -5,7 +5,7 @@
 #
 
 ### Imports and Varibles ###
-import config, professions
+import config, professions, mapUI
 import random
 from tkinter import DISABLED, NORMAL
 
@@ -40,9 +40,85 @@ class Villager:
         config.main_app.add_villager_frame(self)
         self.frame.update_stats()
 
+        # Map data
+        self.pos = (None, None)
+        self.texture = '☺'
+        self.colour = None
+
         # Find house
         self.house = None
         self.house = self.find_house()
+
+    ## Map Functions ##
+
+    def draw_villager(self):
+        '''Draw the villagers onto the map'''
+
+        # Get variables
+        x = self.pos[0]
+        y = self.pos[1]
+        pos = x + ((y-1)*config.map.width)
+
+        # Get colour
+        if self.colour == None:
+            colour = self.profession.colour
+        else:
+            colour = self.colour
+
+        # Get texture and draw to map
+        texture = (self.texture, colour)
+        config.map.texture_map[pos] = texture
+        
+        #print(config.map.texture_map[pos], f'({x}, {y})')
+
+        mapUI.draw_map(config.map.frame)
+
+    def assign_work_building(self):
+        '''Finds building for the villager to work in if required'''
+        
+        # Run through the list of buildings on the map and see if any match
+        for building in config.map.map.values():
+            
+            # Check if building is the right type and free
+            building_type = building.profession == self.profession.name
+            building_free = building.worker == None
+
+            if building_type and building_free:
+
+                # Update stats for villager and building
+                building.worker = self
+                self.work_building = building
+                
+                # Return to logs
+                response = config.get_response('find_work_building').format(self.name, building.name)
+                self.append_villager_log(response, 'lime')
+
+                break
+        
+        # Return to logs if failed
+        if self.work_building == None:
+            response = config.get_response('find_work_building_fail')
+            response = response.format(self.name, self.profession.building)
+            self.append_villager_log(response, 'red')
+
+    def find_house(self):
+        '''Finds a house for the villager if it has none'''
+
+        # Run through the list of buildings on the map and see if any match
+        for building in config.map.map.values():
+            
+            # Check if building is the right type and free
+            building_type = building.type == 'House'
+            if building_type:
+
+                building_free = building.villager == None
+                if building_free:
+
+                    # Update stats for the building and return the building object
+                    building.villager = self
+                    self.profession.villager_location_set(self)
+
+                    return building
 
     ## Turn functions ##
     def end_turn(self):
@@ -148,53 +224,6 @@ class Villager:
         else:
             # Add hunger if no food was consumed
             self.gain_hunger(False)
-    
-    def assign_work_building(self):
-        '''Finds building for the villager to work in if required'''
-        
-        # Run through the list of buildings on the map and see if any match
-        for building in config.map.map.values():
-            
-            # Check if building is the right type and free
-            building_type = building.profession == self.profession.name
-            building_free = building.worker == None
-
-            if building_type and building_free:
-
-                # Update stats for villager and building
-                building.worker = self
-                self.work_building = building
-                
-                # Return to logs
-                response = config.get_response('find_work_building').format(self.name, building.name)
-                self.append_villager_log(response, 'lime')
-
-                break
-        
-        # Return to logs if failed
-        if self.work_building == None:
-            response = config.get_response('find_work_building_fail')
-            response = response.format(self.name, self.profession.building)
-            self.append_villager_log(response, 'red')
-
-    def find_house(self):
-        '''Finds a house for the villager if it has none'''
-
-        # Run through the list of buildings on the map and see if any match
-        for building in config.map.map.values():
-            
-            # Check if building is the right type and free
-            building_type = building.type == 'House'
-            if building_type:
-
-                building_free = building.villager == None
-                if building_free:
-
-                    # Update stats for the building and return the building object
-                    building.villager = self
-                    self.profession.villager_location_set(self)
-
-                    return building
 
     def attack_villager(self):
         '''Function for dealing with villager combat'''
