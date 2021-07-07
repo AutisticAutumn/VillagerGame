@@ -90,16 +90,17 @@ class Villager:
                 self.work_building = building
                 
                 # Return to logs
-                response = config.get_response('find_work_building').format(self.name, building.name)
-                self.append_villager_log(response, 'lime')
+                response = config.get_response('find_work_building')
+                response[0] = response[0].format(self.name, building.name)
+                self.append_villager_log(response)
 
                 break
         
         # Return to logs if failed
         if self.work_building == None:
             response = config.get_response('find_work_building_fail')
-            response = response.format(self.name, self.profession.building)
-            self.append_villager_log(response, 'red')
+            response[0] = response[0].format(self.name, self.profession.building)
+            self.append_villager_log(response)
 
     def find_house(self):
         '''Finds a house for the villager if it has none'''
@@ -159,13 +160,13 @@ class Villager:
         if self.profession.building != None and self.work_building == None: 
             self.assign_work_building()
 
-    def append_villager_log(self, line, colour='white'):
+    def append_villager_log(self, response):
         '''Appends a line to the villager log and prints to main log'''
 
-        if not(line in self.turn_log):
-            self.turn_log.append(line)
-            self.log.append((line, colour))
-            self.frame.parent.append_log(line, colour=colour)
+        if not(response in self.turn_log):
+            self.turn_log.append(response)
+            self.log.append(response)
+            self.frame.parent.append_log(response)
 
     def update_profession(self, profession):
         '''Run functions for chaning a villagers profession'''
@@ -209,15 +210,17 @@ class Villager:
                 food_consumed = init_food - config.food
                 # Add result to log
                 result = config.get_response('consume_food')
-                result = result.format(self.name, food_consumed)
-                self.append_villager_log(result,'yellow')
+                result[0] = result[0].format(self.name, food_consumed)
+                self.append_villager_log(result)
                 # Gain morale from eating if below 0
                 if self.morale < 0:
                     self.gain_morale(0,1)
             else:
                 # Add result to log
-                result = config.get_response('no_food_found').format(self.name)
-                self.append_villager_log(result, 'red')
+                result = config.get_response('no_food_found')
+                result[0] = result[0].format(self.name)
+                self.append_villager_log(result)
+
                 # Add hunger if no food was consumed
                 self.gain_hunger(True)
 
@@ -234,14 +237,16 @@ class Villager:
         # Return result
         if target == self:
             result = config.get_response('attack_self')
-            result = result.format(self.name, damage)
+            result[0] = result[0].format(self.name, damage)
         else:
             result = config.get_response('attack_villager')
-            result = result.format(self.name, target.name, damage)
+            result[0] = result[0].format(self.name, target.name, damage)
+
             target_result = config.get_response('target_villager')
-            target_result.format(self.name, target.name, damage)
-            target.log.append((target_result, 'red2'))
-        self.append_villager_log(result, 'red')
+            target_result[0] = target_result[0].format(self.name, target.name, damage)
+            target.log.append(target_result)
+
+        self.append_villager_log(result)
         
         target.lose_health(damage, damage)
 
@@ -267,9 +272,11 @@ class Villager:
 
         result = None
         if self.hunger >= config.hunger_log_boundry[0]:
-            result = (config.get_response('starving').format(self.name), 'red')
+            result = config.get_response('starving')
+            result[0] = result[0].format(self.name)
         elif self.hunger >= config.hunger_log_boundry[1]:
-            result = (config.get_response('hungry').format(self.name), 'yellow')
+            result = config.get_response('hungry')
+            result[0] = result[0].format(self.name)
 
         if result != None:
             self.append_villager_log(result[0], result[1])
@@ -288,11 +295,12 @@ class Villager:
                 self.morale = config.morale_max
 
             # Add change in morale to logs
-            result = (config.get_response('rising_morale'), 'cyan4')
-            result = (result[0].format(self.name, morale_change), result[1])
+            result = config.get_response('rising_morale')
+
+            result[0] = result[0].format(self.name, morale_change)
 
             # Return to logs
-            self.append_villager_log(result[0], result[1])
+            self.append_villager_log(result)
             self.return_morale_log('Rising')
 
 
@@ -309,11 +317,11 @@ class Villager:
                 self.morale = config.morale_min
 
             # Add change in morale to logs
-            result = (config.get_response('dropping_morale'), 'medium orchid4')
-            result = (result[0].format(self.name, morale_change), result[1])
+            result = config.get_response('dropping_morale')
+            result[0] = result[0].format(self.name, morale_change)
             
             # Return to logs
-            self.append_villager_log(result[0], result[1])
+            self.append_villager_log(result)
             self.return_morale_log('Dropping')
 
     def return_morale_log(self, dir=True):
@@ -330,22 +338,23 @@ class Villager:
                     ]
 
         if boundries[0] and (dir == 'Dropping' or dir):
-            result = (config.get_response('very_low_morale').format(self.name),
-                      'medium orchid')
+            result = config.get_response('very_low_morale')
+            result[0] = result[0].format(self.name)
         elif boundries[1] and (dir == 'Dropping' or dir):
-            result = (config.get_response('low_morale').format(self.name),
-                      'medium orchid')
+            result = config.get_response('low_morale')
+            result[0] = result[0].format(self.name)
         elif boundries[2] and (dir == 'Dropping' or dir):
-            result = (config.get_response('slightly_low_morale').format(self.name),
-                      'medium orchid')
+            result = config.get_response('slightly_low_morale')
+            result[0] = result[0].format(self.name)
         elif boundries[3] and (dir == 'Rising' or dir):
-            result = (config.get_response('high_morale').format(self.name), 'cyan')
+            result = config.get_response('high_morale')
+            result[0] = result[0].format(self.name)
         elif boundries[4] and (dir == 'Rising' or dir):
-            result = (config.get_response('very_high_morale').format(self.name),
-                      'cyan')
+            result = config.get_response('very_high_morale')
+            result[0] = result[0].format(self.name)
 
         if result != None:
-            self.append_villager_log(result[0], result[1])
+            self.append_villager_log(result)
 
     ## Health functions ##
     def lose_health(self, min, max):
@@ -356,11 +365,12 @@ class Villager:
         if health_change > 0:
             self.health -= health_change
 
-            self.return_health_log()
-
             # Add change in health to logs
-            result = (config.get_response('get_hurt'), 'red3')
-            result = (result[0].format(self.name, health_change), result[1])
+            result = config.get_response('get_hurt')
+            result[0] = result[0].format(self.name, health_change)
+
+            self.append_villager_log(result)
+            self.return_health_log()
 
             # Kill if out of bounds
             if self.health <= 0:
@@ -376,16 +386,20 @@ class Villager:
         start_colour = self.colour
 
         if self.health <= config.health_log_boundry[0]:
-            result = config.get_response('near_death').format(self.name)
+            result = config.get_response('near_death')
+            result[0] = result[0].format(self.name)
             self.colour = 'red'
         elif self.health <= config.health_log_boundry[1]:
-            result = config.get_response('hurt_severe').format(self.name)
+            result = config.get_response('hurt_severe')
+            result[0] = result[0].format(self.name)
             self.colour = 'red'
         elif self.health <= config.health_log_boundry[2]:
-            result = config.get_response('hurt_moderate').format(self.name)
+            result = config.get_response('hurt_moderate')
+            result[0] = result[0].format(self.name)
             self.colour = None
         elif self.health <= config.health_log_boundry[3]:
-            result = config.get_response('hurt_mild').format(self.name)
+            result = config.get_response('hurt_mild')
+            result[0] = result[0].format(self.name)
             self.colour = None
         
         # Update texture if changed
@@ -393,7 +407,7 @@ class Villager:
             self.draw_villager()
 
         if result != None:
-            self.append_villager_log(result, 'red')
+            self.append_villager_log(result)
 
     def kill(self):
         '''Kills the villager'''
@@ -414,8 +428,9 @@ class Villager:
             self.house.update_texture_map()
 
         # Add death to logs
-        response = config.get_response('death').format(self.name)
-        self.append_villager_log(response, 'red')
+        response = config.get_response('death')
+        response[0] = response[0].format(self.name)
+        self.append_villager_log(response)
 
         # Remove self from villager list
         config.villagers.remove(self)
