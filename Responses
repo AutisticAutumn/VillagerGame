@@ -116,3 +116,13 @@ General Functions
     build_action_succeed
     {0} has built a {1}
 }
+
+Disasters
+{
+    famine_begin
+    A famine has begun
+}
+{
+    famine_end
+    The famine has ended
+}
