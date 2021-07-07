@@ -1,18 +1,22 @@
 Professions
 {
     farmer_action
+    lime
     {0} has produced {1} food
 }
 {
     feller_action
+    chocolate
     {0} has produced {1} wood
 }
 {
     carpenter_action_no_wood
+    red
     {0} could not find enough wood to build a {1}
 }
 {
     farmer_action_build_fail
+    red
     {0} could not source enough food to start a farm
 }
 
@@ -20,125 +24,158 @@ Professions
 Villager
 {
     consume_food
+    yellow
     {0} has consumed {1} food
 }
 {
     no_food_found
+    red
     There is no food for {0} to consume
 }
 {
     attack_self
+    red
     In a fit of rage {0} has attack themselves dealing {1} damage
     Overcome with angry {0} has attacked themselves dealing {1} damage
 }
 {
     attack_villager
+    red
     In a fit of rage {0} has attack {1} for {2} health
     {0} has attacked {1} in a fit of anger dealing {2} damage
 }
 {
     target_villager
+    red2
     {1} has been attacked by {0} losing {2} health
     {1} was attacked by {0} dealing {2} damage
 }
 {
     hungry
+    yellow
     {0} is growing hungry
 }
 {
     starving
+    red
     {0} is starving
 }
 {
     dropping_morale
+    medium orchid4
     {0} has lost {1} morale
 }
 {
     rising_morale
+    cyan4
     {0} has gained {1} morale
 }
 {
     very_high_morale
+    cyan
     {0} is ecstatic
 }
 {
     high_morale
+    cyan
     {0} is enthusiastic
 }
 {
     slightly_low_morale
+    medium orchid
     {0} is mildly displeased
 }
 {
     low_morale
+    medium orchid
     {0} is quite displeased
 }
 {
     very_low_morale
+    medium orchid
     {0} is intensely displeased
 }
 {
     get_hurt
+    red3
     {0} has taken {1} damage
 }
 {
     heal
+    cyan2
     {0} has healed {1} health
 }
 {
     hurt_mild
+    red
     {0} is slightly injured
 }
 {
     hurt_moderate
+    red
     {0} is moderatly injured
 }
 {
     hurt_severe
+    red
     {0} is severely injured
 }
 {
-    near_death 
+    near_death
+    red
     {0} is dying
 }
 {
     death
+    red
     {0} has been killed
 }
 {
     game_over
-    There are no villagers remaining
+    white
 }
 
 General Functions
 {
+    new_turn
+    white
+    Turn {0}
+}
+{
     arrival
+    cyan
     {0} has arrived in the village
     {0} has decided to settle in your village
 }
 {
     find_work_building
+    lime
     {0} has found a {1} to work in
 }
 {
     find_work_building_fail
+    red
     {0} was unable to find a {1} to work in
 }
 {
     build_turn_action
+    lime
     {0} will build a {1} at the turns end
 }
 {
     build_action_succeed
+    cyan
     {0} has built a {1}
 }
 
 Disasters
 {
     famine_begin
+    orange red
     A famine has begun
 }
 {
     famine_end
+    lawn green
     The famine has ended
 }
