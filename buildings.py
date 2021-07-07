@@ -50,7 +50,8 @@ class Building:
                 updated_positions.append(f'{y}.{x-1}')
 
                 # Ignore tile if villager is placed there
-                if config.map.texture_map[pos][0] != '☺' or reset_villager:
+                villager_texture = config.map.texture_map[pos][0] in config.villager_textures
+                if not(villager_texture) or reset_villager:
 
                     # Don't update texture map if no texture exists
                     if texture[0] == ' ':
