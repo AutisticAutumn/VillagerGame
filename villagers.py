@@ -249,43 +249,69 @@ class Villager:
     def gain_morale(self, min, max):
         '''Calculate morale loss and keep within bounds'''
 
-        self.morale += random.randint(min, max)
+        morale_change = random.randint(min, max)
+        
+        if morale_change > 0:
+            self.morale += morale_change
 
-        # Check boundries 
-        if self.morale > config.morale_max:
-            self.morale = config.morale_max
+            # Check boundries 
+            if self.morale > config.morale_max:
+                self.morale = config.morale_max
 
-        self.return_morale_log()
+            # Add change in morale to logs
+            result = (config.get_response('rising_morale'), 'cyan4')
+            result = (result[0].format(self.name, morale_change), result[1])
+
+            # Return to logs
+            self.append_villager_log(result[0], result[1])
+            self.return_morale_log('Rising')
 
 
     def lose_morale(self, min, max):
         '''Calculate morale loss and keep within bounds'''
 
-        self.morale -= random.randint(min, max)
+        morale_change = random.randint(min, max)
 
-        # Check boundries
-        if self.morale < config.morale_min:
-            self.morale = config.morale_min
+        if morale_change > 0:
+            self.morale -= morale_change
 
-        self.return_morale_log()
+            # Check boundries
+            if self.morale < config.morale_min:
+                self.morale = config.morale_min
 
-    def return_morale_log(self):
+            # Add change in morale to logs
+            result = (config.get_response('dropping_morale'), 'medium orchid4')
+            result = (result[0].format(self.name, morale_change), result[1])
+            
+            # Return to logs
+            self.append_villager_log(result[0], result[1])
+            self.return_morale_log('Dropping')
+
+    def return_morale_log(self, dir=True):
         '''Return an output to the logs depending on morale level'''
 
         result = None
 
-        if self.morale <= config.morale_log_boundry[0]:
+        boundries = [
+                     self.morale <= config.morale_log_boundry[0],
+                     self.morale <= config.morale_log_boundry[1],
+                     self.morale <= config.morale_log_boundry[2],
+                     self.morale >= config.morale_log_boundry[3],
+                     self.morale >= config.morale_log_boundry[4]
+                    ]
+
+        if boundries[0] and (dir == 'Dropping' or dir):
             result = (config.get_response('very_low_morale').format(self.name),
                       'medium orchid')
-        elif self.morale <= config.morale_log_boundry[1]:
+        elif boundries[1] and (dir == 'Dropping' or dir):
             result = (config.get_response('low_morale').format(self.name),
                       'medium orchid')
-        elif self.morale <= config.morale_log_boundry[2]:
-            result = (config.get_response('dropping_morale').format(self.name),
+        elif boundries[2] and (dir == 'Dropping' or dir):
+            result = (config.get_response('slightly_low_morale').format(self.name),
                       'medium orchid')
-        elif self.morale >= config.morale_log_boundry[3]:
+        elif boundries[3] and (dir == 'Rising' or dir):
             result = (config.get_response('high_morale').format(self.name), 'cyan')
-        elif self.morale >= config.morale_log_boundry[4]:
+        elif boundries[4] and (dir == 'Rising' or dir):
             result = (config.get_response('very_high_morale').format(self.name),
                       'cyan')
 
@@ -296,16 +322,23 @@ class Villager:
     def lose_health(self, min, max):
         '''Calculate health loss'''
 
-        self.health -= random.randint(min, max) 
+        health_change = random.randint(min, max) 
+        
+        if health_change > 0:
+            self.health -= health_change
 
-        self.return_health_log()
+            self.return_health_log()
 
-        # Kill if out of bounds
-        if self.health <= 0:
-            self.kill()
-        else:
-            # Lose morale as result of injury
-            self.lose_morale(1,2)
+            # Add change in health to logs
+            result = (config.get_response('get_hurt'), 'red3')
+            result = (result[0].format(self.name, health_change), result[1])
+
+            # Kill if out of bounds
+            if self.health <= 0:
+                self.kill()
+            else:
+                # Lose morale as result of injury
+                self.lose_morale(1,2)
 
     def return_health_log(self):
         '''Return output to the log based on health'''
