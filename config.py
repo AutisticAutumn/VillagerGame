@@ -11,7 +11,15 @@ import villagers as villagers_scr
 # Initiate the global variables
 def init():
     '''Initializes the global variables for the program'''
+    
+    ## Misc ##
+    # Random seeds
+    global seed, grass_seed
+    seed = random.randint(1000000000,9999999999)
+    random.seed(seed)
+    grass_seed = random.randint(1000000000,9999999999)
 
+    ## Villagers ##
     # Villagers and housing
     global villagers
     villagers = []
@@ -34,6 +42,12 @@ def init():
     morale_max = 4
     morale_min = -4
 
+    # Food priority 
+    global food_priority_values, food_priority, hunger_range
+    food_priority_values = ('High', 'Normal', 'Low')
+    food_priority = [[],[],[]]
+    hunger_range = (1, 3)
+
     # Boundries for when villages returns logs for high stats
     # Stats at most extreme to least
     global morale_log_boundry, hunger_log_boundry, health_log_boundry
@@ -41,6 +55,7 @@ def init():
     hunger_log_boundry = [7, 4]
     health_log_boundry = [1, 3, 5, 7]
 
+    ## Stats ##
     # Materials
     global food, wood
     food = 10
@@ -55,12 +70,7 @@ def init():
     log = []
     turn = 1
 
-    # Food priority 
-    global food_priority_values, food_priority, hunger_range
-    food_priority_values = ('High', 'Normal', 'Low')
-    food_priority = [[],[],[]]
-    hunger_range = (1, 3)
-
+    ## Dictionaries ##
     # Professions Dictionary
     global professions_dict
     professions_list = [professions.Unemployed(),
@@ -75,15 +85,6 @@ def init():
     # Create the list of responses
     global response_dict
     response_dict = read_file('villagerResponses')
-
-def  get_seed():
-    '''Returns a randomized seed'''
-
-    # Random seeds
-    global seed, grass_seed
-    seed = random.randint(1000000000,9999999999)
-    random.seed(seed)
-    grass_seed = random.randint(1000000000,9999999999)
 
 def init_app():
     '''Creates the application globals'''
