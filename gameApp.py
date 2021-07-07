@@ -204,9 +204,25 @@ class GameApp:
             self.end_turn_button.config(state=tk.DISABLED)
             return False
 
+        # Attempt to run end of turn functions for disaster
+        if config.disaster != None:
+            config.disaster.end_turn()
+
         # Update turn counter and add to the logs
         config.turn += 1
         self.append_log(f'\nTurn {config.turn}')
+
+        # Attempt to start a disaster
+        disaster_chance = random.randint(1, config.disaster_chance)
+        if disaster_chance == 1 and config.disaster == None:
+            
+            # Select a random disaster from the list
+            config.disaster = config.get_disaster(random.choice(config.disaster_list))
+            config.disaster.on_start()
+
+        else:
+            # Increase chance if no disaster has occured
+            config.disaster_chance -= 1
 
         # Attempt to add new villagers if there is space
         if len(config.villagers) < config.max_villagers:
@@ -220,6 +236,10 @@ class GameApp:
                 # Return response to log
                 response = config.get_response('arrival').format(config.villagers[-1].name)
                 self.append_log(response, 'cyan')
+
+        # Attempt to run start of turn functions for disaster
+        if config.disaster != None:
+            config.disaster.begin_turn()
 
         # Run the beginning of turn functions just before the next turn begins
         for villager in config.villagers:
