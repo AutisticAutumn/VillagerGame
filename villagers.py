@@ -162,7 +162,7 @@ class Villager:
 
         # Attempt to possess villager
         if self.phantom == None:
-            if random.randint(1, config.phantom_chance) == 1:
+            if random.randint(1, config.phantom_chance-90) == 1:
                 self.get_possessed()
         
         # Remove phantom status if phantom
@@ -286,41 +286,45 @@ class Villager:
             if target != self:
                 target_found = True
 
+        # Get list of villager positions
+        villager_positions = {}
+        for villager in config.villagers:
+            villager_positions.update({villager.pos: villager})
+
         # Find position around target villager
         position_found = False
+        delta_real = 3.0
         while not(position_found):
             
             # Get variables
-            delta_real = 3.0
             delta = math.floor(delta_real)
 
             x = target.pos[0] + random.randint(delta*-1, delta)
             y = target.pos[1] + random.randint(delta*-1, delta)
 
             pos = x + ((y-1)*config.map.width)
-            pos_key = f'{y}.{x-1}'
+            pos_key = f'({y}.{x-1})'
 
             # Check to see if tile is valid
-            bounds = True
-            if x > config.map.width-1 or x < 0:
-                if y > config.map.height-1 or y < 0:
-                    bounds = False
-                
-            if bounds:
-                texture = config.map.texture_map[pos]
-                if texture[0] in config.villager_textures:
-                    bounds = False
+            #  Check if tile is within map
+            if x < config.map.width-1 or x > 0:
+                if y < config.map.height-1 or y > 0:
+                    
 
-                terrain_grass = config.map.terrain_map[pos] != 'Grass'
-                terrain_building = pos_key in config.map.map.keys()
-                if terrain_building or terrain_grass:
-                    bounds = False
+                    # Check if tile is empty     
+                    pos_key = f'({y}:{x})'
+                    pos = (x) + ((y-1)*config.map.width)
+
+                    no_villager = not((x, y) in villager_positions.keys())
+                    no_building = not(pos_key in config.map.map.keys())
+                    terrain_grass = config.map.terrain_map[pos] == 'Grass'
+                    
+                    if no_villager and no_building and terrain_grass:
+                        position_found = True
             
-            # If tile is free move break loop or increase search range
-            if bounds:
-                position_found = True
-            else:
-                delta_real += 0.2
+            # If no tile was found increase search range
+            delta_real += 0.2
+            print(delta, delta_real)
 
         # Move villager
         self.pos = (x, y)
