@@ -101,7 +101,7 @@ def create_village():
     print('Adding Villagers')
     for i in range(init_villagers): 
         
-        config.create_villager()
+        config.create_villager(move=False)
         config.villagers[-1].profession.action(config.villagers[-1])
 
 def create_map(reset=False):
