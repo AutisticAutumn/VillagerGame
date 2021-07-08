@@ -153,7 +153,7 @@ class Villager:
 
         # Appends new turn line directly to villager log
         response = config.get_response('new_turn')
-        response[0] = '\n' + response[0].format(config.turn+1)
+        response[0] = '\n' + response[0].format(config.turn)
         self.log.append(response)
 
         # Reset variables
@@ -406,6 +406,7 @@ class Villager:
         if self.hunger >= config.hunger_log_boundry[0]:
             result = config.get_response('starving')
             result[0] = result[0].format(self.name)
+            self.lose_health(-1, 2)
         elif self.hunger >= config.hunger_log_boundry[1]:
             result = config.get_response('hungry')
             result[0] = result[0].format(self.name)
