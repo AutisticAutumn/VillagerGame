@@ -186,8 +186,8 @@ class Map:
         while True:
 
             # Get variables
-            x = random.randint(0, self.width-1)
-            y = random.randint(0, self.height-1)
+            x = random.randint(1, self.width-1)
+            y = random.randint(1, self.height-1)
 
             pos = x + ((y-1)*self.width)
 
