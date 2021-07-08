@@ -243,11 +243,17 @@ class Feller(Profession):
             x, y = self.find_tree(villager)
 
             if not(x == False):
+
                 # Place villager at tree
-                x_delta, y_delta = 1,1
-                while x_delta * y_delta != 0:
-                    x_delta = random.randint(-1,1)
-                    y_delta = random.randint(-1,1)
+                dir = random.randint(1,4)
+                if dir == 1:
+                    x_delta, y_delta = 0, 1
+                elif dir == 2:
+                    x_delta, y_delta = 1, 0
+                elif dir == 3:
+                    x_delta, y_delta = 0, -1
+                elif dir == 4:
+                    x_delta, y_delta = -1, 0
 
                 villager.pos = (x+x_delta, y+y_delta)
                 villager.draw_villager()
@@ -258,7 +264,7 @@ class Feller(Profession):
                 return True
             else:
                 villager.turn_action = None
-        
+
         if return_home:
             draw_villager_home(villager)
 
@@ -275,7 +281,7 @@ class Feller(Profession):
         attempts = 0
         while not(item == 'Tree'):
             attempts += 1
-            
+
             # Get variables
             x_dir =(random.randint(0,1)*2)-1
             x_range = range(center_x-(delta*x_dir), center_x+(delta*x_dir), x_dir)
@@ -286,10 +292,10 @@ class Feller(Profession):
             # Run through tiles in range
             for x in x_range:
                 for y in y_range:
-                        
+
                     # Get variables
-                    xx = max(min(x, config.map.width-1), 0)
-                    yy = max(min(y, config.map.height-1), 0)
+                    xx = max(min(x, config.map.width-2), 0)
+                    yy = max(min(y, config.map.height-2), 0)
                     pos = xx + ((yy-1)*config.map.width)
 
                     item = config.map.terrain_map[pos]
