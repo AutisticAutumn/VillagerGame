@@ -204,6 +204,9 @@ def get_building(key):
 
     if key == buildings.PondWater().name:
         return buildings.PondWater()
+
+    if key == buildings.Tree().name:
+        return buildings.Tree()
     
     if key == buildings.WoodenHut().name:
         return buildings.WoodenHut()
