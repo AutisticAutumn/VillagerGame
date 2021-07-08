@@ -179,3 +179,26 @@ class Map:
             pond_positions.append(pos)
 
         return pond_positions
+
+    def plant_tree(self):
+        '''Plants a tree on the map'''
+
+        while True:
+
+            # Get variables
+            x = random.randint(0, self.width-1)
+            y = random.randint(0, self.height-1)
+
+            pos = x + ((y-1)*self.width)
+
+            # Check if space is empty
+            space_free = self.check_free_land(config.get_building('Tree'), 
+                                                x, y, True)
+
+            if space_free:
+                texture = config.get_building('Tree').get_texture(y + x*123456)
+
+                self.texture_map[pos] = texture
+                self.terrain_map[pos] = 'Tree'
+
+                return True
