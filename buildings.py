@@ -118,7 +118,7 @@ class PondWater(Terraian):
 
 class Tree(Terraian):
 
-    def __init(self):
+    def __init__(self):
 
         Terraian.__init__(self)
 
