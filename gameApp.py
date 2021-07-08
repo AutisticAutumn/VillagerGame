@@ -231,8 +231,14 @@ class GameApp:
             # Increase chance if no disaster has occured
             config.disaster_chance -= 1
 
+        # Find average morale levels
+        average_morale = 0
+        for villager in config.villagers:
+            average_morale += villager.morale
+        average_morale /= len(config.villagers)
+
         # Attempt to add new villagers if there is space
-        if len(config.villagers) < config.max_villagers:
+        if len(config.villagers) < config.max_villagers and average_morale > -1:
             
             chance = int(10 / config.arrival_chance)
 
@@ -250,6 +256,7 @@ class GameApp:
             config.disaster.begin_turn()
 
         # Run the beginning of turn functions just before the next turn begins
+        config.feller_trees = []
         for villager in config.villagers:
             villager.begin_turn()
 
