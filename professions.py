@@ -5,9 +5,8 @@
 #
 
 ### Imports and variables ###
-import config
-import map
-import random
+import config, map, mapUI
+import random, math
 
 ### Functions ###
 
@@ -208,16 +207,88 @@ class Feller(Profession):
     def action(self, villager):
         '''Collect Wood'''
 
-        # Place villager in house
-        draw_villager_home(villager)
+        self.villager_location_set(villager, False)
+        if villager.turn_action != None:
 
-        # Collect wood and add to logs
-        wood_produced = random.randint(2,3)
-        config.wood += wood_produced
+            # get tree position
+            x, y = villager.turn_action
 
-        response = config.get_response('feller_action')
-        response[0] = response[0].format(villager.name, wood_produced)
-        return response
+            # Reset tile of tree
+            pos = x + ((y-1)*config.map.width)
+            config.map.terrain_map[pos] = 'Grass'
+            config.map.texture_map[pos] = config.map.get_ground_texture(x, y)
+            mapUI.draw_map(config.map.frame)
+
+            # Collect wood and add to logs
+            wood_produced = random.randint(2,3)
+            config.wood += wood_produced
+
+            # Find the next tree
+            self.villager_location_set(villager, False)
+
+            response = config.get_response('feller_action')
+            response[0] = response[0].format(villager.name, wood_produced)
+            return response
+
+        else:
+            # Return failed response
+            pass
+    
+    def villager_location_set(self, villager, return_home=True):
+        '''Places the feller by the tree'''
+        
+        if 'Tree' in config.map.terrain_map:
+            
+            # Find tree
+            x, y = self.find_tree(villager)
+
+            # Place villager at tree
+            x_delta, y_delta = 1,1
+            while x_delta * y_delta != 0:
+                x_delta = random.randint(-1,1)
+                y_delta = random.randint(-1,1)
+
+            villager.pos = (x+x_delta, y+y_delta)
+            villager.draw_villager()
+
+            villager.turn_action = (x, y)
+        
+        elif return_home:
+            draw_villager_home(villager)
+
+    def find_tree(self, villager):
+        '''Find and place the feller by the tree'''
+
+        # Get variables
+        item = None
+        center_x = villager.pos[0]
+        center_y = villager.pos[1]
+        delta = 3
+
+        # Find tree
+        while not(item == 'Tree'):
+            
+            # Get variables
+            x_dir =(random.randint(0,1)*2)-1
+            x_range = range(center_x-(delta*x_dir), center_x+(delta*x_dir), x_dir)
+
+            y_dir =(random.randint(0,1)*2)-1
+            y_range = range(center_y-(delta*y_dir), center_y+(delta*y_dir), y_dir)
+
+            # Run through tiles in range
+            for x in x_range:
+                for y in y_range:
+                        
+                    # Get variables
+                    xx = max(min(x, config.map.width-1), 0)
+                    yy = max(min(y, config.map.height-1), 0)
+                    pos = xx + ((yy-1)*config.map.width)
+
+                    item = config.map.terrain_map[pos]
+                    if item == 'Tree':
+                        return x, y 
+        
+            delta += 3
 
 class Carpenter(Profession):
     '''The carpenter builds building with wood'''
