@@ -232,7 +232,7 @@ class Feller(Profession):
 
         else:
             # Return failed response
-            pass
+            draw_villager_home(villager)
     
     def villager_location_set(self, villager, return_home=True):
         '''Places the feller by the tree'''
@@ -242,18 +242,24 @@ class Feller(Profession):
             # Find tree
             x, y = self.find_tree(villager)
 
-            # Place villager at tree
-            x_delta, y_delta = 1,1
-            while x_delta * y_delta != 0:
-                x_delta = random.randint(-1,1)
-                y_delta = random.randint(-1,1)
+            if not(x == False):
+                # Place villager at tree
+                x_delta, y_delta = 1,1
+                while x_delta * y_delta != 0:
+                    x_delta = random.randint(-1,1)
+                    y_delta = random.randint(-1,1)
 
-            villager.pos = (x+x_delta, y+y_delta)
-            villager.draw_villager()
+                villager.pos = (x+x_delta, y+y_delta)
+                villager.draw_villager()
 
-            villager.turn_action = (x, y)
+                config.feller_trees.append((x, y))
+                villager.turn_action = (x, y)
+
+                return True
+            else:
+                villager.turn_action = None
         
-        elif return_home:
+        if return_home:
             draw_villager_home(villager)
 
     def find_tree(self, villager):
@@ -266,7 +272,9 @@ class Feller(Profession):
         delta = 3
 
         # Find tree
+        attempts = 0
         while not(item == 'Tree'):
+            attempts += 1
             
             # Get variables
             x_dir =(random.randint(0,1)*2)-1
@@ -285,9 +293,12 @@ class Feller(Profession):
                     pos = xx + ((yy-1)*config.map.width)
 
                     item = config.map.terrain_map[pos]
-                    if item == 'Tree':
+                    if item == 'Tree' and not((xx, yy) in config.feller_trees):
                         return x, y 
-        
+            
+            if attempts > 30 :
+                return False, False
+                
             delta += 3
 
 class Carpenter(Profession):
