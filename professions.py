@@ -207,7 +207,11 @@ class Feller(Profession):
     def action(self, villager):
         '''Collect Wood'''
 
-        self.villager_location_set(villager, False)
+        # If no tree has been found find one.
+        if 'Tree' in config.map.terrain_map and villager.turn_action == None:
+            self.villager_location_set(villager, False)
+
+        # If a tree is ready to be felled then fell it
         if villager.turn_action != None:
 
             # get tree position
