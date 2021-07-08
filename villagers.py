@@ -14,7 +14,7 @@ from tkinter import DISABLED, NORMAL
 class Villager:
     '''Class the stores the data for each villager'''
 
-    def __init__(self, name, profession):
+    def __init__(self, name, profession, move=True):
 
         self.name = name
         self.profession = profession
@@ -51,9 +51,16 @@ class Villager:
         self.texture = config.villager_textures[0]
         self.colour = None
 
+        # Move to random position at start
+        if move:
+            self.random_movement()
+
         # Find house
         self.house = None
         self.house = self.find_house()
+
+        # Draw the villager into the new positon
+        self.draw_villager()
 
     ## Map Functions ##
 
@@ -138,7 +145,7 @@ class Villager:
             self.append_villager_log(response, True)
 
             # Move phantom villager
-            self.phantom_movement()
+            self.random_movement()
 
         # Random attack villagers if unhappy
         if self.morale < 0 and not(self.phantom):
@@ -275,8 +282,8 @@ class Villager:
         response[0] = response[0].format(self.name)
         self.append_villager_log(response)
     
-    def phantom_movement(self):
-        '''Move phantom villagers around the map'''
+    def random_movement(self):
+        '''Randomly moves near another villager if needed'''
 
         # Lock onto the position of a villager
         target_found = False
