@@ -116,6 +116,17 @@ class PondWater(Terraian):
         self.texture = '≈≈~'
         self.colours = ['blue', 'blue3']
 
+class Tree(Terraian):
+
+    def __init(self):
+
+        Terraian.__init__(self)
+
+        self.name = 'Tree'
+        self.description = 'Simple tree\ncan be used to gather wood'
+        self.texture = 'O'
+        self.colours = ['chocolate2']
+
 ## Villager Buildings
 class WoodenHut(Building):
     '''Simple build that holds two villagers'''
