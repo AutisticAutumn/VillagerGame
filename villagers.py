@@ -285,57 +285,59 @@ class Villager:
     def random_movement(self):
         '''Randomly moves near another villager if needed'''
 
-        # Lock onto the position of a villager
-        target_found = False
-        while not(target_found):
-            target = random.choice(config.villagers)
+        if len(config.villagers) == 1:
+            self.draw_villager()
+        else:
+            # Lock onto the position of a villager
+            target_found = False
+            while not(target_found):
+                target = random.choice(config.villagers)
 
-            if target != self:
-                target_found = True
+                if target != self:
+                    target_found = True
 
-        # Get list of villager positions
-        villager_positions = {}
-        for villager in config.villagers:
-            villager_positions.update({villager.pos: villager})
+            # Get list of villager positions
+            villager_positions = {}
+            for villager in config.villagers:
+                villager_positions.update({villager.pos: villager})
 
-        # Find position around target villager
-        position_found = False
-        delta_real = 3.0
-        while not(position_found):
-            
-            # Get variables
-            delta = math.floor(delta_real)
+            # Find position around target villager
+            position_found = False
+            delta_real = 3.0
+            while not(position_found):
+                
+                # Get variables
+                delta = math.floor(delta_real)
 
-            x = target.pos[0] + random.randint(delta*-1, delta)
-            y = target.pos[1] + random.randint(delta*-1, delta)
+                x = target.pos[0] + random.randint(delta*-1, delta)
+                y = target.pos[1] + random.randint(delta*-1, delta)
 
-            pos = x + ((y-1)*config.map.width)
-            pos_key = f'({y}.{x-1})'
+                pos = x + ((y-1)*config.map.width)
+                pos_key = f'({y}.{x-1})'
 
-            # Check to see if tile is valid
-            #  Check if tile is within map
-            if x < config.map.width-1 or x > 0:
-                if y < config.map.height-1 or y > 0:
-                    
+                # Check to see if tile is valid
+                #  Check if tile is within map
+                if x < config.map.width-1 or x > 0:
+                    if y < config.map.height-1 or y > 0:
+                        
 
-                    # Check if tile is empty     
-                    pos_key = f'({y}:{x})'
-                    pos = (x) + ((y-1)*config.map.width)
+                        # Check if tile is empty     
+                        pos_key = f'({y}:{x})'
+                        pos = (x) + ((y-1)*config.map.width)
 
-                    no_villager = not((x, y) in villager_positions.keys())
-                    no_building = not(pos_key in config.map.map.keys())
-                    terrain_grass = config.map.terrain_map[pos] == 'Grass'
-                    
-                    if no_villager and no_building and terrain_grass:
-                        position_found = True
-            
-            # If no tile was found increase search range
-            delta_real += 0.2
-            print(delta, delta_real)
+                        no_villager = not((x, y) in villager_positions.keys())
+                        no_building = not(pos_key in config.map.map.keys())
+                        terrain_grass = config.map.terrain_map[pos] == 'Grass'
+                        
+                        if no_villager and no_building and terrain_grass:
+                            position_found = True
+                
+                # If no tile was found increase search range
+                delta_real += 0.2
 
-        # Move villager
-        self.pos = (x, y)
-        self.draw_villager()
+            # Move villager
+            self.pos = (x, y)
+            self.draw_villager()
     
     def feed_villager(self):
         '''Feed the villager and calculate stats'''
