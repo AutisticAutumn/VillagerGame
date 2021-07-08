@@ -279,7 +279,8 @@ class Feller(Profession):
         item = None
         center_x = villager.pos[0]
         center_y = villager.pos[1]
-        delta = 3
+        delta_change = 3
+        delta = delta_change
 
         # Find tree
         attempts = 0
@@ -297,19 +298,28 @@ class Feller(Profession):
             for x in x_range:
                 for y in y_range:
 
-                    # Get variables
+                    if abs(y) < delta-delta_change:
+                        y += delta_change*y_dir*2
+
+                    # Rounded variables
                     xx = max(min(x, config.map.width-2), 0)
                     yy = max(min(y, config.map.height-2), 0)
-                    pos = xx + ((yy-1)*config.map.width)
 
-                    item = config.map.terrain_map[pos]
-                    if item == 'Tree' and not((xx, yy) in config.feller_trees):
-                        return x, y 
-            
+                    if not((xx, yy) in config.feller_trees):
+
+                        pos = xx + ((yy-1)*config.map.width)
+
+                        item = config.map.terrain_map[pos]
+                        if item == 'Tree':
+                            return x, y 
+
+                if abs(x) < delta-delta_change:
+                    x += delta_change*x_dir*2
+
             if attempts > 30 :
                 return False, False
-                
-            delta += 3
+ 
+            delta += delta_change
 
 class Carpenter(Profession):
     '''The carpenter builds building with wood'''
