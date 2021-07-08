@@ -16,6 +16,7 @@ init_villagers = 3
 offset_max = (7, 5)
 
 total_ponds = random.randint(5, 8)
+init_trees = random.randint(30,50)
 
 ### Functions ###
 def get_starting_pos():
@@ -90,10 +91,14 @@ def create_village():
             attempts +=1
 
         config.seed += 1
+
+    # Add Trees
+    print('Adding Trees')
+    for i in range(init_trees):
+        config.map.plant_tree()
     
     # Create inital villagers
     print('Adding Villagers')
-
     for i in range(init_villagers): 
         
         config.create_villager()
@@ -132,6 +137,7 @@ def create_map(reset=False):
     if attempts > 200:
         print('Resetting\n')
         create_map(True)
+
 
 ### Main Game Loop ###
 
