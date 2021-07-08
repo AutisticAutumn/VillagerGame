@@ -54,6 +54,10 @@ def init():
     phantom_responses = get_phantom_responses()
     phantom_chance = 96
 
+    # Feller tree counter
+    global feller_trees
+    feller_trees = []
+
     ## Misc Village ##
 
     # Weight for food produced
@@ -237,12 +241,12 @@ def get_disaster_chance():
     
     return disaster_chance
 
-def create_villager():
+def create_villager(move=True):
     '''Creates a randomized villager and to the village'''
 
     name = random.choice(names['First']) + ' ' + random.choice(names['Last'])
 
-    villagers.append(villagers_scr.Villager(name, professions.Unemployed()))
+    villagers.append(villagers_scr.Villager(name, professions.Unemployed(), move=move))
 
 
 def save():
