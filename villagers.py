@@ -71,7 +71,9 @@ class Villager:
         self.colour = self.get_colour()
         
         # Update map
-        mapUI.draw_map(config.map.frame)
+        if not(self.pos[0]) == None:
+            self.frame.update_map()
+            mapUI.draw_map(config.map.frame)
 
     def assign_work_building(self):
         '''Finds building for the villager to work in if required'''
