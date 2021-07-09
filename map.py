@@ -49,7 +49,7 @@ class Map:
         if not(self.terrain_map[pos]) == 'Tree':
             return config.get_building(self.terrain_map[pos]).get_texture(y + x*123456)
         else:
-            return (config.get_building('Tree').get_texture(2,2))
+            return (config.get_building('Tree').get_texture(5))
 
     def check_free_land(self, building, pos_x, pos_y, extra_space=False):
         '''Checks if the land is free from buildings based on set building'''
