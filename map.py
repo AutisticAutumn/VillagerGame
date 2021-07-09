@@ -46,7 +46,10 @@ class Map:
         # Merge position values
         pos = x + (y * self.width)
 
-        return config.get_building(self.terrain_map[pos]).get_texture(y + x*123456)
+        if not(self.terrain_map[pos]) == 'Tree':
+            return config.get_building(self.terrain_map[pos]).get_texture(y + x*123456)
+        else:
+            return (config.get_building('Tree').get_texture(2,2))
 
     def check_free_land(self, building, pos_x, pos_y, extra_space=False):
         '''Checks if the land is free from buildings based on set building'''
@@ -186,19 +189,33 @@ class Map:
         while True:
 
             # Get variables
-            x = random.randint(1, self.width-1)
-            y = random.randint(1, self.height-1)
+            tree = config.get_building('Tree')
+            x = random.randint(2, self.width-tree.size[0])
+            y = random.randint(2, self.height-tree.size[1])
 
-            pos = x + ((y-1)*self.width)
+            tree.pos_x = x
+            tree.pos_y = y
 
             # Check if space is empty
-            space_free = self.check_free_land(config.get_building('Tree'), 
-                                                x, y, True)
+            space_free = self.check_free_land(tree, x, y)
 
             if space_free:
-                texture = config.get_building('Tree').get_texture(y + x*123456)
+                
+                # Add texture
+                for xx in range(tree.size[0]):
+                    for yy in range(tree.size[1]):
 
-                self.texture_map[pos] = texture
-                self.terrain_map[pos] = 'Tree'
+
+                        # Get variables
+                        pos = (x+xx) + ((y+yy)*config.map.width)
+                        texture = tree.get_texture(xx + (yy*tree.size[0]))
+
+                        # Add a tree to the center
+                        if texture[0] == 'O':
+                            self.terrain_map[pos] = 'Tree'
+                        else:
+                            texture = config.map.get_ground_texture(x+xx, y+yy)
+
+                        self.texture_map[pos] = texture
 
                 return True
