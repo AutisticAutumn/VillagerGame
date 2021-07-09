@@ -77,6 +77,7 @@ class Terraian:
     def __init__(self):
 
         self.type = 'Terraian'
+        self.size = (1, 1)
 
     def get_texture(self, randkey):
         '''returns the texture for the building'''
