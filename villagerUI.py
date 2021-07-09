@@ -22,8 +22,8 @@ class VillagerFrame:
         self.id = id
 
         # Set variables
-        self.font_size = 12
-        self.map_size = [9,5]
+        self.font_size = 10
+        self.map_size = [11,5]
 
         # Link to villager
         self.villager.frame = self
@@ -38,7 +38,7 @@ class VillagerFrame:
 
         # Creat the four frames for the widgets 
         self.left_frame = tk.Frame(self.frame)
-        self.left_frame.grid(row=0, column=0, rowspan=2)
+        self.left_frame.grid(row=0, column=0, rowspan=2, pady=4)
 
         self.stats_frame = tk.Frame(self.frame)
         self.stats_frame.grid(row=0, column=1)
@@ -223,6 +223,9 @@ class VillagerFrame:
 
             self.map.insert(tk.END, '\n')
         
+        # Delete Trailing newline
+        self.map.delete(f'{self.map_size[1]+1}.0', tk.END)
+
         # Disable the map
         self.map.config(state=tk.DISABLED)
 
