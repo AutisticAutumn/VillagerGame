@@ -21,6 +21,11 @@ class VillagerFrame:
         self.villager = villager
         self.id = id
 
+        # Set variables
+        self.font_size = 12
+        self.map_size = [9,5]
+
+        # Link to villager
         self.villager.frame = self
 
     def create_widgets(self):
@@ -32,8 +37,8 @@ class VillagerFrame:
         self.frame.grid(row=self.id, column=0, padx=2, pady=4, sticky='')
 
         # Creat the four frames for the widgets 
-        self.ascii_frame = tk.Frame(self.frame)
-        self.ascii_frame.grid(row=0, column=0, rowspan=2)
+        self.left_frame = tk.Frame(self.frame)
+        self.left_frame.grid(row=0, column=0, rowspan=2)
 
         self.stats_frame = tk.Frame(self.frame)
         self.stats_frame.grid(row=0, column=1)
@@ -44,15 +49,26 @@ class VillagerFrame:
         self.profession_frame = tk.Frame(self.frame)
         self.profession_frame.grid(row=1, column=1)
         
-        # Ascii frame widgets #
-        self.ascii_art = tk.Label(self.ascii_frame, text='☺', relief=tk.GROOVE, borderwidth=2, width=8)
-        self.ascii_art.grid(row=0, column=0, padx=2, pady=2, sticky=tk.EW)
+        # Left frame widgets #
+        #  Map Frame  #
+        self.map_frame = tk.Frame(self.left_frame)
+        self.map_frame.grid(row=0, column=0)
 
-        self.ascii_name_var = tk.StringVar()
-        self.ascii_name = tk.Label(self.ascii_frame, textvariable=self.ascii_name_var, width=16)
-        self.ascii_name.grid(row=1, column=0, padx=2, pady=2, sticky=tk.EW)
+        self.map = tk.Text(self.map_frame, 
+                           relief=tk.GROOVE, 
+                           borderwidth=2, 
+                           width=self.map_size[0],
+                           height=self.map_size[1],
+                           bg='black',
+                           wrap=tk.NONE,
+                           font=('Courier', self.font_size))
+        self.map.grid(row=0, column=0, padx=2, pady=2, sticky=tk.EW)
 
-        self.kill_button = tk.Button(self.ascii_frame, text='Kill', 
+        self.name_var = tk.StringVar()
+        self.name = tk.Label(self.left_frame, textvariable=self.name_var, width=16)
+        self.name.grid(row=1, column=0, padx=2, pady=2, sticky=tk.EW)
+
+        self.kill_button = tk.Button(self.left_frame, text='Kill', 
                                      width=8, command=self.villager.kill)
         self.kill_button.grid(row=2, column=0, padx=2, pady=2)
 
@@ -123,7 +139,7 @@ class VillagerFrame:
     def update_stats(self):
         '''Updates the onscreen stats and data for the villager'''
 
-        self.ascii_name_var.set(self.villager.name)
+        self.name_var.set(self.villager.name)
         self.title.set(f'{self.villager.name} the {self.villager.profession.name}')
 
         # Get the stats varible
@@ -165,6 +181,50 @@ class VillagerFrame:
 
         # Turn box off at end
         self.stats_box.config(state=tk.DISABLED)
+
+    def update_map(self):
+        '''Draw on the minimap of the villager'''
+
+        # Enable and clear texture box
+        self.map.config(state=tk.NORMAL)
+        self.map.delete('1.0', tk.END)
+
+        # Get variables
+        xx = int(self.villager.pos[0] - ((self.map_size[0]-1)/2))
+        yy = int(self.villager.pos[1] - ((self.map_size[1]-1)/2))
+
+        # Get positions of villagers
+        # Get list of villager positions
+        villager_positions = {}
+        for villager in config.villagers:
+            villager_positions.update({villager.pos: villager})
+        
+        # Run through and add tiles
+        for y in range(self.map_size[1]):
+            for x in range(self.map_size[0]):
+
+                # Get position of the texture
+                pos = (x+xx) + ((y+yy-1)*config.map.width)
+                pos_key = f'{y+yy}.{x+xx-1}'
+                texture = config.map.texture_map[pos]
+
+                # If tile is a villager tile then draw that instead
+                villager_tile = (x+xx, y+yy) in villager_positions.keys()
+                if villager_tile == True:
+
+                    villager = villager_positions[(x+xx, y+yy)]
+                    texture = (villager.texture, villager.colour)
+                
+                # insert the new texture into the box
+                self.map.insert(pos_key, texture[0])
+
+                self.map.tag_add(pos_key, pos_key, pos_key+'+1c')
+                self.map.tag_config(pos_key, foreground=texture[1])
+
+            self.map.insert(tk.END, '\n')
+        
+        # Disable the map
+        self.map.config(state=tk.DISABLED)
 
 ## Villager info window ##
 
