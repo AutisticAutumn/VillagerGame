@@ -98,14 +98,7 @@ def init():
     ## Dictionaries ##
     # Professions Dictionary
     global professions_dict
-    professions_list = [professions.Unemployed(),
-                        professions.Farmer(),
-                        professions.Feller(),
-                        professions.Carpenter()]
-
-    professions_dict = {}
-    for profession in professions_list:
-        professions_dict.update({profession.name : profession})
+    professions_dict = professions.get_professions_dict()
 
     # Create the list of responses
     global response_dict
