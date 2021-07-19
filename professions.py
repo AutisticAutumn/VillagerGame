@@ -32,6 +32,20 @@ def draw_villager(villager, pos_x, pos_y):
     villager.pos = (pos_x, pos_y)
     villager.draw_villager()
 
+def get_professions_dict():
+    '''Returns the dictionary of professions'''
+
+    professions_list = [Unemployed(),
+                        Farmer(),
+                        Feller(),
+                        Carpenter(),
+                        Plantsman()]
+
+    professions_dict = {}
+    for profession in professions_list:
+        professions_dict.update({profession.name : profession})
+
+    return professions_dict
 
 ### Professions ###
 
