@@ -369,3 +369,16 @@ class Carpenter(Profession):
                 response = config.get_response('carpenter_action_no_wood')
                 response[0] = response[0].format(villager.name, villager.turn_action[1].name)
                 return response
+
+class Plantsman(Profession):
+    '''The plantsman plants trees for the people of the village'''
+    
+    def __init__(self):
+        
+        # Inherit data
+        Profession.__init__(self)
+
+        # Villager info
+        self.name = 'Plantsman'
+        self.description = 'Plants trees'
+        self.colour = 'dark green'
