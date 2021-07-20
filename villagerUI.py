@@ -223,8 +223,14 @@ class VillagerFrame:
                 # Get position of the texture
                 pos = (x+xx) + ((y+yy-1)*config.map.width)
                 pos_key = f'{y+1}.{x}'
-                texture = config.map.texture_map[pos]
 
+                # Get texture
+                try:
+                    texture = config.map.texture_map[pos]
+                except:
+                    # If texture out of map return blank
+                    texture = (' ', 'black')
+                    
                 # If tile is a villager tile then draw that instead
                 villager_tile = (x+xx, y+yy) in villager_positions.keys()
                 if villager_tile == True:
