@@ -224,6 +224,11 @@ class Feller(Profession):
     def action(self, villager):
         '''Collect Wood'''
 
+        # If villager is in a house find a location and end action
+        if villager.in_house:
+            self.villager_location_set(villager)
+            return None
+
         # If no tree has been found find one.
         if 'Tree' in config.map.terrain_map and villager.turn_action == None:
             self.villager_location_set(villager, False)
@@ -403,9 +408,13 @@ class Plantsman(Profession):
     def action(self, villager):
         '''Plants a tree is one is set to be plant'''
 
+        # If villager is in a house find a location and end action
+        if villager.in_house:
+            self.villager_location_set(villager)
+            return None
+
         # If no planting space is found find one
         if villager.turn_action == None:
-            villager.turn_action = None
             self.villager_location_set(villager)
 
         # Plant tree is space is given
