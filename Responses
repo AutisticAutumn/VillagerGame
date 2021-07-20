@@ -19,7 +19,11 @@ Professions
     red
     {0} could not source enough food to start a farm
 }
-
+{
+    plantsmen_plant_tree
+    dark green
+    {0} has planted a tree
+}
 
 Villager
 {
