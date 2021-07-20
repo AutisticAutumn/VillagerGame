@@ -397,6 +397,40 @@ class Plantsman(Profession):
         self.description = 'Plants trees'
         self.colour = 'dark green'
 
+    def action(self, villager):
+        '''Plants a tree is one is set to be plant'''
+
+        # If no planting space is found find one
+        if villager.turn_action == None:
+            villager.turn_action = None
+            self.villager_location_set(villager)
+            
+        # Plant tree is space is given
+        if villager.turn_action != None:
+            
+            # Get variables
+            x = villager.turn_action[0]
+            y = villager.turn_action[1]
+            pos = x + (y*config.map.width)
+
+            tree = config.get_building('Tree')
+            tree.pos_x = x
+            tree.pos_y = y
+
+            texture = tree.get_texture(4)
+
+            # Update map
+            config.map.terrain_map[pos] = 'Tree'
+            config.map.texture_map[pos] = texture
+
+            mapUI.draw_map(config.map.frame)
+
+            # Find a new location for planting
+            self.villager_location_set(villager)
+
+            # Return results
+            return ('plantsmen_plant_tree', 'dark green')        
+
     def villager_location_set(self, villager, return_home=True):
         '''Find a suitable location for a tree for the village to move to'''
 
