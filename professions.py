@@ -441,7 +441,9 @@ class Plantsman(Profession):
             self.villager_location_set(villager)
 
             # Return results
-            return ('plantsmen_plant_tree', 'dark green')        
+            response = config.get_response('plantsmen_plant_tree')
+            response[0] = response[0].format(villager.name)
+            return response   
 
     def villager_location_set(self, villager, return_home=True):
         '''Find a suitable location for a tree for the village to move to'''
