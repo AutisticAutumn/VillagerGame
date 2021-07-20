@@ -119,9 +119,12 @@ class Villager:
 
                     # Update stats for the building and return the building object
                     building.villager = self
+                    self.in_house = True
                     self.profession.villager_location_set(self)
 
                     return building
+
+        self.in_house = False
 
     ## Turn functions ##
     def end_turn(self):
