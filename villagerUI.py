@@ -7,6 +7,7 @@
 ### Importants and Varibles ###
 
 import tkinter as tk
+from villagers import Villager
 import config
 
 ### Classes ###
@@ -79,14 +80,20 @@ class VillagerFrame:
         self.name_button.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
         self.stats_box = tk.Text(self.stats_frame,
-                                  width=44, 
-                                  height=1,
-                                  state=tk.DISABLED,
-                                  bg='black')
+                                 width=44, 
+                                 height=1,
+                                 state=tk.DISABLED,
+                                 bg='black')
 
         self.stats_box.grid(row=1, column=0, padx=2, pady=0, sticky=tk.NSEW)
 
         # Professions frame widgets #
+        self.home_button = tk.Button(self.profession_frame,
+                                     text='Return Home',
+                                     width=12,
+                                     command=self.return_home)
+        self.home_button.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
+
         self.professions_menu_var = tk.StringVar()
         self.professions_menu_var.set(self.villager.profession.name)
 
@@ -96,7 +103,7 @@ class VillagerFrame:
                                               *self.professions_list,
                                               command=self.set_profession)
         self.professions_menu.config(width=14)
-        self.professions_menu.grid(row=2, column=0, padx=2, pady=6, sticky=tk.NSEW)
+        self.professions_menu.grid(row=0, column=1, padx=2, pady=6, sticky=tk.NSEW)
 
         # Button Frame widgets #
         self.food_label = tk.Label(self.button_frame, text='Food Priority:')
@@ -127,7 +134,7 @@ class VillagerFrame:
                                            text=self.villager.profession.action_text,
                                            width=12,
                                            command=lambda: self.villager.profession.turn_action(self.villager))
-            self.action_button.grid(row=2, column=1, padx=2, pady=6, sticky=tk.NSEW)
+            self.action_button.grid(row=0, column=2, padx=2, pady=6, sticky=tk.NSEW)
         except:
             pass
 
@@ -135,6 +142,16 @@ class VillagerFrame:
         '''Opens the window for a detailed villager view'''
 
         self.villager_window = VillagerInfoWindow(self, self.villager)
+
+    def return_home(self):
+        '''Sends the villager back to their house'''
+
+        # Reset actions of villagers outside of their houses
+        if self.villager.in_house == False:
+            self.villager.turn_action = None
+
+        # Draw villager back in house
+        self.villager.profession.draw_villager_home(self.villager)
     
     def update_stats(self):
         '''Updates the onscreen stats and data for the villager'''
