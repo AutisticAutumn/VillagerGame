@@ -86,6 +86,8 @@ class Profession:
             pos_y = villager.house.pos_y + 1
 
             draw_villager(villager, pos_x, pos_y)
+
+            villager.in_house = True
     
 
 class Unemployed(Profession):
@@ -198,6 +200,7 @@ class Farmer(Profession):
                     
                     villager.house.update_texture_map(True)
                     draw_villager(villager, pos_x+building.pos_x, pos_y+building.pos_y)
+                    villager.in_house = False
 
                     found_space = True
 
@@ -273,8 +276,8 @@ class Feller(Profession):
                 elif dir == 4:
                     x_delta, y_delta = -1, 0
 
-                villager.pos = (x+x_delta, y+y_delta)
-                villager.draw_villager()
+                draw_villager(villager, x+x_delta, y+y_delta)
+                villager.in_house = False
 
                 config.feller_trees.append((x, y))
                 villager.turn_action = (x, y)
@@ -479,6 +482,7 @@ class Plantsman(Profession):
 
             # Adjust villager
             draw_villager(villager, x+x_delta, y+y_delta)
+            villager.in_house = False
             villager.turn_action = (x, y)
 
         else:
