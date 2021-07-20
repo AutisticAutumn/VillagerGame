@@ -71,7 +71,7 @@ class Profession:
 
         self.draw_villager_home(villager)
     
-    def draw_villager_home(villager):
+    def draw_villager_home(self, villager):
         '''Draws a villager into their house'''
 
         # Make sure villager has a house to display in
