@@ -396,3 +396,59 @@ class Plantsman(Profession):
         self.name = 'Plantsman'
         self.description = 'Plants trees'
         self.colour = 'dark green'
+
+    def villager_location_set(self, villager, return_home=True):
+        '''Find a suitable location for a tree for the village to move to'''
+
+        # Get initial variables
+        a = 3
+        # Note that a is the number of times each distance is checked before
+        #  moving onto the next distance. Couldn't think of better name
+
+        # Find a location for the tree
+        for spread in range(5, max(config.map.width, config.map.height)*a, 1):
+
+            # Get the delta for the tree
+            delta_x = random.randint(0, math.floor(spread/a)) 
+            delta_y = random.randint(0, math.floor(spread/a))
+
+            delta_x *= (random.randint(0, 1)*2)-1
+            delta_y *= (random.randint(0, 1)*2)-1
+
+            # Get the position
+            x = villager.pos[0] + delta_x
+            y = villager.pos[1] + delta_y
+
+            # Check if space is empty
+            try: 
+                space_free = config.map.check_free_land(config.get_building('Tree'), x-1, y-1)
+            except:
+                space_free = False
+
+            # Break loop if space found
+            if space_free:
+                break
+        
+        # Move villager to location when found
+        if space_free:
+
+            # Place villager at tree
+            dir = random.randint(1,4)
+            if dir == 1:
+                x_delta, y_delta = 0, 1
+            elif dir == 2:
+                x_delta, y_delta = 1, 0
+            elif dir == 3:
+                x_delta, y_delta = 0, -1
+            elif dir == 4:
+                x_delta, y_delta = -1, 0
+
+            # Adjust villager
+            draw_villager(villager, x+x_delta, y+y_delta)
+            villager.turn_action = (x, y)
+
+        else:
+            # if no tree was found return error
+            pass
+
+            draw_villager_home(villager)
