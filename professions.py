@@ -10,22 +10,6 @@ import random, math
 
 ### Functions ###
 
-def draw_villager_home(villager):
-    '''Draws a villager into their house'''
-
-    # Make sure villager has a house to display in
-    if villager.house != None:
-            
-        # Reset house texture
-        villager.house.update_texture_map(True)
-
-        # Set new texture as villager face
-        pos_change = random.randint(1,2)
-        pos_x = villager.house.pos_x + pos_change
-        pos_y = villager.house.pos_y + 1
-
-        draw_villager(villager, pos_x, pos_y)
-
 def draw_villager(villager, pos_x, pos_y):
     '''Draws the villager from set building positions'''
     
@@ -85,7 +69,23 @@ class Profession:
     def villager_location_set(self, villager):
         '''Places the villager in there house for their action'''
 
-        draw_villager_home(villager)
+        self.draw_villager_home(villager)
+    
+    def draw_villager_home(villager):
+        '''Draws a villager into their house'''
+
+        # Make sure villager has a house to display in
+        if villager.house != None:
+                
+            # Reset house texture
+            villager.house.update_texture_map(True)
+
+            # Set new texture as villager face
+            pos_change = random.randint(1,2)
+            pos_x = villager.house.pos_x + pos_change
+            pos_y = villager.house.pos_y + 1
+
+            draw_villager(villager, pos_x, pos_y)
     
 
 class Unemployed(Profession):
@@ -202,7 +202,7 @@ class Farmer(Profession):
                     found_space = True
 
         else:
-            draw_villager_home(villager)
+            self.draw_villager_home(villager)
 
 
 class Feller(Profession):
@@ -250,7 +250,7 @@ class Feller(Profession):
 
         else:
             # Return failed response
-            draw_villager_home(villager)
+            self.draw_villager_home(villager)
     
     def villager_location_set(self, villager, return_home=True):
         '''Places the feller by the tree'''
@@ -284,7 +284,7 @@ class Feller(Profession):
                 villager.turn_action = None
 
         if return_home:
-            draw_villager_home(villager)
+            self.draw_villager_home(villager)
 
     def find_tree(self, villager):
         '''Find and place the feller by the tree'''
@@ -358,7 +358,7 @@ class Carpenter(Profession):
         '''Build a building if the action was selected'''
 
         # Place villager in house
-        draw_villager_home(villager)
+        self.draw_villager_home(villager)
 
         # Only attempt to build if action was seleceted
         if villager.turn_action != None:
@@ -404,7 +404,7 @@ class Plantsman(Profession):
         if villager.turn_action == None:
             villager.turn_action = None
             self.villager_location_set(villager)
-            
+
         # Plant tree is space is given
         if villager.turn_action != None:
             
@@ -485,4 +485,4 @@ class Plantsman(Profession):
             # if no tree was found return error
             pass
 
-            draw_villager_home(villager)
+            self.draw_villager_home(villager)
