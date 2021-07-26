@@ -17,7 +17,7 @@ class GameApp:
         
         # Initialize the window
         self.root = tk.Tk()
-        self.root.title('Villager game')
+        self.set_title()
         self.root.resizable(width=0, height=0)
 
         # Create the three frames for the gui
@@ -57,7 +57,7 @@ class GameApp:
         # Stat box
         self.stats_box = tk.Text(self.root,
                                  width=64, 
-                                 height=1,
+                                 height=2,
                                  state=tk.DISABLED,
                                  bg='black')
         self.stats_box.grid(row=1, column=0, columnspan=2, padx=12, pady=4)
@@ -103,6 +103,10 @@ class GameApp:
         response[0] = response[0].format(config.turn).strip()
         self.append_log(response)
 
+    def set_title(self):
+        '''Sets the widget title'''
+        self.root.title(f'{config.village_name}  |  Turn: {config.turn}')
+
     def add_villager_frame(self, villager):
         '''Creates the frame onscreen to display the villager'''
 
@@ -121,29 +125,33 @@ class GameApp:
         '''Updates the onscreen stats'''
 
         # Update the stats 
-        food_text = f'Total Food: {config.food}    '
+        food_text = f'Total Food: {config.food}'
         wood_text = f'Total Wood: {config.wood}'
+        name_text = config.village_name
+        turn_text = f'Turn: {config.turn}'
+        
+        text = f'{name_text}  |  {turn_text}\n{food_text}  |  {wood_text}'
 
         self.stats_box.config(state=tk.NORMAL)
 
         # Add text to the box
         self.stats_box.delete('1.0', tk.END)
-        self.stats_box.insert(tk.END, food_text + wood_text)
+        self.stats_box.insert(tk.END, text)
+        
+        # Justify the text
+        self.stats_box.tag_add('justify', '1.0', tk.END)
+        self.stats_box.tag_config('justify', justify=tk.CENTER)
 
-        # Add colour to the stats
-        food_start = '1.0'
-        food_end = '1.' + str(len(food_text)-1)
-        self.stats_box.tag_add('food', food_start, food_end)
-        self.stats_box.tag_config('food', 
-                                  foreground='lime', 
-                                  justify=tk.CENTER)
+        ## Add colour to the stats ##
+        # Row 1
+        end_point = self.colour_stat('name', name_text, 'white', '1.0')
+        end_point = self.colour_bar('bar_1', end_point)
+        end_point = turn_end = self.colour_stat('turn', turn_text, 'white', end_point)
 
-        wood_start = str(float(food_end)+0.01)
-        wood_end = '1.' + str(int(wood_start[2:]) + len(wood_text))
-        self.stats_box.tag_add('wood', wood_start, wood_end)
-        self.stats_box.tag_config('wood', 
-                                  foreground='chocolate', 
-                                  justify=tk.CENTER)
+        # Row 2
+        end_point = self.colour_stat('food', food_text, 'lime', '2.0')
+        end_point = self.colour_bar('bar_2', end_point)
+        end_point = self.colour_stat('wood', wood_text, 'chocolate', end_point)
 
         self.stats_box.config(state=tk.DISABLED)
 
@@ -153,6 +161,25 @@ class GameApp:
         
         # Update the map
         mapUI.draw_map(self.map)
+
+    def colour_bar(self, name, end_pos):
+        '''Colours the bars in stats'''
+
+        self.stats_box.tag_add(name, end_pos + '+2c', end_pos + '+3c')
+        self.stats_box.tag_config(name, foreground='white')
+
+        return end_pos[:2] + str(int(end_pos[2:])+5)
+
+    def colour_stat(self, name, text, colour, start_pos):
+        '''Colours stats in the stat box'''
+
+        # Add tag
+        end_pos = start_pos[:2] + str(int(start_pos[2:]) + len(text))
+        self.stats_box.tag_add(name, start_pos, end_pos)
+        self.stats_box.tag_config(name, foreground=colour)
+
+        # Return point at end of text
+        return end_pos
 
     def feed_villagers(self, priotity):
         '''Runs through the list of villagers and uses the frame to
@@ -262,3 +289,4 @@ class GameApp:
 
         # Update the gui and map
         self.update_stats()
+        self.set_title()
