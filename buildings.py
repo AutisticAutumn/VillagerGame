@@ -292,3 +292,33 @@ class Farm(Building):
             self.update_texture_map()
         except:
             pass
+
+class Mine(Building):
+    '''Mine is where stone can be gathered'''
+
+    def __init__(self):
+        # Get inherited data
+        Building.__init__(self)
+
+        # Get building data
+        self.name = 'Mine'
+        self.description = 'A mine where stone can be mined'
+        self.type = 'Work'
+
+        self.size = (6,2)
+        self.reset_texture()
+
+        self.cost = {'food': 0,
+                     'wood': 12}
+        
+    def reset_texture(self):
+        '''Reset texture to default'''
+
+        self.texture = '''
+ ●══● 
+ô║≡≡║O'''
+        self.colour_map = [0,0,0,0,0,0,
+                           0,1,1,1,1,0,
+                           2,1,3,3,1,2]
+        
+        self.colours = ['black', 'chocolate3', 'gray64', 'dark slate gray']
