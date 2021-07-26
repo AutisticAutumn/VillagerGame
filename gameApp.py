@@ -124,17 +124,18 @@ class GameApp:
     def update_stats(self):
         '''Updates the onscreen stats'''
 
-        # Update the stats 
-        food_text = f'Total Food: {config.food}'
-        wood_text = f'Total Wood: {config.wood}'
+        # Get text 
         name_text = config.village_name
         turn_text = f'Turn: {config.turn}'
+        food_text = f'Total Food: {config.food}'
+        wood_text = f'Total Wood: {config.wood}'
+        stone_text = f'Total Stone: {config.stone}'
         
-        text = f'{name_text}  |  {turn_text}\n{food_text}  |  {wood_text}'
-
-        self.stats_box.config(state=tk.NORMAL)
+        text = f'{name_text}  |  {turn_text}'
+        text += f'\n{food_text}  |  {wood_text}  |  {stone_text}'
 
         # Add text to the box
+        self.stats_box.config(state=tk.NORMAL)
         self.stats_box.delete('1.0', tk.END)
         self.stats_box.insert(tk.END, text)
         
@@ -152,6 +153,8 @@ class GameApp:
         end_point = self.colour_stat('food', food_text, 'lime', '2.0')
         end_point = self.colour_bar('bar_2', end_point)
         end_point = self.colour_stat('wood', wood_text, 'chocolate', end_point)
+        end_point = self.colour_bar('bar_3', end_point)
+        end_point = self.colour_stat('stone', stone_text, 'gray72', end_point)
 
         self.stats_box.config(state=tk.DISABLED)
 
