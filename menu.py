@@ -5,7 +5,9 @@
 #
 
 ### Importants and Varibles ###
+from math import exp
 import tkinter as tk
+from tkinter.constants import CENTER
 import config, string
 
 ### Classes ###
@@ -94,11 +96,22 @@ class MenuApp():
 
         self.height = tk.StringVar()
         self.height_box = tk.Entry(self.settings_frame,
-                                  width=10,
-                                  textvariable=self.height)
+                                   width=10,
+                                   textvariable=self.height)
         self.height.set(config.map.default_height)
         self.height_box.grid(row=2, column=1, sticky=tk.W, pady=2)
         self.height_box.bind("<FocusOut>", self.round_data)
+
+        self.reset_button = tk.Button(self.settings_frame,
+                                      text='Reset world settings',
+                                      command=self.reset_data)
+        self.reset_button.grid(row=3, column=0, columnspan=2, pady=4)
+
+        self.warning_text = tk.Label(self.settings_frame,
+                                     text='Warning: Large worlds may \ntake longer to generate',
+                                     width=20,
+                                     justify=tk.CENTER,
+                                     fg='red')
 
         self.advanced_settings_button = tk.Button(self.creation_root,
                                                   text='Advanced settings',
@@ -134,10 +147,27 @@ class MenuApp():
         config.map.height = int(self.height.get())
         config.map.get_world_data()
 
+        if int(self.width.get()) * int(self.height.get()) > 8192:
+            self.warning_text.grid(row=4, column=0, columnspan=2, pady=4)
+        else:
+            try:
+                self.warning_text.grid_remove()
+            except:
+                pass
+
+    def reset_data(self):
+        '''Resets data to default'''
+
+        self.width.set(config.map.default_width)
+        self.height.set(config.map.default_height)
+
+        self.round_data()
+
     def create_world(self):
         '''Close the application and begin the game'''
 
         # Adjust config variables accordingly
+        self.round_data()
         config.village_name = self.village_name.get()
 
         # Adjust variables for main loop
