@@ -5,7 +5,8 @@
 #
 
 import random
-import professions, buildings, map, gameApp, disasters
+from tkinter import Menu
+import professions, buildings, map, gameApp, disasters, menu
 import villagers as villagers_scr
 
 # Initiate the global variables
@@ -117,7 +118,8 @@ def init_app():
     '''Creates the application globals'''
     
     # Game ui
-    global main_app
+    global main_app, menu
+    menu_app = menu.MenuApp()
     main_app = gameApp.GameApp()
 
 def read_file(file):
