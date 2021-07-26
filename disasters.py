@@ -9,6 +9,13 @@
 import random
 import config
 
+### Functions
+def get_disaster(key):
+    '''Returns a unique disaster object based on key input'''
+
+    if key == Famine().name:
+        return Famine()
+
 ### Disasters ###
 
 class Disaster():
