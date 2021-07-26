@@ -15,6 +15,17 @@ def get_disaster(key):
 
     if key == Famine().name:
         return Famine()
+    
+    if key == MassPossession().name:
+        return MassPossession()
+
+def get_disaster_list():
+    '''Returns a list of disasters'''
+
+    list = [Famine().name,
+            MassPossession().name]
+        
+    return list
 
 ### Disasters ###
 
@@ -39,6 +50,9 @@ class Disaster():
         '''Lower disaster timer'''
 
         self.timer -= 1
+    
+    def on_end(self):
+        pass
 
 class Famine(Disaster):
 
@@ -64,3 +78,23 @@ class Famine(Disaster):
 
         response = config.get_response('famine_end')
         config.main_app.append_log(response)
+
+class MassPossession(Disaster):
+
+    def __init__(self):
+
+        self.name = 'MassPossession'
+        self.weight = 500
+        self.timer = 1
+
+    def on_start(self):
+        
+        # Return to logs
+        response = config.get_response('mass_possession_begin')
+        response[0] = response[0].format(config.village_name)
+        config.main_app.append_log(response)
+
+        # Possess villagers with a rate of 2/3 chance
+        for village in config.villagers:
+            if random.randint(1,3) < 3:
+                village.get_possessed(3,7)
