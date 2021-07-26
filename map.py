@@ -5,7 +5,7 @@
 #
 
 ### Importants and Varibles ###
-from math import cos, pi
+from math import *
 import config
 import random
 
@@ -24,9 +24,14 @@ class Map:
 
     def __init__(self):
 
+        # Map constants
+        self.default_width = 96
+        self.default_height = 42
+
         # Map variables
-        self.width = 96
-        self.height = 42
+        self.width = self.default_width
+        self.height = self.default_height
+        self.get_world_data()
 
         # Map storage
         self.map = {}
@@ -39,6 +44,19 @@ class Map:
 
         # Map frame
         self.frame = None
+
+    def get_world_data(self):
+        '''Gets boundries for world data based on world size'''
+
+        size = self.width * self.height
+
+        # Get pond stats
+        self.pond_min = floor(size*0.00075)
+        self.pond_max = floor(size*0.002)
+
+        # Get tree stats
+        self.tree_min = floor(size*0.0075)
+        self.tree_max = floor(size*0.0125)
 
     def get_ground_texture(self, x, y):
         '''Get the texture for the ground base'''
