@@ -33,17 +33,19 @@ class Map:
         self.height = self.default_height
         self.get_world_data()
 
-        # Map storage
-        self.map = {}
-        self.texture_map = []
-        self.terrain_map = []
-
         # Selector positions
         self.selector_x = int(self.width/2)
         self.selector_y = int(self.height/2)
 
         # Map frame
         self.frame = None
+
+    def reset_map(self):
+        '''Purges all maps'''
+        # Map storage
+        self.map = {}
+        self.texture_map = []
+        self.terrain_map = []
 
     def get_world_data(self):
         '''Gets boundries for world data based on world size'''
@@ -57,6 +59,8 @@ class Map:
         # Get tree stats
         self.tree_min = floor(size*0.0075)
         self.tree_max = floor(size*0.0125)
+
+        print('', self.pond_min, self.pond_max, '\n', self.tree_min, self.tree_max)
 
     def get_ground_texture(self, x, y):
         '''Get the texture for the ground base'''
