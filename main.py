@@ -6,7 +6,7 @@
 
 ### Importants and Varibles ###
 import config
-import mapUI
+import mapUI, menu
 import random
 
 # Initialize the globals
@@ -115,11 +115,7 @@ def create_map(reset=False):
         config.villagers = []
 
     # Initiate the applications and variables
-    print('Initializing Map')
-    config.get_seed()
-
-    config.map.__init__()
-    config.init_app()
+    initiate_apps()
     
     # Add ponds to the map
     print('Adding ponds')
@@ -138,13 +134,33 @@ def create_map(reset=False):
         print('Resetting\n')
         create_map(True)
 
+def initiate_apps():
+    '''Initiates the apps'''
+
+    print('Initializing Map')
+    config.get_seed()
+
+    config.map.__init__()
+    config.init_app()
+    
 
 ### Main Game Loop ###
 
 if __name__ == '__main__':
 
-    # Create the world map
-    create_map()
+    # initialize the main menu
+    menu_app = menu.MenuApp()
+    menu_app.root.mainloop()
+
+    # If menu was closed with no action end program
+    if menu_app.quit == True:
+        exit()
+
+    # Create the world map if requested
+    if menu_app.generate_world == True:
+        create_map()
+    else:
+        initiate_apps()
 
     # Draw the map
     mapUI.draw_map(config.map.frame)
