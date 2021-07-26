@@ -84,9 +84,10 @@ def init():
 
     ## Stats ##
     # Materials
-    global food, wood
+    global food, wood, stone
     food = 10
     wood = 0
+    stone = 0
 
     # Map
     global map
