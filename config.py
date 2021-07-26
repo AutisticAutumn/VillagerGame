@@ -118,8 +118,7 @@ def init_app():
     '''Creates the application globals'''
     
     # Game ui
-    global main_app, menu
-    menu_app = menu.MenuApp()
+    global main_app
     main_app = gameApp.GameApp()
 
 def read_file(file):
