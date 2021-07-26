@@ -246,12 +246,12 @@ class Villager:
         else:
             return self.profession.colour
 
-    def get_possessed(self):
+    def get_possessed(self, timer_min=6, timer_max=12):
         '''Runs code for when a villager gets possessed'''
 
         # Adjust stats
         self.phantom = True
-        self.phantom_timer = random.randint(6,12)
+        self.phantom_timer = random.randint(timer_min, timer_max)
         self.texture = config.villager_textures[1]
         self.colour = 'pale turquoise2'
         self.draw_villager()
