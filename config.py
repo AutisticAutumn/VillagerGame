@@ -6,7 +6,7 @@
 
 import random
 from tkinter import Menu
-import professions, buildings, map, gameApp, disasters, menu
+import professions, buildings, map, gameApp, disasters
 import villagers as villagers_scr
 
 # Initiate the global variables
@@ -22,9 +22,10 @@ def init():
 
     ## Villagers ##
     # Villagers and housing
-    global villagers, villager_textures
+    global villagers, villager_textures, village_name
     villagers = []
     villager_textures = ('☺', '☻')
+    village_name = 'Unnamed Village'
 
     # Village stats
     global max_villagers, arrival_chance
