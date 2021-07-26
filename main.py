@@ -15,9 +15,6 @@ config.init()
 init_villagers = 3
 offset_max = (7, 5)
 
-total_ponds = random.randint(5, 8)
-init_trees = random.randint(30,50)
-
 ### Functions ###
 def get_starting_pos():
     '''Gets the starting position for the village'''
@@ -28,8 +25,8 @@ def get_starting_pos():
     init_pos = None
     while init_pos == None:
         
-        x = random.randint(24, config.map.width-24)
-        y = random.randint(16, config.map.height-16)
+        x = random.randint(10, config.map.width-10)
+        y = random.randint(10, config.map.height-10)
 
         pos = ((y-1)*config.map.width)
         
@@ -116,7 +113,11 @@ def create_map(reset=False):
 
     # Initiate the applications and variables
     initiate_apps()
-    
+
+    global total_ponds, init_trees
+    total_ponds = random.randint(config.map.pond_min, config.map.pond_max)
+    init_trees = random.randint(config.map.tree_min, config.map.tree_max)
+
     # Add ponds to the map
     print('Adding ponds')
     config.map.create_ponds(total_ponds)
@@ -140,9 +141,9 @@ def initiate_apps():
     print('Initializing Map')
     config.get_seed()
 
-    config.map.__init__()
+    config.map.reset_map()
     config.init_app()
-    
+
 
 ### Main Game Loop ###
 
