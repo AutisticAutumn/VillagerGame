@@ -8,6 +8,31 @@
 import random, mapUI
 import config
 
+### Functions ###
+def get_building(key):
+    '''Returns a unique building object based off key'''
+
+    if key == Grass().name:
+        return Grass()
+
+    if key == PondWater().name:
+        return PondWater()
+
+    if key == Tree().name:
+        return Tree()
+    
+    if key == WoodenHut().name:
+        return WoodenHut()
+    
+    if key == WoodenStatue().name:
+        return WoodenStatue()
+
+    if key == Farm().name:
+        return Farm()
+    
+    if key == Mine().name:
+        return Mine()
+
 ### Parent Classes ###
 class Building:
     '''Main building class'''
@@ -317,8 +342,7 @@ class Mine(Building):
         self.texture = '''
  ●══● 
 ô║≡≡║O'''
-        self.colour_map = [0,0,0,0,0,0,
-                           0,1,1,1,1,0,
+        self.colour_map = [0,1,1,1,1,0,
                            2,1,3,3,1,2]
         
-        self.colours = ['black', 'chocolate3', 'gray64', 'dark slate gray']
+        self.colours = ['black', 'chocolate3', 'brown4', 'dark slate gray']
