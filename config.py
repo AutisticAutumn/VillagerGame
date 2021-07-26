@@ -210,10 +210,10 @@ def get_disaster(key):
 def get_disaster_chance():
     '''Creates a list of all the different disasters with their weight'''
 
-    disasters = ['Famine']
+    disasters_list = disasters.get_disaster_list()
     disaster_chance = []
 
-    for disaster in disasters:
+    for disaster in disasters_list:
 
         for i in range(get_disaster(disaster).weight):
             disaster_chance.append(disaster)
