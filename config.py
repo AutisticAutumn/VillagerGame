@@ -94,7 +94,7 @@ def init():
     map = map.Map()
 
     global world_size_min, world_size_max
-    world_size_min = 21
+    world_size_min = 34
     world_size_max = 192
 
     # Turn Log and counter
