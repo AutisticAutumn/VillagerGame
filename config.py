@@ -197,32 +197,15 @@ def get_phantom_responses():
     return responses
 
 def get_building(key):
-    '''Returns a unique building object based on input'''
+    '''Returns a unique building object based on key input'''
 
-    if key == buildings.Grass().name:
-        return buildings.Grass()
-
-    if key == buildings.PondWater().name:
-        return buildings.PondWater()
-
-    if key == buildings.Tree().name:
-        return buildings.Tree()
-    
-    if key == buildings.WoodenHut().name:
-        return buildings.WoodenHut()
-    
-    if key == buildings.WoodenStatue().name:
-        return buildings.WoodenStatue()
-
-    if key == buildings.Farm().name:
-        return buildings.Farm()
+    return buildings.get_building(key)
 
 # Disasters
 def get_disaster(key):
-    '''Returns a unique disaster object based on input'''
+    '''Returns a unique disaster object based on key input'''
 
-    if key == disasters.Famine().name:
-        return disasters.Famine()
+    return disasters.get_disaster(key)
 
 def get_disaster_chance():
     '''Creates a list of all the different disasters with their weight'''
