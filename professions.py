@@ -23,7 +23,8 @@ def get_professions_dict():
                         Farmer(),
                         Feller(),
                         Carpenter(),
-                        Plantsman()]
+                        Plantsman(),
+                        Miner()]
 
     professions_dict = {}
     for profession in professions_list:
@@ -501,3 +502,16 @@ class Plantsman(Profession):
             pass
 
             self.draw_villager_home(villager)
+
+class Miner(Profession):
+    '''Miner builds mines and gathers stone'''
+
+    def __init__(self):
+        
+        # Inherit data
+        Profession.__init__(self)
+
+        # Villager info
+        self.name = 'Miner'
+        self.description = 'Gathers stone'
+        self.colour = 'gray48'
