@@ -84,7 +84,7 @@ class MassPossession(Disaster):
     def __init__(self):
 
         self.name = 'MassPossession'
-        self.weight = 500
+        self.weight = 3
         self.timer = 1
 
     def on_start(self):
