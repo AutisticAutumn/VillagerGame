@@ -329,6 +329,7 @@ class Mine(Building):
         self.name = 'Mine'
         self.description = 'A mine where stone can be mined'
         self.type = 'Work'
+        self.profession = 'Miner'
 
         self.size = (6,2)
         self.reset_texture()
