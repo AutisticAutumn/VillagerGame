@@ -5,6 +5,7 @@
 #
 
 ### Imports and variables ###
+from buildings import Building
 import config, map, mapUI
 import random, math
 
@@ -514,4 +515,80 @@ class Miner(Profession):
         # Villager info
         self.name = 'Miner'
         self.description = 'Gathers stone'
-        self.colour = 'gray48'
+        self.colour_list = ('gray48','gray24')
+        self.colour = self.colour_list[0]
+        self.building = 'Mine'
+
+        # Mine construction info
+        self.action_text = 'Construct mine'
+        self.buildings = ['Mine']
+
+    def action(self, villager):
+
+        # Place villager
+        self.villager_location_set(villager)
+
+        # Only attempt to build if action was seleceted
+        if villager.turn_action != None:
+
+            # if building cannot be build return error
+            build = villager.turn_action[0](
+                                            villager.turn_action[1],
+                                            villager.turn_action[2][0],
+                                            villager.turn_action[2][1]
+                                            )
+
+            if build:
+                
+                # Run on creation functions for building
+                villager.turn_action[1].on_creation()
+
+                response = config.get_response('build_action_succeed')
+                response[0] = response[0].format(villager.name, villager.turn_action[1].name)
+                return response
+
+            else:
+                response = config.get_response('carpenter_action_no_wood')
+                response[0] = response[0].format(villager.name, villager.turn_action[1].name)
+                return response
+        
+        else:
+            # If there is a mine to work at collect stone
+            if villager.work_building != None:
+                
+                # Collect sotne
+                stone_produced = random.randint(1,3)
+                config.stone += stone_produced
+
+                # Return to logs
+                response = config.get_response('miner_action')
+                response[0] = response[0].format(villager.name, stone_produced)
+                return response
+
+            else:
+                self.colour = self.colour_list[0]
+                self.draw_villager_home(villager)
+
+    
+    def villager_location_set(self, villager, return_home=True):
+        '''Places the villager in the mines'''
+
+        building = villager.work_building
+
+        if building != None:
+            if building.name == self.building:
+
+                # Get variables
+                delta = random.randint(0,1)
+
+                pos_x = building.pos_x + delta + 2
+                pos_y = building.pos_y + 1
+
+                # Adjust villager visual settings
+                self.colour = self.colour_list[1]
+                draw_villager(villager, pos_x, pos_y)
+                villager.in_house = False
+
+        else:
+            self.colour = self.colour_list[0]
+            self.draw_villager_home(villager)
