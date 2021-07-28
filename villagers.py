@@ -72,7 +72,6 @@ class Villager:
         
         # Update map
         if not(self.pos[0]) == None:
-            self.frame.update_map()
             mapUI.draw_map(config.map.frame)
 
     def assign_work_building(self):
