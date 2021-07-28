@@ -515,8 +515,7 @@ class Miner(Profession):
         # Villager info
         self.name = 'Miner'
         self.description = 'Gathers stone'
-        self.colour_list = ('gray48','gray24')
-        self.colour = self.colour_list[0]
+        self.colour = 'gray40'
         self.building = 'Mine'
 
         # Mine construction info
@@ -566,7 +565,6 @@ class Miner(Profession):
                 return response
 
             else:
-                self.colour = self.colour_list[0]
                 self.draw_villager_home(villager)
 
     
@@ -585,10 +583,8 @@ class Miner(Profession):
                 pos_y = building.pos_y + 1
 
                 # Adjust villager visual settings
-                self.colour = self.colour_list[1]
                 draw_villager(villager, pos_x, pos_y)
                 villager.in_house = False
 
         else:
-            self.colour = self.colour_list[0]
             self.draw_villager_home(villager)
