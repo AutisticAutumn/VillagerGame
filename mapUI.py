@@ -85,6 +85,13 @@ def draw_map(self, updated_positions=[]):
     # Turn the map back off 
     self.map_box.config(state=tk.DISABLED)
 
+    # Update villager maps
+    try:
+        for villager in config.villagers:
+            villager.frame.update_map()
+    except:
+        pass
+
     # Clear positions that need to be updated 
     if len(updated_positions) > 0:
         self.updated_positions = []
@@ -292,7 +299,7 @@ class MapPopout:
         description = self.get_building_description(building)
 
         if villager_tile:
-            
+
             texture = (villager.texture, villager.colour)
             name = villager.name
 
