@@ -165,22 +165,46 @@ class MapPopout:
         self.build_positions = (None, None)
         self.villager = None
 
+        # Variables
+        self.width = min(config.map.width, config.map.default_width)
+        self.height = min(config.map.height, config.map.default_height)
+
     def create_toplevel(self):
         '''Create the toplevel widget for the map popout'''
 
         # Initialize the root
         self.root = tk.Toplevel(self.parent.parent.root)
-        self.root.title('World map')
+        self.root.title(f'{config.village_name}  |  Turn: {config.turn}  |  World map')
         self.root.resizable(width=0, height=0)
         self.root.focus()
 
         # Add the map textbox
-        self.map_box = tk.Text(self.root, 
-                               width=config.map.width, 
-                               height=config.map.height,
+        self.map_frame = tk.Frame(self.root)
+        self.map_frame.grid(row=0, column= 0, rowspan=4, padx=8, pady=8)
+
+        self.map_box = tk.Text(self.map_frame, 
+                               width=self.width, 
+                               height=self.height,
                                bg='black',
                                wrap=tk.NONE)
-        self.map_box.grid(row=0, column= 0, rowspan=4, padx=8, pady=8)
+        self.map_box.grid(row=0, column=0)
+
+        # Add scrollbars to the relevant axis if needed
+        if config.map.width > config.map.default_width:
+            self.map_scrollbar_horizontal = tk.Scrollbar(self.map_frame, 
+                                                     orient=tk.HORIZONTAL)
+            self.map_scrollbar_horizontal.grid(row=1, column=0, sticky=tk.NSEW)
+
+            self.map_box.config(xscrollcommand=self.map_scrollbar_horizontal.set)
+            self.map_scrollbar_horizontal.config(command=self.map_box.xview)
+        
+        if config.map.height > config.map.default_height:
+            self.map_scrollbar_vertical = tk.Scrollbar(self.map_frame, 
+                                                       orient=tk.VERTICAL)
+            self.map_scrollbar_vertical.grid(row=0, column=1, sticky=tk.NSEW)
+
+            self.map_box.config(yscrollcommand=self.map_scrollbar_vertical.set)
+            self.map_scrollbar_vertical.config(command=self.map_box.yview)
 
         # Add the tile information boxes
         self.tile_texture_box = tk.Text(self.root, 
@@ -245,19 +269,34 @@ class MapPopout:
         pos = x + ((y-1)*self.map.width)
         pos_key = f'({y}:{x})'
 
+        villager_tile = False
+        for villager in config.villagers:
+            if x == villager.pos[0] and y == villager.pos[1]:
+                
+                villager_tile = True
+
+                break
+    
         # Get texture
         texture = self.map.texture_map[pos]
 
         # Attempt to find building at location, else return grass
-        
+            
         try:
             building = self.map.map[pos_key]
         except:
             building = config.get_building(self.map.terrain_map[pos])
-
+        name = building.name
+            
         # Get advanced building descriptiong
         description = self.get_building_description(building)
 
+        if villager_tile:
+            
+            texture = (villager.texture, villager.colour)
+            name = villager.name
+
+            
         # Clear all textboxes of previous data
         self.tile_texture_box.delete(1.0, tk.END)
         self.tile_name_box.delete(1.0, tk.END)
@@ -265,7 +304,7 @@ class MapPopout:
 
         # Insert new data to the text boxes
         self.tile_texture_box.insert(1.0, texture[0])
-        self.tile_name_box.insert(1.0, building.name)
+        self.tile_name_box.insert(1.0, name)
         self.tile_info_box.insert(1.0, description)
 
         # Add colour tags to the boxes
