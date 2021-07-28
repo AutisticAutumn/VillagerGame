@@ -1,339 +1,467 @@
 #
 # Villager Game
-# VilalgerUI Module
+# MapUI Module
 # Written by Madeline Autumn
 #
 
 ### Importants and Varibles ###
-
 import tkinter as tk
-from villagers import Villager
+from tkinter.constants import NORMAL
 import config
 
-### Classes ###
+### Functions ###
+def create_map_base(self):
+        '''Create the plain base of grass for the map'''
 
-## Villager Frame Class ##
-class VillagerFrame:
-    '''Stores the data for the frame of each villager onscreen'''
+        # Enable the map for editing
+        self.map_box.config(state=tk.NORMAL)
+        self.map_box.delete('1.0', tk.END)
 
-    def __init__(self, parent, villager, id):
-        
-        self.parent = parent
-        self.villager = villager
-        self.id = id
-
-        # Set variables
-        self.font_size = 10
-        self.map_size = [11,5]
-
-        # Link to villager
-        self.villager.frame = self
-
-    def create_widgets(self):
-        '''Create the widgets onscreen for the villager'''
-        
-        # Create the main frame for the villager
-        self.frame = tk.Frame(self.parent.mod_frame_scrollable, relief=tk.GROOVE, 
-                              borderwidth=2, width=12)
-        self.frame.grid(row=self.id, column=0, padx=2, pady=4, sticky='')
-
-        # Creat the four frames for the widgets 
-        self.left_frame = tk.Frame(self.frame)
-        self.left_frame.grid(row=0, column=0, rowspan=2, pady=4)
-
-        self.stats_frame = tk.Frame(self.frame)
-        self.stats_frame.grid(row=0, column=1)
-
-        self.button_frame = tk.Frame(self.frame)
-        self.button_frame.grid(row=0, column=2, rowspan=2)
-
-        self.profession_frame = tk.Frame(self.frame)
-        self.profession_frame.grid(row=1, column=1)
-        
-        # Left frame widgets #
-        #  Map Frame  #
-        self.map_frame = tk.Frame(self.left_frame)
-        self.map_frame.grid(row=0, column=0)
-
-        self.map = tk.Text(self.map_frame, 
-                           relief=tk.GROOVE, 
-                           borderwidth=2, 
-                           width=self.map_size[0],
-                           height=self.map_size[1],
-                           bg='black',
-                           wrap=tk.NONE,
-                           font=('Courier', self.font_size))
-        self.map.grid(row=0, column=0, padx=2, pady=2, sticky=tk.EW)
-
-        self.name_var = tk.StringVar()
-        self.name = tk.Label(self.left_frame, textvariable=self.name_var, width=16)
-        self.name.grid(row=1, column=0, padx=2, pady=2, sticky=tk.EW)
-
-        self.kill_button = tk.Button(self.left_frame, text='Kill', 
-                                     width=8, command=self.villager.kill)
-        self.kill_button.grid(row=2, column=0, padx=2, pady=2)
-
-        # Stats frame widgets #
-        self.title = tk.StringVar()
-        self.name_button = tk.Button(self.stats_frame, textvariable=self.title, 
-                                     width=48, command=self.open_villager_window)
-        self.name_button.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
-
-        self.stats_box = tk.Text(self.stats_frame,
-                                 width=44, 
-                                 height=1,
-                                 state=tk.DISABLED,
-                                 bg='black')
-
-        self.stats_box.grid(row=1, column=0, padx=2, pady=0, sticky=tk.NSEW)
-
-        # Professions frame widgets #
-        self.home_button = tk.Button(self.profession_frame,
-                                     text='Return Home',
-                                     width=12,
-                                     command=self.return_home)
-        self.home_button.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
-
-        self.professions_menu_var = tk.StringVar()
-        self.professions_menu_var.set(self.villager.profession.name)
-
-        self.professions_list = config.professions_dict.keys()
-        self.professions_menu = tk.OptionMenu(self.profession_frame,
-                                              self.professions_menu_var, 
-                                              *self.professions_list,
-                                              command=self.set_profession)
-        self.professions_menu.config(width=14)
-        self.professions_menu.grid(row=0, column=1, padx=2, pady=6, sticky=tk.NSEW)
-
-        # Button Frame widgets #
-        self.food_label = tk.Label(self.button_frame, text='Food Priority:')
-        self.food_label.grid(row=0, column=0, padx=2, pady=4, sticky=tk.NSEW)
-        self.food_menu_var = tk.StringVar()
-        self.food_menu_var.set(config.food_priority_values[1])
-
-        for value in config.food_priority_values:
-            tk.Radiobutton(self.button_frame,
-                           text=value, value=value,
-                           variable=self.food_menu_var,
-                           indicator = 0, width=6,).grid(padx=2, pady=2)
-
-    def set_profession(self, profession):
-        '''Upates the villager profession based on the profession menu'''
-
-        self.villager.update_profession(profession)
-        self.update_stats()
-
-        # Attempt to add action button for certain professions
-        try:
-            self.action_button.grid_remove()
-        except:
-            pass
-
-        try:
-            self.action_button = tk.Button(self.profession_frame, 
-                                           text=self.villager.profession.action_text,
-                                           width=12,
-                                           command=lambda: self.villager.profession.turn_action(self.villager))
-            self.action_button.grid(row=0, column=2, padx=2, pady=6, sticky=tk.NSEW)
-        except:
-            pass
-
-    def open_villager_window(self):
-        '''Opens the window for a detailed villager view'''
-
-        self.villager_window = VillagerInfoWindow(self, self.villager)
-
-    def return_home(self):
-        '''Sends the villager back to their house'''
-
-        # Reset actions of villagers outside of their houses
-        if self.villager.in_house == False:
-            self.villager.turn_action = None
-
-        # Draw villager back in house
-        self.villager.profession.draw_villager_home(self.villager)
-    
-    def update_stats(self):
-        '''Updates the onscreen stats and data for the villager'''
-
-        self.name_var.set(self.villager.name)
-        self.title.set(f'{self.villager.name} the {self.villager.profession.name}')
-
-        # Get the stats varible
-        space = '   '
-        health = f'Health: {self.villager.health}{space}'
-        hunger = f'Hunger: {self.villager.hunger}{space}'
-        morale = f'Morale: {self.villager.morale}'
-
-        self.stats = health + hunger + morale
-
-        # Insert stats into the statbox
-        self.stats_box.config(state=tk.NORMAL)
-        self.stats_box.delete(1.0, tk.END)
-        self.stats_box.insert(1.0, self.stats)
-
-        # Health colouring
-        health_start = '1.0'
-        health_end = '1.' + str(len(health)-1)
-        self.stats_box.tag_add('Health', health_start, health_end)
-        self.stats_box.tag_config('Health', 
-                                  foreground='red', 
-                                  justify=tk.CENTER)
-
-        # Hunger colouring
-        hunger_start = str(float(health_end))
-        hunger_end = '1.' + str(int(hunger_start[2:]) + len(hunger))
-        self.stats_box.tag_add('Hunger', hunger_start, hunger_end)
-        self.stats_box.tag_config('Hunger', 
-                                  foreground='lime', 
-                                  justify=tk.CENTER)
-
-        # Morale colouring
-        morale_start = str(float(hunger_end))
-        morale_end = '1.' + str(int(morale_start[2:]) + len(morale)+1)
-        self.stats_box.tag_add('Morale', morale_start, morale_end)
-        self.stats_box.tag_config('Morale', 
-                                  foreground='yellow', 
-                                  justify=tk.CENTER)
-
-        # Turn box off at end
-        self.stats_box.config(state=tk.DISABLED)
-
-    def update_map(self):
-        '''Draw on the minimap of the villager'''
-
-        # Enable and clear texture box
-        self.map.config(state=tk.NORMAL)
-        self.map.delete('1.0', tk.END)
-
-        # Get variables
-        xx = int(self.villager.pos[0] - ((self.map_size[0]-1)/2))
-        yy = int(self.villager.pos[1] - ((self.map_size[1]-1)/2))
-
-        # Get positions of villagers
-        # Get list of villager positions
-        villager_positions = {}
-        for villager in config.villagers:
-            villager_positions.update({villager.pos: villager})
-        
-        # Run through and add tiles
-        for y in range(self.map_size[1]):
-            for x in range(self.map_size[0]):
-
-                # Get position of the texture
-                pos = (x+xx) + ((y+yy-1)*config.map.width)
-                pos_key = f'{y+1}.{x}'
-
-                # Get texture
-                try:
-                    texture = config.map.texture_map[pos]
-                except:
-                    # If texture out of map return blank
-                    texture = (' ', 'black')
-                    
-                # If tile is a villager tile then draw that instead
-                villager_tile = (x+xx, y+yy) in villager_positions.keys()
-                if villager_tile == True:
-
-                    villager = villager_positions[(x+xx, y+yy)]
-                    texture = (villager.texture, villager.colour)
+        for y in range(1, self.map.height+1):
+            for x in range(self.map.width):
                 
-                # insert the new texture into the box
-                self.map.insert(pos_key, texture[0])
+                # Get the position and key
+                pos = f'{y}.{x-1}'
 
-                self.map.tag_add(pos_key, pos_key, pos_key+'+1c')
-                self.map.tag_config(pos_key, foreground=texture[1])
+                # Add grass base
+                item = config.get_building('Grass').get_texture(y + x*123456)
+                self.map_box.insert(pos, item[0])
+                self.map.texture_map.append(item)
+                self.map.terrain_map.append('Grass')
 
-            self.map.insert(tk.END, '\n')
-        
+            self.map_box.insert(tk.END, '\n')
+
+        # Add grass colour
+        self.map_box.tag_add('Grass', 1.0, tk.END)
+        self.map_box.tag_config('Grass', foreground='green')
+
         # Delete Trailing newline
-        self.map.delete(f'{self.map_size[1]+1}.0', tk.END)
+        self.map_box.delete(f'{config.map.height+1}.0', tk.END)
 
-        # Disable the map
-        self.map.config(state=tk.DISABLED)
+        # Turn the map back off 
+        self.map_box.config(state=tk.DISABLED)
 
-## Villager info window ##
+def draw_map(self, updated_positions=[]):
+    '''Draws the map from the texture map'''
 
-class VillagerInfoWindow:
-    '''Brings up a window with all the information for the villager'''
+    # Enable map for editting
+    self.map_box.config(state=tk.NORMAL)
 
-    def __init__(self, parent, villager):
+    # Get list of villager positions
+    villager_positions = {}
+    for villager in config.villagers:
+        villager_positions.update({villager.pos: villager})
+        
+    for y in range(1, self.map.height+1):
+        for x in range(1,self.map.width):
+
+            # Get position of the texture
+            pos = x + ((y-1)*self.map.width)
+            pos_key = f'{y}.{x-1}'
+            texture = self.map.texture_map[pos]
+
+            # Check is position has changes
+            pos_change = self.map_box.get(pos_key, pos_key+'+1c') == texture[0]
+
+            # If tile is a villager tile then draw that instead
+            villager_tile = (x, y) in villager_positions.keys()
+            if villager_tile == True:
+                
+                updated_positions.append(pos_key)
+
+                villager = villager_positions[(x, y)]
+                texture = (villager.texture, villager.colour)
+            
+            if not(pos_change) or pos_key in updated_positions:
+                # Remove old texture
+                self.map_box.delete(pos_key, pos_key+'+1c')
+
+                # insert the new texture into the box
+                self.map_box.insert(pos_key, texture[0])
+
+                self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
+                self.map_box.tag_config(pos_key, foreground=texture[1])
+
+    # Turn the map back off 
+    self.map_box.config(state=tk.DISABLED)
+
+    # Clear positions that need to be updated 
+    if len(updated_positions) > 0:
+        self.updated_positions = []
+
+### Classes ###
+class MapFrame:
+    '''Class to deal with the onscreen map of the village'''
+
+    def __init__(self, parent, frame):
 
         self.parent = parent
-        self.villager = villager
+        self.frame = frame
 
-        # Disable ending turn and modifying villager while open
-        parent.professions_menu.config(state=tk.DISABLED)
-        parent.kill_button.config(state=tk.DISABLED)
-        parent.name_button.config(state=tk.DISABLED)
-        'Action button to be added'
-        parent.parent.end_turn_button.config(state=tk.DISABLED)
+        self.map = config.map
+        self.map.frame = self
+        self.map.popout = MapPopout(self)
 
-        # Initiate the window
-        self.root = tk.Toplevel(parent.parent.root)
-        self.root.title(parent.title.get())
-        self.root.resizable(width=0, height=0)
-        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.font_size = 14
+        self.map_size = (round(48*(10/self.font_size)), 
+                        round(21*(10/self.font_size)))
 
-        # Add the title, stats, biography and logs
-        info_frame = tk.Frame(self.root)
-        info_frame.grid(row=0, column=0, columnspan=2, padx=8, pady=4)
+        self.create_map()
+        create_map_base(self)
 
-        title = tk.Label(info_frame, text=parent.title.get(), width=88)
-        title.grid(row=0, column=0, pady=4)
+    def create_map(self):
+        '''Creates the onscreen mapbox'''
 
-        stats = tk.Label(info_frame, text=parent.stats)
-        stats.grid(row=1, column=0, pady=4)
+        # Create the scrollbars
+        self.map_scrollbar_vertical = tk.Scrollbar(self.frame)
+        self.map_scrollbar_vertical.grid(row=0, column=1, sticky=tk.NSEW)
 
-        bio_frame = tk.Frame(self.root)
-        bio_frame.grid(row=1, column=0, padx=8, pady=8)
+        self.map_scrollbar_horizontal = tk.Scrollbar(self.frame, 
+                                                     orient=tk.HORIZONTAL)
+        self.map_scrollbar_horizontal.grid(row=1, column=0, sticky=tk.NSEW)
 
-        log_frame = tk.Frame(self.root)
-        log_frame.grid(row=1, column=1, padx=8, pady=8)
+        # Create the textbox itself
+        self.map_box = tk.Text(self.frame, 
+                               width=self.map_size[0], 
+                               height=self.map_size[1],
+                               state=tk.DISABLED,
+                               bg='black',
+                               wrap=tk.NONE,
+                               font=('Courier', self.font_size))
+        self.map_box.grid(row=0, column=0, padx=4, pady=4)
 
-        # Biography frame data
-        bio_scrollbar = tk.Scrollbar(bio_frame)
-        bio_scrollbar.grid(row=0, column=1, sticky=tk.NSEW)
+        # Place the scrollbars in
+        self.map_box.config(yscrollcommand=self.map_scrollbar_vertical.set)
+        self.map_scrollbar_vertical.config(command=self.map_box.yview)
 
-        bio_text = tk.Text(bio_frame, width=32, height=12, wrap=tk.WORD)
-        bio_text.grid(row=0, column=0, padx=4, pady=4)
+        self.map_box.config(xscrollcommand=self.map_scrollbar_horizontal.set)
+        self.map_scrollbar_horizontal.config(command=self.map_box.xview)
 
-        bio_text.config(yscrollcommand=bio_scrollbar.set)
-        bio_scrollbar.config(command=bio_text.yview)
+    def insert_building(self, pos_key):
+        '''Insert a building onto the map.
+            pos_key should be top right corner of the building'''
 
-        bio_text.config(state=tk.DISABLED)
-        
-        # Log frame data
-        log_scrollbar = tk.Scrollbar(log_frame)
-        log_scrollbar.grid(row=0, column=1, sticky=tk.NSEW)
+        # Maker sure building exists at the position
+        try:
+            # Get the building object from the map
+            building = self.map.map[pos_key]
 
-        log_text = tk.Text(log_frame, width=32, height=12, wrap=tk.WORD, bg='black')
-        log_text.grid(row=0, column=0, padx=4, pady=4)
-
-        log_text.config(yscrollcommand=log_scrollbar.set)
-        log_scrollbar.config(command=log_text.yview)
-
-        for line in villager.log:
+            # Update the map texture
+            building.update_texture_map()
             
-            # Insert line
-            log_text.insert(tk.END, f'{line[0]}\n')
-            log_text.see("end")
+        except:
+            return False
 
-            # Colour Text
-            tag_id = int(log_text.index('end-1c').split('.')[0]) - 1
-            log_text.tag_add(tag_id, float(tag_id), float(tag_id+1))
-            log_text.tag_config(tag_id, foreground=line[1])
+class MapPopout:
+    '''Creates a toplevel tkinter element that displays the full map'''
 
+    def __init__(self, parent):
 
-        log_text.config(state=tk.DISABLED)
+        self.parent = parent
+        self.map = config.map
+
+        # Functions for building
+        self.building = None
+        self.build_positions = (None, None)
+        self.villager = None
+
+        # Variables
+        self.width = min(config.map.width, config.map.default_width)
+        self.height = min(config.map.height, config.map.default_height)
+
+    def create_toplevel(self):
+        '''Create the toplevel widget for the map popout'''
+
+        # Initialize the root
+        self.root = tk.Toplevel(self.parent.parent.root)
+        self.root.title(f'{config.village_name}  |  Turn: {config.turn}  |  World map')
+        self.root.resizable(width=0, height=0)
+        self.root.focus()
+
+        # Add the map textbox
+        self.map_frame = tk.Frame(self.root)
+        self.map_frame.grid(row=0, column= 0, rowspan=4, padx=8, pady=8)
+
+        self.map_box = tk.Text(self.map_frame, 
+                               width=self.width, 
+                               height=self.height,
+                               bg='black',
+                               wrap=tk.NONE)
+        self.map_box.grid(row=0, column=0)
+
+        # Add scrollbars to the relevant axis if needed
+        if config.map.width > config.map.default_width:
+            self.map_scrollbar_horizontal = tk.Scrollbar(self.map_frame, 
+                                                     orient=tk.HORIZONTAL)
+            self.map_scrollbar_horizontal.grid(row=1, column=0, sticky=tk.NSEW)
+
+            self.map_box.config(xscrollcommand=self.map_scrollbar_horizontal.set)
+            self.map_scrollbar_horizontal.config(command=self.map_box.xview)
+        
+        if config.map.height > config.map.default_height:
+            self.map_scrollbar_vertical = tk.Scrollbar(self.map_frame, 
+                                                       orient=tk.VERTICAL)
+            self.map_scrollbar_vertical.grid(row=0, column=1, sticky=tk.NSEW)
+
+            self.map_box.config(yscrollcommand=self.map_scrollbar_vertical.set)
+            self.map_scrollbar_vertical.config(command=self.map_box.yview)
+
+        # Add the tile information boxes
+        self.tile_texture_box = tk.Text(self.root, 
+                                        width=1, 
+                                        height=1,
+                                        bg='black')
+        self.tile_texture_box.grid(row=0, column= 1,padx=4, pady=8, sticky='N')
+
+        self.tile_name_box = tk.Text(self.root, 
+                                     width=16, 
+                                     height=1,
+                                     bg='black')
+        self.tile_name_box.grid(row=0, column= 2,padx=4, pady=8, sticky='N')
+
+        self.tile_info_box = tk.Text(self.root, 
+                                     width=20, 
+                                     height=24,
+                                     bg='black',
+                                     wrap=tk.WORD)
+        self.tile_info_box.grid(row=1, column= 1, columnspan=2, padx=4, pady=8, sticky='N')
+
+        # Add construct button is in building mode
+        if self.building != None:
+            
+            # Building selection menu
+            self.selected_building = tk.StringVar()
+            self.selected_building.set(self.building.name)
+
+            self.building_select = tk.OptionMenu(self.root,
+                                                 self.selected_building,
+                                                 *self.villager.profession.buildings,
+                                                 command=self.select_building)
+            self.building_select.grid(row=2, column= 1, columnspan=2, padx=4, pady=8, sticky='S')
+
+            # Building button
+            self.construct_button = tk.Button(self.root,
+                                              text='Construct building',
+                                              width=20,
+                                              height=2,
+                                              command=self.construct_building)
+            self.construct_button.grid(row=3, column= 1, columnspan=2, padx=4, pady=8, sticky='S')
+
+        # Draw the map textures in 
+        create_map_base(self)
+        draw_map(self)
+        self.updated_positions = []
+
+        # Setup the selector
+        self.draw_selector()
+        self.root.bind('<Right>', self.move_selector_right)
+        self.root.bind('<Left>', self.move_selector_left)
+        self.root.bind('<Up>', self.move_selector_up)
+        self.root.bind('<Down>', self.move_selector_down)
     
-    def on_closing(self):
-        '''Renable the buttons when window is closed'''
+    def update_tile_information(self):
+        '''Updates stats for the selected tile'''
 
-        self.parent.professions_menu.config(state=tk.NORMAL)
-        self.parent.kill_button.config(state=tk.NORMAL)
-        self.parent.name_button.config(state=tk.NORMAL)
-        'Action button to be added'
-        self.parent.parent.end_turn_button.config(state=tk.NORMAL)
+        # Get position and position keys
+        x = self.map.selector_x
+        y = self.map.selector_y
 
-        self.root.destroy()
+        pos = x + ((y-1)*self.map.width)
+        pos_key = f'({y}:{x})'
+
+        # Get texture
+        texture = self.map.texture_map[pos]
+
+        # Attempt to find building at location, else return grass
+        
+        try:
+            building = self.map.map[pos_key]
+        except:
+            building = config.get_building(self.map.terrain_map[pos])
+
+        # Get advanced building descriptiong
+        description = self.get_building_description(building)
+
+        # Clear all textboxes of previous data
+        self.tile_texture_box.delete(1.0, tk.END)
+        self.tile_name_box.delete(1.0, tk.END)
+        self.tile_info_box.delete(1.0, tk.END)
+
+        # Insert new data to the text boxes
+        self.tile_texture_box.insert(1.0, texture[0])
+        self.tile_name_box.insert(1.0, building.name)
+        self.tile_info_box.insert(1.0, description)
+
+        # Add colour tags to the boxes
+        self.tile_texture_box.tag_add('Colour', 1.0, tk.END)
+        self.tile_name_box.tag_add('Colour', 1.0, tk.END)
+        self.tile_info_box.tag_add('Colour', 1.0, tk.END)
+
+        self.tile_texture_box.tag_config('Colour', foreground=texture[1])
+        self.tile_name_box.tag_config('Colour', foreground=texture[1])
+        self.tile_info_box.tag_config('Colour', foreground='white')
+
+    def get_building_description(self, building):
+        '''Gets a complete description for a building'''
+    
+        description = building.description
+            
+        if building.type != 'Terrain':
+                
+            # Add descriptions for work buildings
+            if building.type == 'Work':
+
+                # Add crop numbers for farms
+                if building.name == 'Farm':
+                    if building.food > 0:
+                        description += f'\n\nContains {building.food} crops'
+                    else:
+                        description += '\n\nContains no crops'
+
+                # Add workers to description
+                if building.worker != None:
+                    description += f'\n\nCurrently worked by {building.worker.name}'
+            
+            elif building.type == 'House':
+
+                # Add villagers to description
+                if building.villager != None:
+                    name = building.villager.name
+                    job = building.villager.profession.name
+                    description += f'\n\nCurrently occupied by {name} the {job}'
+                else:
+                    description += '\n\nCurrently unoccupied'
+        
+        # Return the complete description
+        return description
+
+    def draw_selector(self):
+        '''Draws the selector onscreen that gives information about a tile'''
+
+        # Get the size of the seletion
+        if self.building != None:
+            size = self.building.size
+        else:
+            size = (0,0)
+
+        # Check the selector is withing bounds
+        max_x = self.map.width - size[0]
+        max_y = self.map.height - size[1]
+        self.map.selector_x = max(1, min(self.map.selector_x, max_x))
+        self.map.selector_y = max(1, min(self.map.selector_y, max_y))
+
+        # Clear off old selectors
+        draw_map(self, self.updated_positions)
+
+        # Enable the map for editing
+        self.map_box.config(state=tk.NORMAL)
+
+        # Get the raw positions as x and y
+        x = self.map.selector_x
+        y = self.map.selector_y
+
+        # Get the texture to draw
+        if self.building == None:
+            texture = ('X', 'white')
+            size = (1, 1)
+        else:
+            size = self.building.size
+
+        for yy in range(size[1]):
+            for xx in range(size[0]):
+                
+                # Get the position key
+                pos_key = f'{y+yy}.{x+xx-1}'
+
+                # Remove old texture
+                self.map_box.delete(pos_key, pos_key+'+1c')
+
+                # Get exact texture for building
+                if not(self.building == None):
+                   
+                    # Get colour for building
+                    if self.map.check_free_land(self.building, x, y):
+                        texture = (self.building.get_texture(xx+(yy*size[0]))[0], 'lime')
+                        self.can_build = True
+                    else:
+                        texture = (self.building.get_texture(xx+(yy*size[0]))[0], 'red')
+                        self.can_build = False
+
+                # insert the new texture into the box
+                self.map_box.insert(pos_key, texture[0])
+
+                self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
+                self.map_box.tag_config(pos_key, foreground=texture[1])
+
+                # Save the positions that have been updated
+                self.updated_positions.append(pos_key)
+
+        # Turn the map back off 
+        self.map_box.config(state=tk.DISABLED)
+
+        # Update tile info
+        self.update_tile_information()
+
+    # Build a building in build mode
+    def construct_building(self):
+        '''Returns if a building can be constructed to a villager
+            function is for self.constuct_button'''
+        
+        if self.can_build == True:
+            self.villager.profession.turn_action_popout_closed(
+                self.villager,
+                self.building,
+                (self.map.selector_x, self.map.selector_y)
+            )
+            
+            # Reset variables out of building mode
+            self.building = None
+            self.build_positions = (None, None)
+            self.villager = None
+
+            # Close the gui
+            self.root.destroy()
+            self.root.update()
+
+    def select_building(self, building):
+        '''Changes onscreen building based on the selection menu'''
+
+        self.building = config.get_building(building)
+        self.draw_selector()
+
+    ### Moving selector ###
+    def move_selector(self, dir):
+        '''Move the sector and run any extra functions'''
+
+        # Move is the correct direction and change varibles
+        if dir == 'Right':
+            self.map.selector_x += 1
+        elif dir == 'Left':
+            self.map.selector_x -= 1
+        elif dir == 'Up':
+            self.map.selector_y -= 1
+        elif dir == 'Down':
+            self.map.selector_y += 1
+
+        # Update the selector
+        self.draw_selector()
+
+    def move_selector_right(self, _event=None):
+        '''Move the position of the selector right based on keyboard input'''
+    
+        self.move_selector('Right')
+
+    def move_selector_left(self, _event=None):
+        '''Move the position of the selector left based on keyboard input'''
+
+        self.move_selector('Left')
+
+    def move_selector_up(self, _event=None):
+        '''Move the position of the selector up based on keyboard input'''
+
+        self.move_selector('Up')
+
+    def move_selector_down(self, _event=None):
+        '''Move the position of the selector down based on keyboard input'''
+
+        self.move_selector('Down')
