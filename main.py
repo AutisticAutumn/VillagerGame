@@ -125,6 +125,8 @@ def create_map(reset=False):
     # Get villager position
     print('Finding Village')
     get_starting_pos()
+    config.map.selector_x = init_pos[0]
+    config.map.selector_y = init_pos[1]
 
     # Add buildings
     create_village()
@@ -143,7 +145,6 @@ def initiate_apps():
 
     config.map.reset_map()
     config.init_app()
-
 
 ### Main Game Loop ###
 
