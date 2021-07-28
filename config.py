@@ -56,6 +56,14 @@ def init():
     phantom_responses = get_phantom_responses()
     phantom_chance = 96
 
+    # Skills and preferences
+    global skill_level_names
+    skill_level_names = ['poor',
+                         'medicore',
+                         'average',
+                         'competent',
+                         'distinguished']
+
     # Feller tree counter
     global feller_trees
     feller_trees = []
