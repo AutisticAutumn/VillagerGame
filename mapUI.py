@@ -303,7 +303,11 @@ class MapPopout:
             texture = (villager.texture, villager.colour)
             name = villager.name
 
-            
+        # Enable all the boxes
+        self.tile_texture_box.config(state=tk.NORMAL)
+        self.tile_name_box.config(state=tk.NORMAL)
+        self.tile_info_box.config(state=tk.NORMAL)
+
         # Clear all textboxes of previous data
         self.tile_texture_box.delete(1.0, tk.END)
         self.tile_name_box.delete(1.0, tk.END)
@@ -322,6 +326,11 @@ class MapPopout:
         self.tile_texture_box.tag_config('Colour', foreground=texture[1])
         self.tile_name_box.tag_config('Colour', foreground=texture[1])
         self.tile_info_box.tag_config('Colour', foreground='white')
+
+        # Disable all the boxes
+        self.tile_texture_box.config(state=tk.DISABLED)
+        self.tile_name_box.config(state=tk.DISABLED)
+        self.tile_info_box.config(state=tk.DISABLED)
 
     def get_building_description(self, building):
         '''Gets a complete description for a building'''
