@@ -95,7 +95,7 @@ def init():
 
     global world_size_min, world_size_max
     world_size_min = 34
-    world_size_max = 192
+    world_size_max = 144
 
     # Turn Log and counter
     global log, turn
