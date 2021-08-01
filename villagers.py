@@ -23,6 +23,7 @@ class Villager:
         self.hunger = 0
         self.health = config.health_max
         self.morale = 0
+        self.get_skills()
 
         # Phantom status
         self.phantom = None
@@ -61,6 +62,22 @@ class Villager:
 
         # Draw the villager into the new positon
         self.draw_villager()
+
+    def get_skills(self):
+        '''Gets a list of skills each villager has for professions'''
+
+        professions_dict = professions.get_professions_dict()
+        professions_dict.pop(professions.Unemployed().name)
+
+        self.skills = {}
+
+        for profession in professions_dict.values():
+
+            level = random.randint(0, len(config.skill_level_names)-1)
+            self.skills.update({profession.name: level})
+
+        print(self.skills)
+
 
     ## Map Functions ##
 
