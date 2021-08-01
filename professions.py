@@ -161,7 +161,14 @@ class Farmer(Profession):
                 config.food += food
 
                 # Add food to the farm
+                skill_difference = ((villager.skills[self.name]-2)*0.2)+1
                 food_produced = random.randint(1,3) + config.food_weight
+
+                if random.randint(0,1) == 0:
+                    food_produced = math.ceil(food_produced*skill_difference)
+                else:
+                    food_produced = math.floor(food_produced*skill_difference)
+
                 max_food = (building.size[0]-2)*(building.size[1]-2)
                 food_produced = max( min(food_produced, max_food), 0)
 
