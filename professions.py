@@ -349,8 +349,8 @@ class Feller(Profession):
                         y += delta_change*y_dir*2
 
                     # Rounded variables
-                    xx = max(min(x, config.map.width-2), 0)
-                    yy = max(min(y, config.map.height-2), 0)
+                    xx = max(min(x, config.map.width-2), 1)
+                    yy = max(min(y, config.map.height-2), 1)
 
                     if not((xx, yy) in config.feller_trees):
 
@@ -358,7 +358,7 @@ class Feller(Profession):
 
                         item = config.map.terrain_map[pos]
                         if item == 'Tree':
-                            return x, y 
+                            return xx, yy 
 
                 if abs(x) < delta-delta_change:
                     x += delta_change*x_dir*2
@@ -474,16 +474,20 @@ class Plantsman(Profession):
         '''Find a suitable location for a tree for the village to move to'''
 
         # Get initial variables
-        a = 3
+        a = 2  # Checks per ring
+        b = 4  # Size of ring
         # Note that a is the number of times each distance is checked before
         #  moving onto the next distance. Couldn't think of better name
 
         # Find a location for the tree
-        for spread in range(5, max(config.map.width, config.map.height)*a, 1):
+        size = max(config.map.width, config.map.height)*a
+        for spread in range(b*2, round(size/b), b):
 
             # Get the delta for the tree
-            delta_x = random.randint(0, math.floor(spread/a)) 
-            delta_y = random.randint(0, math.floor(spread/a))
+            ring = math.floor(spread/a)
+
+            delta_x = random.randint(0, ring) 
+            delta_y = random.randint(0, ring)
 
             delta_x *= (random.randint(0, 1)*2)-1
             delta_y *= (random.randint(0, 1)*2)-1
@@ -491,6 +495,10 @@ class Plantsman(Profession):
             # Get the position
             x = villager.pos[0] + delta_x
             y = villager.pos[1] + delta_y
+
+            # Keep data in bounds
+            x = max(min(x, config.map.width-2), 1)
+            y = max(min(y, config.map.height-2), 1)
 
             # Check if space is empty
             try: 
