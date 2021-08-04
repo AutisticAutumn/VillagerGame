@@ -1,1 +1,37 @@
+Manual Assets
 
+{
+    Main
+    text
+    Villager game is a simple game of management. Your goal is to sustain your small
+    village and avoid death at all costs. 
+}
+
+{
+    World Generation
+    text
+    When generating the world there are a series of different stats that can be adjusted.
+    World size is the most important and constrains the other adjustable stats. The world size
+    determines the total possible number of tree and lakes that can appear in your world.
+    Terrian features however can be adjusted within a range determined by the size of your world
+    but cannot be set to high as to avoid issues with generation.
+}
+
+{
+    Villagers
+    menu
+    General
+    Housing
+    Health, Hunger and Morale
+}
+
+{
+    Professions
+    menu
+    General
+    Farmer
+    Feller
+    Carpenter
+    Plantsmen
+    Miner
+}
