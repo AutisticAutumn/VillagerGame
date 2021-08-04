@@ -182,7 +182,6 @@ class Farmer(Profession):
 
                 # Add food to the farm
                 food_produced = random.randint(1,3) + config.food_weight
-
                 food_produced = self.get_harvest_modifier(villager, food_produced)
 
                 max_food = (building.size[0]-2)*(building.size[1]-2)
@@ -406,10 +405,13 @@ class Carpenter(Profession):
         if villager.turn_action != None:
 
             # if building cannot be build return error
+            price_mod = self.get_price_modifier(villager)
+            
             build = villager.turn_action[0](
                                             villager.turn_action[1],
                                             villager.turn_action[2][0],
-                                            villager.turn_action[2][1]
+                                            villager.turn_action[2][1],
+                                            price_mod=price_mod
                                             )
 
             if build:
@@ -437,7 +439,7 @@ class Plantsman(Profession):
         # Villager info
         self.name = 'Plantsman'
         self.description = 'Plants trees'
-        self.colour = 'dark green'
+        self.colour = 'spring green3'
 
     def action(self, villager):
         '''Plants a tree is one is set to be plant'''
@@ -571,10 +573,13 @@ class Miner(Profession):
         if villager.turn_action != None:
 
             # if building cannot be build return error
+            price_mod = self.get_price_modifier(villager)
+
             build = villager.turn_action[0](
                                             villager.turn_action[1],
                                             villager.turn_action[2][0],
-                                            villager.turn_action[2][1]
+                                            villager.turn_action[2][1],
+                                            price_mod=price_mod
                                             )
 
             if build:
@@ -597,6 +602,8 @@ class Miner(Profession):
                 
                 # Collect sotne
                 stone_produced = random.randint(1,3)
+                stone_produced = self.get_harvest_modifier(villager, stone_produced)
+
                 config.stone += stone_produced
 
                 # Return to logs
