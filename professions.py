@@ -155,6 +155,15 @@ class Farmer(Profession):
         # Check if a build is going to be build as first priority
         if villager.turn_action != None:
 
+            # Check if action fails from skill
+            fail = self.get_fail_action(villager, -1)
+
+            if fail:
+                response = config.get_response('build_action_fail')
+                response[0] = response[0].format(villager.name, villager.turn_action[1].name)
+                return response  
+
+            # Get price
             price_mod = self.get_price_modifier(villager)
 
             # if building cannot be build return error
@@ -273,8 +282,11 @@ class Feller(Profession):
             wood_produced = random.randint(1,3)
             wood_produced = self.get_harvest_modifier(villager, wood_produced)
 
+            # Check if fellers fail from skill
+            fail = self.get_fail_action(villager)
+
             # If no wood was produced return error
-            if wood_produced == 0:
+            if wood_produced == 0 or fail:
                 response = config.get_response('feller_action_fail')
                 response[0] = response[0].format(villager.name)
                 return response
@@ -413,6 +425,14 @@ class Carpenter(Profession):
         # Only attempt to build if action was seleceted
         if villager.turn_action != None:
 
+            # Check if action fails from skill
+            fail = self.get_fail_action(villager, -2)
+
+            if fail:
+                response = config.get_response('build_action_fail')
+                response[0] = response[0].format(villager.name, villager.turn_action[1].name)
+                return response   
+
             # if building cannot be build return error
             price_mod = self.get_price_modifier(villager)
             
@@ -465,8 +485,13 @@ class Plantsman(Profession):
         # Plant tree is space is given
         if villager.turn_action != None:
 
-            fail = self.get_fail_action(villager)
-            print(fail)
+            # Check if action fails from skill
+            fail = self.get_fail_action(villager, -2)
+
+            if fail:
+                response = config.get_response('plantsmen_action_fail')
+                response[0] = response[0].format(villager.name)
+                return response   
             
             # Get variables
             x = villager.turn_action[0]
@@ -583,6 +608,14 @@ class Miner(Profession):
 
         # Only attempt to build if action was seleceted
         if villager.turn_action != None:
+
+            # Check if action fails from skill
+            fail = self.get_fail_action(villager, -1)
+
+            if fail:
+                response = config.get_response('build_action_fail')
+                response[0] = response[0].format(villager.name, villager.turn_action[1].name)
+                return response  
 
             # if building cannot be build return error
             price_mod = self.get_price_modifier(villager)
