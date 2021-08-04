@@ -18,6 +18,7 @@ class Villager:
 
         self.name = name
         self.profession = profession
+        self.seed = random.randint(1000000000,9999999999)
 
         # Villagers initial stats
         self.hunger = 0
@@ -75,9 +76,6 @@ class Villager:
 
             level = random.randint(0, len(config.skill_level_names)-1)
             self.skills.update({profession.name: level})
-
-        print(self.skills)
-
 
     ## Map Functions ##
 
