@@ -13,12 +13,9 @@ import villagers as villagers_scr
 def init():
     '''Initializes the global variables for the program'''
     
-    ## Misc ##
+    ## Misc ##x
     # Random seeds
-    global seed, grass_seed
-    seed = random.randint(1000000000,9999999999)
-    random.seed(seed)
-    grass_seed = random.randint(1000000000,9999999999)
+    get_seed()
 
     ## Villagers ##
     # Villagers and housing
@@ -93,7 +90,7 @@ def init():
     ## Stats ##
     # Materials
     global food, wood, stone
-    food = 10
+    food = 1000
     wood = 0
     stone = 0
 
@@ -127,6 +124,13 @@ def get_seed():
     seed = random.randint(1000000000,9999999999)
     random.seed(seed)
     grass_seed = random.randint(1000000000,9999999999)
+
+def reset_seed():
+    '''Resets the seed if modified''' 
+    
+    global seed
+    seed += 1
+    random.seed(seed)
 
 def init_app():
     '''Creates the application globals'''
