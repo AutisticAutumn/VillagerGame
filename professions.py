@@ -245,6 +245,25 @@ class Feller(Profession):
         # If a tree is ready to be felled then fell it
         if villager.turn_action != None:
 
+            # Get wood 
+            wood_produced = random.randint(2,3)
+            
+            skill_difference = ((villager.skills[self.name]-2)*0.2)+1
+            wood_produced = random.randint(1,3)
+
+            if random.randint(0,1) == 0:
+                wood_produced = math.ceil(wood_produced*skill_difference)
+            else:
+                wood_produced = math.floor(wood_produced*skill_difference)
+
+            # If no wood was produced return error
+            if wood_produced == 0:
+                response = config.get_response('feller_action_fail')
+                response[0] = response[0].format(villager.name)
+                return response
+
+            config.wood += wood_produced
+
             # get tree position
             x, y = villager.turn_action
 
@@ -254,13 +273,10 @@ class Feller(Profession):
             config.map.texture_map[pos] = config.map.get_ground_texture(x, y)
             mapUI.draw_map(config.map.frame)
 
-            # Collect wood and add to logs
-            wood_produced = random.randint(2,3)
-            config.wood += wood_produced
-
             # Find the next tree
             self.villager_location_set(villager, False)
 
+            # Return to logs
             response = config.get_response('feller_action')
             response[0] = response[0].format(villager.name, wood_produced)
             return response
