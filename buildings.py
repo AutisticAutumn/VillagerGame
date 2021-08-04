@@ -111,8 +111,7 @@ class Terraian:
         texture = random.choice(self.texture)
 
         # Add to seed so new number is produced every time
-        config.seed += 1
-        random.seed(config.seed)
+        config.reset_seed()
         
         return (texture, random.choice(self.colours))
 
