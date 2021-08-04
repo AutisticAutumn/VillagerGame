@@ -91,6 +91,23 @@ class Profession:
 
             villager.in_house = True
     
+    def get_price_modifier(self, villager):
+        '''Returns price changes based on skill'''
+
+        return 1-(villager.skills[self.name]-2)*0.125
+
+    def get_harvest_modifier(self, villager, value):
+        '''Returns modified resource collection based on skill'''
+
+        skill_difference = ((villager.skills[self.name]-2)*0.2)+1
+
+        if random.randint(0,1) == 0:
+            value = math.ceil(value*skill_difference)
+        else:
+            value = math.floor(value*skill_difference)
+
+        return value
+    
 
 class Unemployed(Profession):
     '''Unemployed villagers provide no materials or bonuses but can build buildings'''
@@ -129,11 +146,14 @@ class Farmer(Profession):
         # Check if a build is going to be build as first priority
         if villager.turn_action != None:
 
+            price_mod = self.get_price_modifier(villager)
+
             # if building cannot be build return error
             build = villager.turn_action[0](
                                             villager.turn_action[1],
                                             villager.turn_action[2][0],
-                                            villager.turn_action[2][1]
+                                            villager.turn_action[2][1],
+                                            price_mod=price_mod
                                             )
 
             if build:
@@ -161,13 +181,9 @@ class Farmer(Profession):
                 config.food += food
 
                 # Add food to the farm
-                skill_difference = ((villager.skills[self.name]-2)*0.2)+1
                 food_produced = random.randint(1,3) + config.food_weight
 
-                if random.randint(0,1) == 0:
-                    food_produced = math.ceil(food_produced*skill_difference)
-                else:
-                    food_produced = math.floor(food_produced*skill_difference)
+                food_produced = self.get_harvest_modifier(villager, food_produced)
 
                 max_food = (building.size[0]-2)*(building.size[1]-2)
                 food_produced = max( min(food_produced, max_food), 0)
@@ -246,15 +262,8 @@ class Feller(Profession):
         if villager.turn_action != None:
 
             # Get wood 
-            wood_produced = random.randint(2,3)
-            
-            skill_difference = ((villager.skills[self.name]-2)*0.2)+1
             wood_produced = random.randint(1,3)
-
-            if random.randint(0,1) == 0:
-                wood_produced = math.ceil(wood_produced*skill_difference)
-            else:
-                wood_produced = math.floor(wood_produced*skill_difference)
+            wood_produced = self.get_harvest_modifier(villager, wood_produced)
 
             # If no wood was produced return error
             if wood_produced == 0:
