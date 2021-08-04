@@ -60,8 +60,6 @@ class Map:
         self.tree_min = floor(size*0.0075)
         self.tree_max = floor(size*0.0125)
 
-        print('', self.pond_min, self.pond_max, '\n', self.tree_min, self.tree_max)
-
     def get_ground_texture(self, x, y):
         '''Get the texture for the ground base'''
 
@@ -99,7 +97,8 @@ class Map:
         
         return True
     
-    def build_building(self, building, pos_x, pos_y, pay=True, extra_space=False):
+    def build_building(self, building, pos_x, pos_y, 
+                        pay=True, extra_space=False, price_mod=1):
         '''Creates a building on the map'''
 
         # Get the building position
@@ -112,14 +111,16 @@ class Map:
         # Make payments for building
         if pay:
             # Check food
-            if building.cost['food'] <= config.food:
-                config.food -= building.cost['food']
+            food_cost = building.cost['food']*price_mod
+            if food_cost <= config.food:
+                config.food -= food_cost
             else:
                 return False
             
             # Check wood
-            if building.cost['wood'] <= config.wood:
-                config.wood -= building.cost['wood']
+            wood_cost = building.cost['wood']*price_mod
+            if wood_cost <= config.wood:
+                config.wood -= wood_cost
             else:
                 return False
 
