@@ -10,6 +10,11 @@ Professions
     {0} has produced {1} wood
 }
 {
+    feller_action_fail
+    chocolate
+    {0} failed to fell their tree
+}
+{
     carpenter_action_no_wood
     red
     {0} could not find enough wood to build a {1}
