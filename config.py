@@ -31,7 +31,7 @@ def init():
 
     # Villager names
     global names
-    names = read_file('villager_names')
+    names = read_file('Assets/VillagerNames')
 
     # Villager stat boundries
     global health_max, hunger_max
@@ -114,7 +114,7 @@ def init():
 
     # Create the list of responses
     global response_dict
-    response_dict = read_file('Responses')
+    response_dict = read_file('Assets/Responses')
 
 def get_seed():
     '''Returns a randomized seed'''
