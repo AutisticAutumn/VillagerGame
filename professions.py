@@ -107,6 +107,15 @@ class Profession:
             value = math.floor(value*skill_difference)
 
         return value
+
+    def get_fail_action(self, villager, chance_mod=0):
+        '''Checks if the villager will fail and activity based on skill'''
+
+        skill_level = (villager.skills[self.name]-2) + chance_mod
+
+        chance = random.randint(0, skill_level+5)
+
+        return chance < 1
     
 
 class Unemployed(Profession):
@@ -455,6 +464,9 @@ class Plantsman(Profession):
 
         # Plant tree is space is given
         if villager.turn_action != None:
+
+            fail = self.get_fail_action(villager)
+            print(fail)
             
             # Get variables
             x = villager.turn_action[0]
