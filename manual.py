@@ -15,6 +15,7 @@ class Manual:
     def __init__(self):
 
         self.get_manual_dictionary()
+        self.open_manual()
 
     def open_manual(self):
         '''Opens the manual'''
@@ -23,6 +24,46 @@ class Manual:
 
         self.root.title('Villager game manual')
         self.root.resizable(width=0, height=0)
+
+        # Draw in buttons along edge
+        self.selection_frame = tk.Frame()
+        self.selection_frame.grid(row=0, column=0)
+
+        self.widgets = {}
+
+        for name, button_type in self.button_list.items():
+            row = 0
+
+            # Get widget type
+            if button_type == 'text':
+
+                button = tk.Button(self.selection_frame,
+                                   text=name,
+                                   width=20,
+                                   height=2)
+                button.grid(padx=4, pady=4)
+
+                self.widgets.update({name: [button]})
+
+            elif button_type == 'menu':
+                
+                menu_data = self.menus[name]
+                menu_var = tk.StringVar()
+
+                menu = tk.OptionMenu(self.selection_frame,
+                                     menu_var,
+                                     *menu_data)
+                menu.config(width=18, height=2)
+                menu.grid(padx=4, pady=4)
+
+                menu_var.set(menu_data[0])
+
+                self.widgets.update({name: [menu, menu_var]})
+            
+
+            row += 1
+
+
 
 
     def get_manual_dictionary(self):
