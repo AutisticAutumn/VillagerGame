@@ -351,7 +351,10 @@ class VillagerInfoWindow:
             text_list.append((skill[0], text, colour))
 
         # Randomize the text and add the mixed list
+        random.seed(self.villager.seed)
         random.shuffle(text_list)
+        config.reset_seed()
+
         for text in text_list:
             self.add_bio_text(text[0], text[1], text[2])
         
