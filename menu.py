@@ -108,7 +108,7 @@ class MenuApp():
         self.reset_button.grid(row=3, column=0, columnspan=2, pady=4)
 
         self.warning_text = tk.Label(self.settings_frame,
-                                     text='Warning: Large worlds may \ntake longer to generate',
+                                     text='Warning: Large worlds may \ncause preformance issues',
                                      width=20,
                                      justify=tk.CENTER,
                                      fg='red')
