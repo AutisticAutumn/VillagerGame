@@ -32,7 +32,6 @@ class Manual:
         self.widgets = {}
 
         for name, button_type in self.button_list.items():
-            row = 0
 
             # Get widget type
             if button_type == 'text':
@@ -59,12 +58,6 @@ class Manual:
                 menu_var.set(menu_data[0])
 
                 self.widgets.update({name: [menu, menu_var]})
-            
-
-            row += 1
-
-
-
 
     def get_manual_dictionary(self):
         '''Creates the dicionary for the manual'''
