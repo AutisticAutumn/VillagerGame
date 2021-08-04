@@ -6,16 +6,20 @@
 
 import random
 from tkinter import Menu
-import professions, buildings, map, gameApp, disasters
+import professions, buildings, map, gameApp, disasters, manual
 import villagers as villagers_scr
 
 # Initiate the global variables
 def init():
     '''Initializes the global variables for the program'''
     
-    ## Misc ##x
+    ## Misc ##
     # Random seeds
     get_seed()
+
+    # Manual
+    global manual
+    manual = manual.Manual()
 
     ## Villagers ##
     # Villagers and housing
@@ -140,7 +144,7 @@ def init_app():
     main_app = gameApp.GameApp()
 
 def read_file(file):
-    '''Produce the dictionary of villager responses'''
+    '''Reads simple files'''
 
     response_dict = {}
 
