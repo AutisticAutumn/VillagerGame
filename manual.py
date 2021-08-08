@@ -15,49 +15,36 @@ class Manual:
     def __init__(self):
 
         self.get_manual_dictionary()
-        self.open_manual()
 
     def open_manual(self):
         '''Opens the manual'''
 
         self.root = tk.Toplevel()
-
         self.root.title('Villager game manual')
         self.root.resizable(width=0, height=0)
 
         # Draw in buttons along edge
-        self.selection_frame = tk.Frame()
+        self.selection_frame = tk.Frame(self.root)
         self.selection_frame.grid(row=0, column=0)
 
         self.widgets = {}
 
         for name, button_type in self.button_list.items():
 
-            # Get widget type
-            if button_type == 'text':
+            widget = ManualWidget(name, button_type, self)
+            self.widgets.update({name: widget})
 
-                button = tk.Button(self.selection_frame,
-                                   text=name,
-                                   width=20,
-                                   height=2)
-                button.grid(padx=4, pady=4)
+        # Add text box
+        self.text_frame = tk.Frame(self.root)
+        self.text_frame.grid(row=0, column=1, padx=8, pady=8)
 
-                self.widgets.update({name: [button]})
-
-            elif button_type == 'menu':
-                
-                menu_data = self.menus[name]
-                menu_var = tk.StringVar()
-
-                menu = tk.OptionMenu(self.selection_frame,
-                                     menu_var,
-                                     *menu_data)
-                menu.config(width=18, height=2)
-                menu.grid(padx=4, pady=4)
-
-                menu_var.set(menu_data[0])
-
-                self.widgets.update({name: [menu, menu_var]})
+        self.text_var = tk.StringVar()
+        self.text = tk.Label(self.text_frame, 
+                             textvariable=self.text_var,
+                             relief='ridge',
+                             borderwidth=2,
+                             width=32)
+        self.text.grid(sticky=tk.NSEW)
 
     def get_manual_dictionary(self):
         '''Creates the dicionary for the manual'''
@@ -95,10 +82,11 @@ class Manual:
                     if line.strip() == '}':
                         
                         # Add key to the order of buttons
-                        self.button_list.update({key: values[0]})
+                        if  values[0] != 'menutext':
+                            self.button_list.update({key: values[0]})
 
                         # Add values to correct dictionary
-                        if values[0] == 'text':
+                        if 'text' in values[0]:
                             values.pop(0)
                             data_temp[key] = values
                         elif values[0] == 'menu':
@@ -119,3 +107,45 @@ class Manual:
         print(self.data, '\n')
         print(self.menus)
         print(self.button_list)
+    
+    def update_text(self, key):
+        '''Update the text onscreen on the manual'''
+
+        self.text_var.set(self.data[key])
+
+class ManualWidget:
+
+    def __init__(self, name, widget_type, parent):
+        
+        self.name = name
+        self.type = widget_type
+        self.parent = parent
+
+        # Initiate the widget
+
+        if self.type == 'text':
+
+            self.data = parent.data[name]
+
+            self.button = tk.Button(parent.selection_frame,
+                                    text=name,
+                                    width=20,
+                                    height=2,
+                                    command=lambda: parent.update_text(name))
+            self.button.grid(padx=4, pady=4)
+
+        elif self.type == 'menu':
+            
+            self.data = parent.menus[name]
+            self.menu_var = tk.StringVar()
+
+            self.menu = tk.OptionMenu(parent.selection_frame,
+                                      self.menu_var,
+                                      *self.data,
+                                      command=parent.update_text)
+            self.menu.config(width=18, height=2)
+            self.menu.grid(padx=4, pady=4)
+
+            self.menu_var.set(self.data[0])
+
+    
