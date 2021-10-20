@@ -5,29 +5,42 @@ Professions
     {0} has produced {1} food
 }
 {
+    farmer_action_build_fail
+    red
+    {0} could not source enough food to start a farm
+}
+
+{
     feller_action
     chocolate
     {0} has produced {1} wood
 }
 {
     feller_action_fail
-    chocolate
+    red
     {0} failed to fell their tree
 }
+{
+    miner_action
+    lime
+    {0} has mined {1} stone
+}
+
 {
     carpenter_action_no_wood
     red
     {0} could not find enough wood to build a {1}
 }
-{
-    farmer_action_build_fail
-    red
-    {0} could not source enough food to start a farm
-}
+
 {
     plantsmen_plant_tree
-    dark green
+    spring green3
     {0} has planted a tree
+}
+{
+    plantsmen_action_fail
+    red
+    {0} failed to plant a tree
 }
 
 Villager
@@ -154,39 +167,6 @@ Villager
     white
 }
 
-General Functions
-{
-    new_turn
-    white
-    Turn {0}
-}
-{
-    arrival
-    cyan
-    {0} has arrived in the village
-    {0} has decided to settle in your village
-}
-{
-    find_work_building
-    lime
-    {0} has found a {1} to work in
-}
-{
-    find_work_building_fail
-    red
-    {0} was unable to find a {1} to work in
-}
-{
-    build_turn_action
-    lime
-    {0} will build a {1} at the turns end
-}
-{
-    build_action_succeed
-    cyan
-    {0} has built a {1}
-}
-
 Disasters
 {
     famine_begin
@@ -197,4 +177,50 @@ Disasters
     famine_end
     lawn green
     The famine has ended
+}
+{
+    mass_possession_begin
+    pale turquoise3
+    A plague of phantoms descends upon your vilalge
+}
+
+General Functions
+{
+    new_turn
+    white
+    Turn {0}
+}
+
+{
+    arrival
+    cyan
+    {0} has arrived in the village
+    {0} has decided to settle in your village
+}
+
+{
+    find_work_building
+    lime
+    {0} has found a {1} to work in
+}
+{
+    find_work_building_fail
+    red
+    {0} was unable to find a {1} to work in
+}
+
+{
+    build_turn_action
+    lime
+    {0} will build a {1} at the turns end
+}
+{
+    build_action_succeed
+    cyan
+    {0} has built a {1}
+}
+{
+    build_action_fail
+    red
+    {0} failed to construct a {1}
 }
