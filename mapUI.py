@@ -376,19 +376,43 @@ class MapPopout:
         return description
 
     def update_building_text(self):
-        '''Updates the text for the building display'''
+        '''Updates the text for the building display box'''
         
-        # Update Text
+        # Get text data
         self.building_stats.config(state=tk.NORMAL)
-        self.building_stats.insert(tk.END, self.building.name)
-
         price_mod = self.villager.profession.get_price_modifier(self.villager)
-        
-        # Food
-        price = round(self.building.cost["food"] * price_mod)
 
+        building_text = self.building.name
+        title = "Building Cost:"
+        food_text = f"Food: {round(self.building.cost['food'] * price_mod)}"
+        wood_text = f"Wood: {round(self.building.cost['wood'] * price_mod)}"
+        stone_text = f"Stone: {round(self.building.cost['stone'] * price_mod)}"
+        text = f"{building_text}\n\n{title}\n{food_text}\n{wood_text}\n{stone_text}"
         
-        self.building_stats.insert(tk.END, "Price")
+        # Add text to the box
+        self.building_stats.config(state=tk.NORMAL)
+        self.building_stats.delete('1.0', tk.END)
+        self.building_stats.insert(tk.END, text)
+
+        # Add colour to the stats
+        self.colour_stat('name', building_text, self.building.text_colour, '1.0')
+        self.colour_stat('label', title, 'white', '3.0')
+        self.colour_stat('food', food_text, 'lime', '4.0')
+        self.colour_stat('wood', wood_text, 'chocolate', '5.0')
+        self.colour_stat('stone', stone_text, 'gray72', '6.0')
+
+        self.building_stats.config(state=tk.DISABLED)
+    
+    def colour_stat(self, name, text, colour, start_pos):
+        '''Colours stats in the boxes'''
+
+        # Add tag
+        end_pos = start_pos[:2] + str(int(start_pos[2:]) + len(text))
+        self.building_stats.tag_add(name, start_pos, end_pos)
+        self.building_stats.tag_config(name, foreground=colour)
+
+        # Return point at end of text
+        return end_pos
 
     def draw_selector(self):
         '''Draws the selector onscreen that gives information about a tile'''
@@ -484,6 +508,7 @@ class MapPopout:
         self.building = config.get_building(building)
 
         # Draw building
+        self.update_building_text()
         self.draw_selector()
 
     ### Moving selector ###
