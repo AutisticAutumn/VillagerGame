@@ -287,6 +287,7 @@ class MapPopout:
         pos = x + ((y-1)*self.map.width)
         pos_key = f'({y}:{x})'
 
+        # Special case tiles
         villager_tile = False
         for villager in config.villagers:
             if x == villager.pos[0] and y == villager.pos[1]:
@@ -294,24 +295,51 @@ class MapPopout:
                 villager_tile = True
 
                 break
-    
+
+        width = 1  
+        height = 1  
+        if self.building != None:
+            width = self.building.size[0]
+            height = self.building.size[1]
+            self.tile_texture_box.config(width=width, 
+                                         height=height)
+            complex_tile = True    
         # Get texture
         texture = self.map.texture_map[pos]
 
-        # Attempt to find building at location, else return grass
-            
-        try:
-            building = self.map.map[pos_key]
-        except:
-            building = config.get_building(self.map.terrain_map[pos])
-        name = building.name
-            
-        # Get advanced building descriptiong
-        description = self.get_building_description(building)
+        
+        description = []
+        for yy in range(width):
+            for xx in range(height):
 
+                # Get position of the texture
+                pos = (x+xx) + ((y+yy-1)*config.map.width)
+                pos_key = f'({y+yy+1}:{x+xx})'
+
+                # Attempt to find building at location, else return grass
+                try:
+                    building = self.map.map[pos_key]
+                except:
+                    building = config.get_building(self.map.terrain_map[pos])
+                name = building.name
+                    
+                # Get advanced building descriptiong
+                description.append(self.get_building_description(building))
+        
+        # Prune complex descriptions
+        if complex_tile:
+            temp_description = [] 
+            for sub_desc in description:
+                for text in sub_desc:
+                    if not(text in temp_description):
+                        temp_description.append(text)
+
+            description = temp_description
+        else:
+            description = description[0]
+
+        # Set Villager tile varibles
         if villager_tile:
-            
-            name_colour_secondary = texture[1]
             texture = (villager.texture, villager.colour)
             name = f'{villager.name}\n{name}'
             self.tile_name_box.config(height=2)
@@ -328,16 +356,19 @@ class MapPopout:
         self.tile_info_box.delete(1.0, tk.END)
 
         # Texture box
-        self.tile_texture_box.insert(1.0, texture[0])
-        self.tile_texture_box.tag_add('Colour', 1.0, tk.END)
-        self.tile_texture_box.tag_config('Colour', foreground=texture[1])
+        if complex_tile:
+            self.update_complex_tile_map(x, y, self.building.size[0], self.building.size[1])
+        else:
+            self.tile_texture_box.insert(1.0, texture[0])
+            self.tile_texture_box.tag_add('Colour', 1.0, tk.END)
+            self.tile_texture_box.tag_config('Colour', foreground=texture[1])
 
         # Tile name box
         self.tile_name_box.insert(1.0, name)
         if villager_tile:
             self.tile_name_box.tag_add('Colour', 1.0, 2.0)
             self.tile_name_box.tag_add('BGColour', 2.0, tk.END)
-            self.tile_name_box.tag_config('BGColour', foreground=name_colour_secondary)
+            self.tile_name_box.tag_config('BGColour', foreground=building.text_colour)
         else:
             self.tile_name_box.tag_add('Colour', 1.0, tk.END)
         
@@ -360,6 +391,40 @@ class MapPopout:
         self.tile_texture_box.config(state=tk.DISABLED)
         self.tile_name_box.config(state=tk.DISABLED)
         self.tile_info_box.config(state=tk.DISABLED)
+
+    def update_complex_tile_map(self, xx, yy, width, height):
+        '''Updates the tile texture box box if it is complex'''
+
+        # Get positions of villagers in list
+        villager_positions = {}
+        for villager in config.villagers:
+            villager_positions.update({villager.pos: villager})
+        
+        # Run through and add tiles
+        for y in range(height):
+            for x in range(width):
+
+                # Get position of the texture
+                pos = (x+xx) + ((y+yy-1)*config.map.width)
+                pos_key = f'{y+1}.{x}'
+
+                # Get texture
+                texture = config.map.texture_map[pos]
+                    
+                # If tile is a villager tile then draw that instead
+                villager_tile = (x+xx, y+yy) in villager_positions.keys()
+                if villager_tile == True:
+
+                    villager = villager_positions[(x+xx, y+yy)]
+                    texture = (villager.texture, villager.colour)
+                
+                # insert the new texture into the box
+                self.tile_texture_box.insert(pos_key, texture[0])
+
+                self.tile_texture_box.tag_add(pos_key, pos_key, pos_key+'+1c')
+                self.tile_texture_box.tag_config(pos_key, foreground=texture[1])
+
+            self.tile_texture_box.insert(tk.END, '\n')
 
     def get_building_description(self, building):
         '''Gets a complete description for a building'''
