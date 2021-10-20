@@ -185,6 +185,8 @@ class MapPopout:
         self.root.resizable(width=0, height=0)
         self.root.focus()
 
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+
         # Add the map textbox
         self.map_frame = tk.Frame(self.root)
         self.map_frame.grid(row=0, column= 0, rowspan=5, padx=8, pady=8)
@@ -218,20 +220,20 @@ class MapPopout:
                                         width=1, 
                                         height=1,
                                         bg='black')
-        self.tile_texture_box.grid(row=0, column= 1,padx=4, pady=8, sticky='N')
+        self.tile_texture_box.grid(row=0, column= 1,padx=4, pady=4, sticky='N')
 
         self.tile_name_box = tk.Text(self.root, 
                                      width=16, 
                                      height=1,
                                      bg='black')
-        self.tile_name_box.grid(row=0, column= 2,padx=4, pady=8, sticky='N')
+        self.tile_name_box.grid(row=0, column= 2,padx=4, pady=4, sticky='N')
 
         self.tile_info_box = tk.Text(self.root, 
                                      width=20, 
-                                     height=24,
+                                     height=20,
                                      bg='black',
                                      wrap=tk.WORD)
-        self.tile_info_box.grid(row=1, column= 1, columnspan=2, padx=4, pady=8, sticky='N')
+        self.tile_info_box.grid(row=1, column= 1, columnspan=2, padx=4, pady=4, sticky='N')
 
         # Add construct button is in building mode
         if self.building != None:
@@ -244,14 +246,14 @@ class MapPopout:
                                                  self.selected_building,
                                                  *self.villager.profession.buildings,
                                                  command=self.select_building)
-            self.building_select.grid(row=2, column= 1, columnspan=2, padx=4, pady=8, sticky='S')
+            self.building_select.grid(row=2, column= 1, columnspan=2, padx=4, pady=4, sticky='S')
 
             self.building_stats = tk.Text(self.root, 
                                           width=20, 
-                                          height=8,
+                                          height=12,
                                           bg='black',
                                           wrap=tk.WORD)
-            self.building_stats.grid(row=3, column= 1, columnspan=2, padx=4, pady=8, sticky='N')
+            self.building_stats.grid(row=3, column= 1, columnspan=2, padx=4, pady=4, sticky='N')
 
             self.update_building_text()
 
@@ -308,9 +310,13 @@ class MapPopout:
         description = self.get_building_description(building)
 
         if villager_tile:
-
+            
+            name_colour_secondary = texture[1]
             texture = (villager.texture, villager.colour)
-            name = villager.name
+            name = f'{villager.name}\n{name}'
+            self.tile_name_box.config(height=2)
+        else:
+            self.tile_name_box.config(height=1)
 
         # Enable all the boxes
         self.tile_texture_box.config(state=tk.NORMAL)
@@ -328,8 +334,14 @@ class MapPopout:
         self.tile_info_box.insert(1.0, description)
 
         # Add colour tags to the boxes
+        if villager_tile:
+            self.tile_name_box.tag_add('Colour', 1.0, 2.0)
+            self.tile_name_box.tag_add('BGColour', 2.0, tk.END)
+            self.tile_name_box.tag_config('BGColour', foreground=name_colour_secondary)
+        else:
+            self.tile_name_box.tag_add('Colour', 1.0, tk.END)
+        
         self.tile_texture_box.tag_add('Colour', 1.0, tk.END)
-        self.tile_name_box.tag_add('Colour', 1.0, tk.END)
         self.tile_info_box.tag_add('Colour', 1.0, tk.END)
 
         self.tile_texture_box.tag_config('Colour', foreground=texture[1])
@@ -547,3 +559,10 @@ class MapPopout:
         '''Move the position of the selector down based on keyboard input'''
 
         self.move_selector('Down')
+
+    def on_closing(self):
+        '''Run on closing events'''
+
+        self.building = None
+        self.root.destroy()
+        self.root.update()
