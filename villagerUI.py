@@ -25,7 +25,7 @@ class VillagerFrame:
 
         # Set variables
         self.font_size = 10
-        self.map_size = [11,5]
+        self.map_size = (11,5)
 
         # Link to villager
         self.villager.frame = self
@@ -36,7 +36,7 @@ class VillagerFrame:
         # Create the main frame for the villager
         self.frame = tk.Frame(self.parent.mod_frame_scrollable, relief=tk.GROOVE, 
                               borderwidth=2, width=12)
-        self.frame.grid(row=self.id, column=0, padx=2, pady=4, sticky='')
+        self.frame.grid(row=self.id, column=0, padx=4, pady=4, sticky='')
 
         # Creat the four frames for the widgets 
         self.left_frame = tk.Frame(self.frame)
@@ -158,7 +158,12 @@ class VillagerFrame:
         '''Updates the onscreen stats and data for the villager'''
 
         self.name_var.set(self.villager.name)
-        self.title.set(f'{self.villager.name} the {self.villager.profession.name}')
+
+        # If villager is possessed give custom name suffix
+        name_suffix = self.villager.profession.name 
+        if self.villager.phantom:
+            name_suffix = "Possessed"
+        self.title.set(f'{self.villager.name} the {name_suffix}')
 
         # Get the stats varible
         space = '   '
