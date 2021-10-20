@@ -106,6 +106,7 @@ class Terraian:
     def __init__(self):
 
         self.type = 'Terraian'
+        self.text_colour = 'white'
 
     def get_texture(self, randkey):
         '''returns the texture for the building'''
@@ -132,6 +133,7 @@ class Grass(Terraian):
         self.description = 'Grass'
         self.texture = '''  '".,  '''
         self.colours = ['green']
+        self.text_colour = self.colours[0]
 
 class PondWater(Terraian):
 
@@ -140,9 +142,11 @@ class PondWater(Terraian):
         Terraian.__init__(self)
         
         self.name = 'Pond Water'
+        
         self.description = 'Stagnant Water'
         self.texture = '≈≈~'
         self.colours = ['blue', 'blue3']
+        self.text_colour = self.colours[0]
 
 class Tree(Building, Terraian):
 
@@ -152,14 +156,16 @@ class Tree(Building, Terraian):
         Terraian.__init__(self)
 
         self.name = 'Tree'
+        self.text_colour = 'chocolate2'
         self.description = 'Simple tree\ncan be used to gather wood'
 
         self.texture = '    O    '
-        self.colours = ['chocolate2']
         self.colour_map = [0,0,0,
                            0,0,0,
                            0,0,0]
         self.size = (3, 3)
+        self.colours = ['chocolate2']
+        self.text_colour = self.colours[0]
 
     # Note that tree uses Building class instead of terrain due to the fact
     #  that the tree is more solid and function wise it makes more sense to
