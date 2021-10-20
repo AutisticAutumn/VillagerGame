@@ -297,13 +297,15 @@ class MapPopout:
                 break
 
         width = 1  
-        height = 1  
+        height = 1 
+        complex_tile = false
         if self.building != None:
             width = self.building.size[0]
             height = self.building.size[1]
             self.tile_texture_box.config(width=width, 
                                          height=height)
             complex_tile = True    
+            
         # Get texture
         texture = self.map.texture_map[pos]
 
@@ -355,7 +357,7 @@ class MapPopout:
         self.tile_name_box.delete(1.0, tk.END)
         self.tile_info_box.delete(1.0, tk.END)
 
-        # Texture box
+        ## Texture box
         if complex_tile:
             self.update_complex_tile_map(x, y, self.building.size[0], self.building.size[1])
         else:
@@ -363,7 +365,7 @@ class MapPopout:
             self.tile_texture_box.tag_add('Colour', 1.0, tk.END)
             self.tile_texture_box.tag_config('Colour', foreground=texture[1])
 
-        # Tile name box
+        ## Tile name box
         self.tile_name_box.insert(1.0, name)
         if villager_tile:
             self.tile_name_box.tag_add('Colour', 1.0, 2.0)
@@ -374,17 +376,26 @@ class MapPopout:
         
         self.tile_name_box.tag_config('Colour', foreground=texture[1])
         
-        # Info box
+        ## Info box
         start_point = '0.0'
         tag_id = 0
+        
+        # Add each line of text and add colour seperatly
         for text in description:
-            tag_id += 1
+            
+            # Remove initial newline
+            if tag_id == 0:
+                text[0] = text[0][2:]
+
+            # Add text
             self.tile_info_box.insert(start_point, text[0])
             end_point = self.tile_info_box.index("end")
 
             self.tile_info_box.tag_add(tag_id, start_point, end_point)
             self.tile_info_box.tag_config(tag_id, foreground=text[1])
 
+            # Update varibles
+            tag_id += 1
             start_point = end_point
 
         # Disable all the boxes
@@ -429,7 +440,7 @@ class MapPopout:
     def get_building_description(self, building):
         '''Gets a complete description for a building'''
     
-        description = [(building.description, building.text_colour)]
+        description = [(f'\n{building.description}', building.text_colour)]
             
         if building.type != 'Terrain':
                 
