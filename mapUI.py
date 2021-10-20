@@ -220,17 +220,17 @@ class MapPopout:
                                         width=1, 
                                         height=1,
                                         bg='black')
-        self.tile_texture_box.grid(row=0, column= 1,padx=4, pady=4, sticky='N')
+        self.tile_texture_box.grid(row=0, column= 1,padx=4, pady=8, sticky='N')
 
         self.tile_name_box = tk.Text(self.root, 
                                      width=16, 
                                      height=1,
                                      bg='black')
-        self.tile_name_box.grid(row=0, column= 2,padx=4, pady=4, sticky='N')
+        self.tile_name_box.grid(row=0, column= 2,padx=4, pady=8, sticky='N')
 
         self.tile_info_box = tk.Text(self.root, 
                                      width=20, 
-                                     height=20,
+                                     height=16,
                                      bg='black',
                                      wrap=tk.WORD)
         self.tile_info_box.grid(row=1, column= 1, columnspan=2, padx=4, pady=4, sticky='N')
@@ -250,7 +250,7 @@ class MapPopout:
 
             self.building_stats = tk.Text(self.root, 
                                           width=20, 
-                                          height=12,
+                                          height=16,
                                           bg='black',
                                           wrap=tk.WORD)
             self.building_stats.grid(row=3, column= 1, columnspan=2, padx=4, pady=4, sticky='N')
@@ -399,7 +399,8 @@ class MapPopout:
         food_text = f"Food: {round(self.building.cost['food'] * price_mod)}"
         wood_text = f"Wood: {round(self.building.cost['wood'] * price_mod)}"
         stone_text = f"Stone: {round(self.building.cost['stone'] * price_mod)}"
-        text = f"{building_text}\n\n{title}\n{food_text}\n{wood_text}\n{stone_text}"
+        building_description = self.building.description
+        text = f"""{building_text}\n\n{title}\n{food_text}\n{wood_text}\n{stone_text}\n\n{building_description}"""
         
         # Add text to the box
         self.building_stats.config(state=tk.NORMAL)
@@ -407,15 +408,17 @@ class MapPopout:
         self.building_stats.insert(tk.END, text)
 
         # Add colour to the stats
-        self.colour_stat('name', building_text, self.building.text_colour, '1.0')
-        self.colour_stat('label', title, 'white', '3.0')
-        self.colour_stat('food', food_text, 'lime', '4.0')
-        self.colour_stat('wood', wood_text, 'chocolate', '5.0')
-        self.colour_stat('stone', stone_text, 'gray72', '6.0')
+        self.colour_text('name', building_text, self.building.text_colour, '1.0')
+        self.colour_text('label', title, 'white', '3.0')
+        self.colour_text('food', food_text, 'lime', '4.0')
+        self.colour_text('wood', wood_text, 'chocolate', '5.0')
+        self.colour_text('stone', stone_text, 'gray72', '6.0')
+        self.building_stats.tag_add('desc', '7.0', tk.END)
+        self.building_stats.tag_config('desc', foreground=self.building.text_colour)
 
         self.building_stats.config(state=tk.DISABLED)
     
-    def colour_stat(self, name, text, colour, start_pos):
+    def colour_text(self, name, text, colour, start_pos):
         '''Colours stats in the boxes'''
 
         # Add tag
