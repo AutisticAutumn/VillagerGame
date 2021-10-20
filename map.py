@@ -110,18 +110,12 @@ class Map:
 
         # Make payments for building
         if pay:
-            # Check food
-            food_cost = building.cost['food']*price_mod
-            if food_cost <= config.food:
-                config.food -= food_cost
-            else:
-                return False
-            
-            # Check wood
-            wood_cost = building.cost['wood']*price_mod
-            if wood_cost <= config.wood:
-                config.wood -= wood_cost
-            else:
+            try:
+                # Check Prices
+                config.food -= self.check_building_cost(building, 'food', config.food, price_mod)
+                config.wood -= self.check_building_cost(building,'wood', config.wood, price_mod)
+                config.stone -= self.check_building_cost(building,'stone', config.stone, price_mod)
+            except:
                 return False
 
         # Add building to map
@@ -138,6 +132,14 @@ class Map:
         self.frame.insert_building(f'({building.pos_y}:{building.pos_x})')
 
         return True
+
+    def check_building_cost(self, building, material, material_total, price_mod):
+        '''Checks if a building can be built for the cost'''
+        cost = round(building.cost[material]*price_mod)
+        if cost <= material_total:
+            return cost
+        else:
+            return 'False'
 
     ## Generation functions ##
     def create_ponds(self, total_ponds):
