@@ -44,6 +44,10 @@ class Building:
 
         self.profession = None
         self.worker = None
+        
+        self.cost = {'food' : 0,
+                     'wood' : 0,
+                     'stone' : 0}
 
     def get_texture(self, pos):
         '''returns the texture for the building'''
@@ -178,8 +182,7 @@ class WoodenHut(Building):
         self.size = (4,3)
         self.reset_texture()
 
-        self.cost = {'food': 0,
-                     'wood': 10}
+        self.cost['wood'] = 10
 
         self.villager = None
 
@@ -229,8 +232,7 @@ class WoodenStatue(Building):
         
         self.colours = ['chocolate3', 'brown4', 'navajo white']
 
-        self.cost = {'food': 0,
-                     'wood': 6}
+        self.cost['wood'] = 6
     
     def on_creation(self):
         '''Runs functions for when the building is built'''
@@ -265,8 +267,7 @@ class Farm(Building):
         self.reset_texture()
 
         # add crops to farm
-        self.cost = {'food': 5,
-                     'wood': 0}
+        self.cost['food'] = 5
 
     def reset_texture(self, crops=0):
         '''Reset the texture to include new crops'''
@@ -333,8 +334,7 @@ class Mine(Building):
         self.size = (6,2)
         self.reset_texture()
 
-        self.cost = {'food': 0,
-                     'wood': 12}
+        self.cost['wood'] = 12
         
     def reset_texture(self):
         '''Reset texture to default'''
