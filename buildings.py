@@ -176,7 +176,8 @@ class WoodenHut(Building):
 
         # Get building data
         self.name = 'Wooden Hut'
-        self.description = 'A simple wooden hut'
+        self.text_colour = 'chocolate3'
+        self.description = 'A simple wooden hut that houses one villager'
         self.type = 'House'
 
         self.size = (4,3)
@@ -216,8 +217,9 @@ class WoodenStatue(Building):
 
         # Get building data
         self.name = 'Wooden Statue'
+        self.text_colour = 'chocolate3'
         self.description = ''.join(['A simple wooden statue that provides a ',
-                           'small one time happiness boost and slightly increases ',
+                           'small one time happiness boost\nSlightly increases ',
                            'the chance of new villagers appearing'])
         self.type = 'Misc'
 
@@ -252,7 +254,8 @@ class Farm(Building):
 
         # Get building data
         self.name = 'Farm'
-        self.description = 'Provides food for the village'
+        self.text_colour = 'forest green'
+        self.description = 'Provides food for the village\nRequires a farmer villager to produce food'
         self.type = 'Work'
 
         self.size = (5, 4)
@@ -327,7 +330,8 @@ class Mine(Building):
 
         # Get building data
         self.name = 'Mine'
-        self.description = 'A mine where stone can be mined'
+        self.text_colour = 'slate gray'
+        self.description = 'A mine where stone can be harvested\nRequires a miner villager to produce stone'
         self.type = 'Work'
         self.profession = 'Miner'
 
