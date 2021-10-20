@@ -187,7 +187,7 @@ class MapPopout:
 
         # Add the map textbox
         self.map_frame = tk.Frame(self.root)
-        self.map_frame.grid(row=0, column= 0, rowspan=4, padx=8, pady=8)
+        self.map_frame.grid(row=0, column= 0, rowspan=5, padx=8, pady=8)
 
         self.map_box = tk.Text(self.map_frame, 
                                width=self.width, 
@@ -246,13 +246,22 @@ class MapPopout:
                                                  command=self.select_building)
             self.building_select.grid(row=2, column= 1, columnspan=2, padx=4, pady=8, sticky='S')
 
+            self.building_stats = tk.Text(self.root, 
+                                          width=20, 
+                                          height=8,
+                                          bg='black',
+                                          wrap=tk.WORD)
+            self.building_stats.grid(row=3, column= 1, columnspan=2, padx=4, pady=8, sticky='N')
+
+            self.update_building_text()
+
             # Building button
             self.construct_button = tk.Button(self.root,
                                               text='Construct building',
                                               width=20,
                                               height=2,
                                               command=self.construct_building)
-            self.construct_button.grid(row=3, column= 1, columnspan=2, padx=4, pady=8, sticky='S')
+            self.construct_button.grid(row=4, column= 1, columnspan=2, padx=4, pady=8, sticky='S')
 
         # Draw the map textures in 
         create_map_base(self)
@@ -366,6 +375,21 @@ class MapPopout:
         # Return the complete description
         return description
 
+    def update_building_text(self):
+        '''Updates the text for the building display'''
+        
+        # Update Text
+        self.building_stats.config(state=tk.NORMAL)
+        self.building_stats.insert(tk.END, self.building.name)
+
+        price_mod = self.villager.profession.get_price_modifier(self.villager)
+        
+        # Food
+        price = round(self.building.cost["food"] * price_mod)
+
+        
+        self.building_stats.insert(tk.END, "Price")
+
     def draw_selector(self):
         '''Draws the selector onscreen that gives information about a tile'''
 
@@ -458,6 +482,8 @@ class MapPopout:
         '''Changes onscreen building based on the selection menu'''
 
         self.building = config.get_building(building)
+
+        # Draw building
         self.draw_selector()
 
     ### Moving selector ###
