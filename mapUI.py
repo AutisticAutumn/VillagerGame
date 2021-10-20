@@ -318,22 +318,22 @@ class MapPopout:
         else:
             self.tile_name_box.config(height=1)
 
-        # Enable all the boxes
+        # Enable and clear all the boxes
         self.tile_texture_box.config(state=tk.NORMAL)
         self.tile_name_box.config(state=tk.NORMAL)
         self.tile_info_box.config(state=tk.NORMAL)
 
-        # Clear all textboxes of previous data
         self.tile_texture_box.delete(1.0, tk.END)
         self.tile_name_box.delete(1.0, tk.END)
         self.tile_info_box.delete(1.0, tk.END)
 
-        # Insert new data to the text boxes
+        # Texture box
         self.tile_texture_box.insert(1.0, texture[0])
-        self.tile_name_box.insert(1.0, name)
-        self.tile_info_box.insert(1.0, description)
+        self.tile_texture_box.tag_add('Colour', 1.0, tk.END)
+        self.tile_texture_box.tag_config('Colour', foreground=texture[1])
 
-        # Add colour tags to the boxes
+        # Tile name box
+        self.tile_name_box.insert(1.0, name)
         if villager_tile:
             self.tile_name_box.tag_add('Colour', 1.0, 2.0)
             self.tile_name_box.tag_add('BGColour', 2.0, tk.END)
@@ -341,12 +341,20 @@ class MapPopout:
         else:
             self.tile_name_box.tag_add('Colour', 1.0, tk.END)
         
-        self.tile_texture_box.tag_add('Colour', 1.0, tk.END)
-        self.tile_info_box.tag_add('Colour', 1.0, tk.END)
-
-        self.tile_texture_box.tag_config('Colour', foreground=texture[1])
         self.tile_name_box.tag_config('Colour', foreground=texture[1])
-        self.tile_info_box.tag_config('Colour', foreground='white')
+        
+        # Info box
+        start_point = '0.0'
+        tag_id = 0
+        for text in description:
+            tag_id += 1
+            self.tile_info_box.insert(start_point, text[0])
+            end_point = self.tile_info_box.index("end")
+
+            self.tile_info_box.tag_add(tag_id, start_point, end_point)
+            self.tile_info_box.tag_config(tag_id, foreground=text[1])
+
+            start_point = end_point
 
         # Disable all the boxes
         self.tile_texture_box.config(state=tk.DISABLED)
@@ -356,7 +364,7 @@ class MapPopout:
     def get_building_description(self, building):
         '''Gets a complete description for a building'''
     
-        description = building.description
+        description = [(building.description, building.text_colour)]
             
         if building.type != 'Terrain':
                 
@@ -366,13 +374,13 @@ class MapPopout:
                 # Add crop numbers for farms
                 if building.name == 'Farm':
                     if building.food > 0:
-                        description += f'\n\nContains {building.food} crops'
+                        description.append((f'\n\nContains {building.food} crops', building.text_colour))
                     else:
-                        description += '\n\nContains no crops'
+                        description.append(('\n\nContains no crops', building.text_colour))
 
                 # Add workers to description
                 if building.worker != None:
-                    description += f'\n\nCurrently worked by {building.worker.name}'
+                    description.append((f'\n\nCurrently worked by {building.worker.name}', building.worker.profession.colour))
             
             elif building.type == 'House':
 
@@ -380,9 +388,9 @@ class MapPopout:
                 if building.villager != None:
                     name = building.villager.name
                     job = building.villager.profession.name
-                    description += f'\n\nCurrently occupied by {name} the {job}'
+                    description.append((f'\n\nCurrently occupied by {name} the {job}', building.villager.profession.colour))
                 else:
-                    description += '\n\nCurrently unoccupied'
+                    description.append((f'\n\nCurrently unoccupied', 'white'))
         
         # Return the complete description
         return description
