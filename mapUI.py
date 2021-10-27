@@ -298,7 +298,7 @@ class MapPopout:
 
         width = 1  
         height = 1 
-        complex_tile = false
+        complex_tile = False
         if self.building != None:
             width = self.building.size[0]
             height = self.building.size[1]
@@ -311,8 +311,8 @@ class MapPopout:
 
         
         description = []
-        for yy in range(width):
-            for xx in range(height):
+        for yy in range(width+1):
+            for xx in range(height+1):
 
                 # Get position of the texture
                 pos = (x+xx) + ((y+yy-1)*config.map.width)
@@ -385,10 +385,12 @@ class MapPopout:
             
             # Remove initial newline
             if tag_id == 0:
-                text[0] = text[0][2:]
+                info_box_text = text[0][2:]
+            else:
+                info_box_text = text[0]
 
             # Add text
-            self.tile_info_box.insert(start_point, text[0])
+            self.tile_info_box.insert(start_point, info_box_text)
             end_point = self.tile_info_box.index("end")
 
             self.tile_info_box.tag_add(tag_id, start_point, end_point)
@@ -440,9 +442,11 @@ class MapPopout:
     def get_building_description(self, building):
         '''Gets a complete description for a building'''
     
-        description = [(f'\n{building.description}', building.text_colour)]
+        description = [(f'\n\n{building.description}', building.text_colour)]
             
         if building.type != 'Terrain':
+
+            description.insert(0, (f'\n\n{building.name}', building.text_colour))
                 
             # Add descriptions for work buildings
             if building.type == 'Work':
