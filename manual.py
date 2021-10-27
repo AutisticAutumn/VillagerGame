@@ -36,7 +36,7 @@ class Manual:
 
         # Add text box
         self.text_frame = tk.Frame(self.root)
-        self.text_frame.grid(row=0, column=1, padx=8, pady=8)
+        self.text_frame.grid(row=0, column=1, padx=8, pady=8, sticky=tk.NSEW)
 
         self.text_var = tk.StringVar()
         self.text = tk.Label(self.text_frame, 
@@ -103,10 +103,6 @@ class Manual:
         # Join text data together
         for key, value in data_temp.items():
             self.data.update({key : ' '.join(value)})
-            
-        print(self.data, '\n')
-        print(self.menus)
-        print(self.button_list)
     
     def update_text(self, key):
         '''Update the text onscreen on the manual'''
