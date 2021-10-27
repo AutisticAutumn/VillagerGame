@@ -119,13 +119,29 @@ class MenuApp():
                                                   state=tk.DISABLED)
         self.advanced_settings_button.grid(row=2, column=0, padx=8, pady=8)
 
+        self.gui_size_frame = tk.Frame(self.creation_root)
+        self.gui_size_frame.grid(row=3, column=0, padx=8, pady=8)
+
+        self.gui_size_label = tk.Label(self.gui_size_frame, text='GUI Scale:')
+        self.gui_size_label.grid(row=0, column=0, columnspan=3, padx=2, pady=4, sticky=tk.NSEW)
+        self.gui_size_var = tk.StringVar()
+        self.gui_size_var.set(config.gui_size_values[2])
+
+        i = 0
+        for value in config.gui_size_values:
+            tk.Radiobutton(self.gui_size_frame,
+                           text=value, value=value,
+                           variable=self.gui_size_var,
+                           indicator = 0, width=6,).grid(row=1, column=i, padx=2, pady=2)
+            i += 1
+
         self.create_world_button = tk.Button(self.creation_root,
                                              text='Create World',
                                              width=24,
                                              height=2,
                                              command=self.create_world)
 
-        self.create_world_button.grid(row=3, column=0, padx=8, pady=8)
+        self.create_world_button.grid(row=4, column=0, padx=8, pady=8)
 
         # Track entry boxes to keep data in range
         self.village_name.trace("w", lambda name, index, mode: self.round_data())
