@@ -185,6 +185,7 @@ class MenuApp():
         # Adjust config variables accordingly
         self.round_data()
         config.village_name = self.village_name.get()
+        config.gui_size = self.gui_size_var.get()
 
         # Adjust variables for main loop
         self.generate_world = True
