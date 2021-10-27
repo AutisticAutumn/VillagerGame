@@ -311,15 +311,12 @@ class MapPopout:
 
         # Get description        
         description = []
-        #test_pos = []
         for yy in range(height):
             for xx in range(width):
 
                 # Get position of the texture
                 pos = (x+xx) + ((y+yy-1)*config.map.width)
-                pos_key = f'({y+yy+1}:{x+xx})'
-                #test_pos.append(pos_key)
-                #config.map.texture_map[pos] = ('#', 'white')
+                pos_key = f'({y+yy}:{x+xx})'
 
                 # Attempt to find building at location, else return grass
                 try:
@@ -330,7 +327,6 @@ class MapPopout:
                     
                 # Get advanced building descriptiong
                 description.append(self.get_building_description(building))
-        #draw_map(config.map.frame, test_pos)
 
         # Prune complex descriptions
         if complex_tile:
