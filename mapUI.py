@@ -328,17 +328,14 @@ class MapPopout:
                 # Get advanced building descriptiong
                 description.append(self.get_building_description(building))
 
-        # Prune complex descriptions
-        if complex_tile:
-            temp_description = [] 
-            for sub_desc in description:
-                for text in sub_desc:
-                    if not(text in temp_description):
-                        temp_description.append(text)
+        # Prune descriptions of duplicates
+        temp_description = [] 
+        for sub_desc in description:
+            for text in sub_desc:
+                if not(text in temp_description):
+                    temp_description.append(text)
 
-            description = temp_description
-        else:
-            description = description[0]
+        description = temp_description
 
         # Set Villager tile varibles
         if villager_tile:
