@@ -33,6 +33,9 @@ def get_building(key):
     if key == Mine().name:
         return Mine()
 
+    if key == Storehouse().name:
+        return Storehouse()
+
 ### Parent Classes ###
 class Building:
     '''Main building class'''
@@ -260,7 +263,7 @@ class Farm(Building):
 
         # Get building data
         self.name = 'Farm'
-        self.text_colour = 'forest green'
+        self.text_colour = 'lawn green'
         self.description = 'Provides food for the village\nRequires a farmer villager to produce food'
         self.type = 'Work'
 
@@ -356,3 +359,36 @@ class Mine(Building):
                            2,1,3,3,1,2]
         
         self.colours = ['black', 'chocolate3', 'brown4', 'dark slate gray']
+
+class Storehouse(Building):
+
+    def __init__(self):
+        # Get inherited data
+        Building.__init__(self)
+
+        # Get building data
+        self.name = 'Storehouse'
+        self.text_colour = 'sienna1'
+        self.description = 'Can store up to 32 of any material'
+        self.type = 'Storage'
+
+        self.capacity = 32
+        self.materials = None
+
+        self.size = (6,3)
+        self.reset_texture()
+
+        self.cost['wood'] = 20
+
+    def reset_texture(self):
+        '''Reset texture to default'''
+
+        self.texture = '''
+●----●
+¦++++¦
+●----●'''
+        self.colour_map = [0,0,0,0,0,0,
+                           0,1,1,1,1,0,
+                           0,0,0,0,0,0]
+        
+        self.colours = ['chocolate3', 'brown4']
