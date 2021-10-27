@@ -16,6 +16,11 @@ def init():
     ## Misc ##
     # Random seeds
     get_seed()
+    
+    # GUI
+    global gui_size, gui_size_values
+    gui_size_values = ['Small', 'Medium', 'Large']
+    gui_size = gui_size_values[2]
 
     # Manual
     global manual
@@ -94,7 +99,7 @@ def init():
     ## Stats ##
     # Materials
     global food, wood, stone
-    food = 1000
+    food = 0
     wood = 0
     stone = 0
 
