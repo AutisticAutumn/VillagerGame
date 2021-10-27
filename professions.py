@@ -414,7 +414,8 @@ class Carpenter(Profession):
 
         # List of available buildings
         self.buildings = ('Wooden Hut',
-                          'Wooden Statue')
+                          'Wooden Statue',
+                          'Storehouse')
 
     def action(self, villager):
         '''Build a building if the action was selected'''
