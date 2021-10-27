@@ -79,7 +79,7 @@ def create_village():
 
     # Add farms
     print('Adding Farms')
-    for i in range(init_villagers):  
+    for i in range(round(init_villagers*(2/3))):  
 
         build_farm = False
         while build_farm == False: 
@@ -175,6 +175,8 @@ if __name__ == '__main__':
 
     map_frame.map_box.xview_moveto(x)
     map_frame.map_box.yview_moveto(y)
+
+    config.manual.open_manual()
 
     # Run the main loop
     config.main_app.root.mainloop()
