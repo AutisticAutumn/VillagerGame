@@ -18,9 +18,10 @@ def init():
     get_seed()
     
     # GUI
-    global gui_size, gui_size_values
+    global gui_size, gui_size_values, main_font
     gui_size_values = ['Small', 'Medium', 'Large']
     gui_size = gui_size_values[2]
+    main_font = 'Calibri'
 
     # Manual
     global manual
