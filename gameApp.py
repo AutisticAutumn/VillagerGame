@@ -21,8 +21,8 @@ class GameApp:
             log_size = (124, 10)
             self.font_size = 8
         elif config.gui_size == config.gui_size_values[1]:
-            villager_size = (500, 256)
-            log_size = (124, 16)
+            villager_size = (500, 276)
+            log_size = (108, 16)
             self.font_size = 9
         else:
             villager_size = (574, 374)
