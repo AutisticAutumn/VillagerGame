@@ -21,7 +21,7 @@ def init():
     global gui_size, gui_size_values, main_font
     gui_size_values = ['Small', 'Medium', 'Large']
     gui_size = gui_size_values[2]
-    main_font = 'Calibri'
+    main_font = 'Arial'
 
     # Manual
     global manual
@@ -66,7 +66,7 @@ def init():
     # Skills and preferences
     global skill_level_names
     skill_level_names = ['poor',
-                         'medicore',
+                         'mediocre',
                          'average',
                          'competent',
                          'distinguished']
@@ -100,7 +100,7 @@ def init():
     ## Stats ##
     # Materials
     global food, wood, stone
-    food = 0
+    food = 10
     wood = 0
     stone = 0
 
