@@ -24,7 +24,7 @@ class VillagerFrame:
         self.id = id
 
         # Set variables
-        self.map_font_size = self.parent.map.font_size
+        self.map_font = ('Courier', self.parent.map.font_size-4)
         self.font_size = self.parent.font_size-1
         self.font = (config.main_font, self.font_size)
         self.map_size = (11,5)
@@ -65,7 +65,7 @@ class VillagerFrame:
                            height=self.map_size[1],
                            bg='black',
                            wrap=tk.NONE,
-                           font=self.font)
+                           font=self.map_font)
         self.map.grid(row=0, column=0, padx=2, pady=2, sticky=tk.EW)
 
         self.name_var = tk.StringVar()
