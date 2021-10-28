@@ -279,12 +279,13 @@ class VillagerInfoWindow:
 
         self.parent = parent
         self.villager = villager
+        self.font = parent.font
 
         # Disable ending turn and modifying villager while open
         parent.professions_menu.config(state=tk.DISABLED)
         parent.kill_button.config(state=tk.DISABLED)
         parent.name_button.config(state=tk.DISABLED)
-        'Action button to be added'
+        'Action button to be added' ## Unsure what this is
         parent.parent.end_turn_button.config(state=tk.DISABLED)
 
         # Initiate the window
@@ -297,10 +298,15 @@ class VillagerInfoWindow:
         info_frame = tk.Frame(self.root)
         info_frame.grid(row=0, column=0, columnspan=2, padx=8, pady=4)
 
-        title = tk.Label(info_frame, text=parent.title.get(), width=88)
+        title = tk.Label(info_frame, 
+                         text=parent.title.get(), 
+                         width=88,
+                         font=self.font)
         title.grid(row=0, column=0, pady=4)
 
-        stats = tk.Label(info_frame, text=parent.stats)
+        stats = tk.Label(info_frame, 
+                         text=parent.stats,
+                         font=self.font)
         stats.grid(row=1, column=0, pady=4)
 
         bio_frame = tk.Frame(self.root)
@@ -317,7 +323,8 @@ class VillagerInfoWindow:
                                 width=48, 
                                 height=10, 
                                 wrap=tk.WORD, 
-                                bg='black')
+                                bg='black',
+                                font=self.font)
         self.bio_text.grid(row=0, column=0, padx=4, pady=4)
 
         self.bio_text.config(yscrollcommand=bio_scrollbar.set)
@@ -331,7 +338,12 @@ class VillagerInfoWindow:
         log_scrollbar = tk.Scrollbar(log_frame)
         log_scrollbar.grid(row=0, column=1, sticky=tk.NSEW)
 
-        log_text = tk.Text(log_frame, width=48, height=12, wrap=tk.WORD, bg='black')
+        log_text = tk.Text(log_frame, 
+                           width=48, 
+                           height=12, 
+                           wrap=tk.WORD, 
+                           bg='black', 
+                           font=self.font)
         log_text.grid(row=0, column=0, padx=4, pady=4)
 
         log_text.config(yscrollcommand=log_scrollbar.set)
