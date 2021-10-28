@@ -112,7 +112,8 @@ class VillagerFrame:
                                               command=self.set_profession)
 
         self.professions_menu.config(width=14)
-
+        self.professions_menu.config(font=self.font)
+        
         self.professions_menu.grid(row=0, column=1, padx=2, pady=6, sticky=tk.NSEW)
 
         # Button Frame widgets #
@@ -146,6 +147,7 @@ class VillagerFrame:
             self.action_button = tk.Button(self.profession_frame, 
                                            text=self.villager.profession.action_text,
                                            width=12,
+                                           font=self.font,
                                            command=lambda: self.villager.profession.turn_action(self.villager))
             self.action_button.grid(row=0, column=2, padx=2, pady=6, sticky=tk.NSEW)
         except:
