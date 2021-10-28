@@ -14,7 +14,23 @@ class GameApp:
     '''The main game routine application'''
 
     def __init__(self):
+
+        # Get the frame sizes based on gui
+        if config.gui_size == config.gui_size_values[0]:
+            villager_size = (574, 192)
+            log_size = (124, 10)
+            self.font_size = 8
+        elif config.gui_size == config.gui_size_values[1]:
+            villager_size = (500, 256)
+            log_size = (124, 16)
+            self.font_size = 9
+        else:
+            villager_size = (574, 374)
+            log_size = (124, 23)
+            self.font_size = 10
         
+        self.font = (config.main_font, self.font_size)
+
         # Initialize the window
         self.root = tk.Tk()
         self.set_title()
@@ -36,7 +52,8 @@ class GameApp:
         self.map = mapUI.MapFrame(self, self.village_frame)
 
         self.map_button = tk.Button(self.map_frame, text='View full map',
-                                    width=16, command=config.map.popout.create_toplevel)
+                                    width=16, font=self.font,
+                                    command=config.map.popout.create_toplevel)
         self.map_button.grid(row=1, column=0, padx=2, pady=4)
 
         ## Log Frame ##
@@ -44,11 +61,12 @@ class GameApp:
         self.log_scrollbar.grid(row=0, column=1, sticky=tk.NSEW)
 
         self.log_text = tk.Text(self.log_frame, 
-                                width=124, 
-                                height=23,
+                                width=log_size[0], 
+                                height=log_size[1],
                                 state=tk.DISABLED,
                                 wrap=tk.WORD,
-                                bg='black')
+                                bg='black',
+                                font=self.font)
         self.log_text.grid(row=0, column=0, padx=5, pady=5)
 
         self.log_text.config(yscrollcommand=self.log_scrollbar.set)
@@ -59,14 +77,15 @@ class GameApp:
                                  width=64, 
                                  height=2,
                                  state=tk.DISABLED,
-                                 bg='black')
+                                 bg='black',
+                                 font=self.font)
         self.stats_box.grid(row=1, column=0, columnspan=2, padx=12, pady=4)
 
         ## Bottom Frame ##
         # Create a scrollable frame for the villager modification section
         self.mod_frame = tk.Frame(self.bottom_frame)
 
-        self.mod_canvas = tk.Canvas(self.mod_frame, height=374, width=574)
+        self.mod_canvas = tk.Canvas(self.mod_frame, height=villager_size[1], width=villager_size[0])
         self.mod_scrollbar = tk.Scrollbar(self.mod_frame,
                                           orient='vertical',
                                           command=self.mod_canvas.yview)
@@ -95,7 +114,8 @@ class GameApp:
                                          width=48, 
                                          command=self.end_turn,
                                          borderwidth=4,
-                                         bg='grey84')
+                                         bg='grey84',
+                                         font=self.font)
         self.end_turn_button.grid(row=3, column=0, columnspan=2, padx=2, pady=4)
 
         self.update_stats()
