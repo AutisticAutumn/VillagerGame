@@ -180,6 +180,9 @@ class MapPopout:
         self.parent = parent
         self.map = config.map
 
+        self.font = parent.font
+        self.map_font = ('Courier', parent.font_size-4)
+
         # Functions for building
         self.building = None
         self.build_positions = (None, None)
@@ -208,7 +211,8 @@ class MapPopout:
                                width=self.width, 
                                height=self.height,
                                bg='black',
-                               wrap=tk.NONE)
+                               wrap=tk.NONE,
+                               font=self.map_font)
         self.map_box.grid(row=0, column=0)
 
         # Add scrollbars to the relevant axis if needed
@@ -232,20 +236,23 @@ class MapPopout:
         self.tile_texture_box = tk.Text(self.root, 
                                         width=1, 
                                         height=1,
-                                        bg='black')
+                                        bg='black',
+                                        font=self.map_font)
         self.tile_texture_box.grid(row=0, column= 1,padx=4, pady=8, sticky='N')
 
         self.tile_name_box = tk.Text(self.root, 
                                      width=16, 
                                      height=1,
-                                     bg='black')
+                                     bg='black',
+                                     font=self.font)
         self.tile_name_box.grid(row=0, column= 2,padx=4, pady=8, sticky='N')
 
         self.tile_info_box = tk.Text(self.root, 
                                      width=20, 
                                      height=16,
                                      bg='black',
-                                     wrap=tk.WORD)
+                                     wrap=tk.WORD,
+                                     font=self.font)
         self.tile_info_box.grid(row=1, column= 1, columnspan=2, padx=4, pady=4, sticky='N')
 
         # Add construct button is in building mode
@@ -265,7 +272,8 @@ class MapPopout:
                                           width=20, 
                                           height=16,
                                           bg='black',
-                                          wrap=tk.WORD)
+                                          wrap=tk.WORD,
+                                          font=self.font)
             self.building_stats.grid(row=3, column= 1, columnspan=2, padx=4, pady=4, sticky='N')
 
             self.update_building_text()
@@ -275,6 +283,7 @@ class MapPopout:
                                               text='Construct building',
                                               width=20,
                                               height=2,
+                                              font=self.font,
                                               command=self.construct_building)
             self.construct_button.grid(row=4, column= 1, columnspan=2, padx=4, pady=8, sticky='S')
 
