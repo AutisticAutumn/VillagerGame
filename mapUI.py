@@ -105,10 +105,10 @@ class MapFrame:
         # Get the frame size based on gui
         if config.gui_size == config.gui_size_values[0]:
             self.font_size = 10
-            self.size = (32, 10)
+            self.size = (24, 10)
         elif config.gui_size == config.gui_size_values[1]:
             self.font_size = 12
-            self.size = (40, 15)
+            self.size = (36, 15)
         else:
             self.font_size = 14
             self.size = (48, 21)
