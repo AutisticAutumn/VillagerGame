@@ -24,7 +24,9 @@ class VillagerFrame:
         self.id = id
 
         # Set variables
-        self.font_size = 10
+        self.map_font_size = self.parent.map.font_size
+        self.font_size = self.parent.font_size-1
+        self.font = (config.main_font, self.font_size)
         self.map_size = (11,5)
 
         # Link to villager
@@ -63,28 +65,32 @@ class VillagerFrame:
                            height=self.map_size[1],
                            bg='black',
                            wrap=tk.NONE,
-                           font=('Courier', self.font_size))
+                           font=self.font)
         self.map.grid(row=0, column=0, padx=2, pady=2, sticky=tk.EW)
 
         self.name_var = tk.StringVar()
-        self.name = tk.Label(self.left_frame, textvariable=self.name_var, width=16)
+        self.name = tk.Label(self.left_frame, textvariable=self.name_var, 
+                             width=16, font=self.font)
         self.name.grid(row=1, column=0, padx=2, pady=2, sticky=tk.EW)
 
         self.kill_button = tk.Button(self.left_frame, text='Kill', 
-                                     width=8, command=self.villager.kill)
+                                     width=8, font=self.font,
+                                     command=self.villager.kill)
         self.kill_button.grid(row=2, column=0, padx=2, pady=2)
 
         # Stats frame widgets #
         self.title = tk.StringVar()
         self.name_button = tk.Button(self.stats_frame, textvariable=self.title, 
-                                     width=48, command=self.open_villager_window)
+                                     width=48, font=self.font,
+                                     command=self.open_villager_window)
         self.name_button.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
         self.stats_box = tk.Text(self.stats_frame,
                                  width=44, 
                                  height=1,
                                  state=tk.DISABLED,
-                                 bg='black')
+                                 bg='black',
+                                 font=self.font)
 
         self.stats_box.grid(row=1, column=0, padx=2, pady=0, sticky=tk.NSEW)
 
@@ -92,6 +98,7 @@ class VillagerFrame:
         self.home_button = tk.Button(self.profession_frame,
                                      text='Return Home',
                                      width=12,
+                                     font=self.font,
                                      command=self.return_home)
         self.home_button.grid(row=0, column=0, padx=2, pady=6, sticky=tk.NSEW)
 
@@ -103,11 +110,15 @@ class VillagerFrame:
                                               self.professions_menu_var, 
                                               *self.professions_list,
                                               command=self.set_profession)
+
         self.professions_menu.config(width=14)
+
         self.professions_menu.grid(row=0, column=1, padx=2, pady=6, sticky=tk.NSEW)
 
         # Button Frame widgets #
-        self.food_label = tk.Label(self.button_frame, text='Food Priority:')
+        self.food_label = tk.Label(self.button_frame, 
+                                   text='Food Priority:',
+                                   font=self.font)
         self.food_label.grid(row=0, column=0, padx=2, pady=4, sticky=tk.NSEW)
         self.food_menu_var = tk.StringVar()
         self.food_menu_var.set(config.food_priority_values[1])
@@ -116,6 +127,7 @@ class VillagerFrame:
             tk.Radiobutton(self.button_frame,
                            text=value, value=value,
                            variable=self.food_menu_var,
+                           font=self.font,
                            indicator = 0, width=6,).grid(padx=2, pady=2)
 
     def set_profession(self, profession):
