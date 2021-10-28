@@ -102,6 +102,20 @@ class MapFrame:
 
     def __init__(self, parent, frame):
 
+        # Get the frame size based on gui
+        if config.gui_size == config.gui_size_values[0]:
+            self.font_size = 10
+            self.size = (32, 10)
+        elif config.gui_size == config.gui_size_values[1]:
+            self.font_size = 12
+            self.size = (40, 15)
+        else:
+            self.font_size = 14
+            self.size = (48, 21)
+            
+        self.font = (config.main_font, parent.font_size)
+        self.map_font = ('Courier', self.font_size)
+
         self.parent = parent
         self.frame = frame
 
@@ -109,9 +123,8 @@ class MapFrame:
         self.map.frame = self
         self.map.popout = MapPopout(self)
 
-        self.font_size = 14
-        self.map_size = (round(48*(10/self.font_size)), 
-                        round(21*(10/self.font_size)))
+        self.map_size = (round(self.size[0]*(10/self.font_size)), 
+                         round(self.size[1]*(10/self.font_size)))
 
         self.create_map()
         create_map_base(self)
@@ -134,7 +147,7 @@ class MapFrame:
                                state=tk.DISABLED,
                                bg='black',
                                wrap=tk.NONE,
-                               font=('Courier', self.font_size))
+                               font=self.map_font)
         self.map_box.grid(row=0, column=0, padx=4, pady=4)
 
         # Place the scrollbars in
