@@ -77,8 +77,9 @@ def create_village():
 
         config.seed += 1
 
-    # Add farms
-    print('Adding Farms')
+    # Add Buildings
+    print('Adding Buildings')
+    #  Farms
     for i in range(round(init_villagers*(2/3))):  
 
         build_farm = False
@@ -88,6 +89,14 @@ def create_village():
             attempts +=1
 
         config.seed += 1
+    #  Storehouse
+    build_storehouse = False
+    while build_storehouse == False: 
+        pos = get_offset(offset_max[0]+2, offset_max[1]+2)
+        build_storehouse = build_building(pos, 'Storehouse')
+        attempts +=1
+
+    config.seed += 1
 
     # Add Trees
     print('Adding Trees')
