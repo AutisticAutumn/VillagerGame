@@ -173,6 +173,10 @@ if __name__ == '__main__':
     else:
         initiate_apps()
 
+    # Add initial materials
+    config.get_material('Food', 10)
+    config.main_app.update_stats()
+
     # Draw the map
     mapUI.draw_map(config.map.frame)
 
