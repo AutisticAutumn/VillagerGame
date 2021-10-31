@@ -104,8 +104,9 @@ def init():
     wood = 0
     stone = 0
 
-    global stored_materials
-    stored_materials = 10
+    global stored_materials, storehouses
+    stored_materials = []
+    storehouses = []
 
     # Map
     global map
