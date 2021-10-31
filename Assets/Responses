@@ -192,6 +192,12 @@ General Functions
 }
 
 {
+    storage_failed
+    red
+    there is not enough space to store {0} {1}
+}
+
+{
     arrival
     cyan
     {0} has arrived in the village
