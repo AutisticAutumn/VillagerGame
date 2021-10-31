@@ -183,7 +183,36 @@ def get_material(material, amount):
         wood += amount - (amount-total_stored)
     elif material == 'Stone':
         stone += amount - (amount-total_stored)
-                
+
+def remove_material(material, amount):
+    '''Removes materials from storehouse
+        Runs upon the assumption that the check that said materails exist has already been run'''
+
+    global food, wood, stone, storehouses
+
+    # Run through the amount of times required
+    for i in range(amount):
+
+        removed = False
+
+        # Run through each storage building and attempt to add
+        for building in storehouses:
+            if (building.materials == []) or (material in building.materials):
+                building.storage.pop(building.storage.index(material))
+                removed = True
+                print(building.storage)
+                break
+
+        if removed == False:
+            break    
+
+    # Update material values
+    if material == 'Food':
+        food -= amount
+    elif material == 'Wood':
+        wood -= amount
+    elif material == 'Stone':
+        stone -= amount
 
 def init_app():
     '''Creates the application globals'''
