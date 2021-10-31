@@ -373,7 +373,7 @@ class Storehouse(Building):
         self.type = 'Storage'
 
         self.capacity = 32
-        self.materials = None
+        self.materials = []
 
         self.size = (6,3)
         self.reset_texture()
