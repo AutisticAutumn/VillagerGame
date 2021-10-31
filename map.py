@@ -118,6 +118,10 @@ class Map:
             except:
                 return False
 
+        # Add buildings to specific type lists if needed
+        if building.type == 'Storage':
+            config.storehouses.append(building)
+        
         # Add building to map
         building.positions = []
         for x in range(building.size[0]):
