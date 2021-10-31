@@ -104,6 +104,9 @@ def init():
     wood = 0
     stone = 0
 
+    global stored_materials
+    stored_materials = 10
+
     # Map
     global map
     map = map.Map()
