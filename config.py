@@ -151,7 +151,7 @@ def get_material(material, amount):
 
     total_stored = 0
 
-    global food, storehouses
+    global food, wood, stone, storehouses
 
     # Run through the amount of times required
     for i in range(amount):
@@ -165,9 +165,7 @@ def get_material(material, amount):
                     building.storage.append(material)
                     total_stored += 1
                     stored = True
-                    print(building.storage)
                     break
-
 
         if stored == False:
             break
@@ -181,6 +179,10 @@ def get_material(material, amount):
     # Update material values
     if material == 'Food':
         food += amount - (amount-total_stored)
+    elif material == 'Wood':
+        wood += amount - (amount-total_stored)
+    elif material == 'Stone':
+        stone += amount - (amount-total_stored)
                 
 
 def init_app():
