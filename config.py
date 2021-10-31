@@ -100,7 +100,7 @@ def init():
     ## Stats ##
     # Materials
     global food, wood, stone
-    food = 10
+    food = 0
     wood = 0
     stone = 0
 
@@ -145,6 +145,43 @@ def reset_seed():
     global seed
     seed += 1
     random.seed(seed)
+
+def get_material(material, amount):
+    '''Adds materials to the storehouse'''
+
+    total_stored = 0
+
+    global food, storehouses
+
+    # Run through the amount of times required
+    for i in range(amount):
+
+        stored = False
+
+        # Run through each storage building and attempt to add
+        for building in storehouses:
+            if len(building.storage) < building.capacity:
+                if (building.materials == []) or (material in building.materials):
+                    building.storage.append(material)
+                    total_stored += 1
+                    stored = True
+                    print(building.storage)
+                    break
+
+
+        if stored == False:
+            break
+    
+    # Return total failed materials
+    if total_stored < amount:
+        response = get_response('storage_failed')
+        response[0] = response[0].format(material, amount-total_stored)
+        main_app.append_log(response)
+
+    # Update material values
+    if material == 'Food':
+        food += amount - (amount-total_stored)
+                
 
 def init_app():
     '''Creates the application globals'''
