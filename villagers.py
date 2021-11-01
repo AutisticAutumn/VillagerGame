@@ -364,14 +364,16 @@ class Villager:
         # Only caluate food if needed
         if self.hunger > 0:
             if config.food > 0:
-                init_food = config.food
-                config.food -= self.hunger
+                food_consumed = 0
+                # Calculate remaineder when feed
+                r = config.food - self.hunger
+                food_consumed += self.hunger
                 self.hunger = 0
-                if config.food < 0:
+                if r < 0:
                     # Add back food and hunger so that food > 0
-                    self.hunger += config.food*-1
-                    config.food += config.food*-1
-                food_consumed = init_food - config.food
+                    self.hunger += r*-1
+                    food_consumed += r
+                config.remove_material('Food', food_consumed)
                 # Add result to log
                 result = config.get_response('consume_food')
                 result[0] = result[0].format(self.name, food_consumed)
