@@ -87,7 +87,7 @@ def init():
 
     global disaster_list, disaster_chance_max, disaster_chance
     disaster_list = get_disaster_chance()
-    disaster_chance_max = 16
+    disaster_chance_max = 20
     disaster_chance = disaster_chance_max
 
     # Boundries for when villages returns logs for high stats
@@ -207,7 +207,6 @@ def remove_material(material, amount):
             if (building.materials == []) or (material in building.materials):
                 building.storage.pop(building.storage.index(material))
                 removed = True
-                print(building.storage)
                 break
 
         if removed == False:
