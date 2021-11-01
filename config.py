@@ -149,9 +149,12 @@ def reset_seed():
 def get_material(material, amount):
     '''Adds materials to the storehouse'''
 
+    global food, wood, stone, storehouses
     total_stored = 0
 
-    global food, wood, stone, storehouses
+    # Break if nothing
+    if amount == 0:
+        return
 
     # Run through the amount of times required
     for i in range(amount):
@@ -189,6 +192,10 @@ def remove_material(material, amount):
         Runs upon the assumption that the check that said materails exist has already been run'''
 
     global food, wood, stone, storehouses
+
+    # Break if nothing
+    if amount == 0:
+        return
 
     # Run through the amount of times required
     for i in range(amount):
