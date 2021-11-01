@@ -172,7 +172,8 @@ def get_material(material, amount):
 
         if stored == False:
             break
-    
+    building.reset_texture()
+
     # Return total failed materials
     if total_stored < amount:
         response = get_response('storage_failed')
@@ -211,6 +212,7 @@ def remove_material(material, amount):
 
         if removed == False:
             break    
+    building.reset_texture()
 
     # Update material values
     if material == 'Food':
