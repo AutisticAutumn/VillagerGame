@@ -141,7 +141,7 @@ class Farmer(Profession):
 
         # Villager info
         self.name = 'Farmer'
-        self.description = 'Provides 2-4 food each turn'
+        self.description = 'Provides food each turn'
         self.building = 'Farm'
         self.colour = 'green yellow'
 
@@ -196,7 +196,7 @@ class Farmer(Profession):
 
                 # Get food from farm
                 food = building.food
-                config.food += food
+                config.get_material('Food', food)
 
                 # Add food to the farm
                 food_produced = random.randint(1,3) + config.food_weight
@@ -291,7 +291,7 @@ class Feller(Profession):
                 response[0] = response[0].format(villager.name)
                 return response
 
-            config.wood += wood_produced
+            config.get_material('Wood', wood_produced)
 
             # get tree position
             x, y = villager.turn_action
@@ -650,7 +650,7 @@ class Miner(Profession):
                 stone_produced = random.randint(1,3)
                 stone_produced = self.get_harvest_modifier(villager, stone_produced)
 
-                config.stone += stone_produced
+                config.get_material('Stone', stone_produced)
 
                 # Return to logs
                 response = config.get_response('miner_action')
