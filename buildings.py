@@ -59,6 +59,13 @@ class Building:
         texture = self.texture.replace('\n','')[pos]
         colour = self.colours[self.colour_map[pos]]
 
+        try:
+            background = self.colours[self.background_map[pos]]
+            if self.background_map[pos] != 0:
+                 return (texture, colour, background)
+        except:
+            pass
+
         return (texture, colour)
 
     def update_texture_map(self, reset_villager=False):
@@ -118,6 +125,12 @@ class Terraian:
         # Make sure texture is psudo-random 
         random.seed(config.grass_seed + randkey)
         texture = random.choice(self.texture)
+
+        try:
+            background = random.choice(self.background)
+            return (texture, random.choice(self.colours), background)
+        except:
+            pass
 
         # Add to seed so new number is produced every time
         config.reset_seed()
@@ -214,7 +227,7 @@ class WoodenHut(Building):
                            0,1,1,0,
                            0,0,0,0]
         
-        self.colours = ['chocolate3', 'brown4']
+        self.colours = ['chocolate3', 'brown3']
         
 class WoodenStatue(Building):
     '''Simple statue that provides an instant boost to happiness
@@ -386,8 +399,10 @@ class Storehouse(Building):
     def reset_texture(self):
         '''Reset texture to default'''
         
-        self.colours = ['chocolate3', 'brown4', 'tan3']
+        self.colours = ['chocolate3', 'brown4', 'tan1', 'tan4']
         self.barrel_textures = ['õ', 'ð', '%']
+        
+
 
         temp_texture = []
         center_texture = []
@@ -398,8 +413,11 @@ class Storehouse(Building):
             # Create initial texture
             self.texture = '''●----●¦    ¦●----●'''
             self.colour_map = [0,0,0,0,0,0,
-                            0,1,1,1,1,0,
-                            0,0,0,0,0,0]
+                               0,1,1,1,1,0,
+                               0,0,0,0,0,0]
+            self.background_map = [0,0,0,0,0,0,
+                                   0,0,0,0,0,0,
+                                   0,0,0,0,0,0]
 
             self.barrels = floor(len(self.storage)/8)
 
@@ -422,6 +440,7 @@ class Storehouse(Building):
 
                     if center_texture[0] in self.barrel_textures:
                         self.colour_map[i] = 2
+                        self.background_map[i] = 3
 
                     center_texture.pop(0)
 
@@ -433,4 +452,3 @@ class Storehouse(Building):
             self.update_texture_map()
         except:
             pass
-    
