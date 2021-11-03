@@ -368,11 +368,13 @@ class Mine(Building):
 
         self.texture = '''
  ●══● 
-ô║≡≡║O'''
+±║≡≡║±'''
         self.colour_map = [0,1,1,1,1,0,
-                           2,1,3,3,1,2]
+                           4,1,2,2,1,4]
+        self.background_map = [0,0,0,0,0,0,
+                               0,0,3,3,0,0]
         
-        self.colours = ['black', 'chocolate3', 'brown4', 'dark slate gray']
+        self.colours = ['black', 'chocolate3', 'dark slate gray', 'gray16', 'gray64']
 
 class Storehouse(Building):
 
@@ -441,6 +443,8 @@ class Storehouse(Building):
                     if center_texture[0] in self.barrel_textures:
                         self.colour_map[i] = 2
                         self.background_map[i] = 3
+                    else:
+                        self.background_map[i] = 0
 
                     center_texture.pop(0)
 
