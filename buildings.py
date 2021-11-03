@@ -7,6 +7,7 @@
 ### Imports and variables ###
 import random, mapUI
 import config
+from math import floor
 
 ### Functions ###
 def get_building(key):
@@ -384,12 +385,50 @@ class Storehouse(Building):
     def reset_texture(self):
         '''Reset texture to default'''
 
-        self.texture = '''
-●----●
-¦++++¦
-●----●'''
+        # Create initial texture
+        self.texture = '''●----●¦    ¦●----●'''
         self.colour_map = [0,0,0,0,0,0,
                            0,1,1,1,1,0,
                            0,0,0,0,0,0]
         
-        self.colours = ['chocolate3', 'brown4']
+        self.colours = ['chocolate3', 'brown4', 'tan3']
+        self.barrel_textures = ['õ', 'ð', '%']
+
+        temp_texture = []
+        center_texture = []
+
+        # Add barrels
+        for i in range(floor(len(self.storage)/8)):
+            center_texture.append(random.choice(self.barrel_textures))
+
+        for i in range(floor(self.capacity/8)-floor(len(self.storage)/8)):
+            center_texture.append('+')
+        
+        random.shuffle(center_texture)
+        
+        # Add variable details to texture
+        for i in range(self.size[0]*self.size[1]):
+            
+            if self.texture[i] != ' ':
+                temp_texture.append(self.texture[i])
+            else:
+                temp_texture.append(center_texture[0])
+
+                if center_texture[0] in self.barrel_textures:
+                    self.colour_map[i] = 2
+
+                center_texture.pop(0)
+            print(temp_texture)
+
+        # Set final texture
+        self.texture = ''.join(temp_texture)
+        
+        # Attempt to update texture on the map if possible
+        try:
+            self.update_texture_map()
+        except:
+            pass
+
+        
+        
+        
