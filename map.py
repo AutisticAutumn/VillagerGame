@@ -112,9 +112,9 @@ class Map:
         if pay:
             try:
                 # Check Prices
-                config.food -= self.check_building_cost(building, 'food', config.food, price_mod)
-                config.wood -= self.check_building_cost(building,'wood', config.wood, price_mod)
-                config.stone -= self.check_building_cost(building,'stone', config.stone, price_mod)
+                config.remove_material('Food', self.check_building_cost(building, 'food', config.food, price_mod))
+                config.remove_material('Wood',self.check_building_cost(building,'wood', config.wood, price_mod))
+                config.remove_material('Stone',self.check_building_cost(building,'stone', config.stone, price_mod))
             except:
                 return False
 
