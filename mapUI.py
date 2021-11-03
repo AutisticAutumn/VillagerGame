@@ -388,7 +388,12 @@ class MapPopout:
         else:
             self.tile_texture_box.insert(1.0, texture[0])
             self.tile_texture_box.tag_add('Colour', 1.0, tk.END)
-            self.tile_texture_box.tag_config('Colour', foreground=texture[1])
+            # Get background texture if it exists
+            try:
+                background = texture[2]
+            except:
+                background = 'Black'
+            self.tile_texture_box.tag_config('Colour', foreground=texture[1], background=background)
 
         ## Tile name box
         self.tile_name_box.insert(1.0, name)
@@ -448,6 +453,12 @@ class MapPopout:
 
                 # Get texture
                 texture = config.map.texture_map[pos]
+                
+                # Get background texture if it exists
+                try:
+                    background = texture[2]
+                except:
+                    background = 'Black'
                     
                 # If tile is a villager tile then draw that instead
                 villager_tile = (x+xx, y+yy) in villager_positions.keys()
@@ -460,7 +471,7 @@ class MapPopout:
                 self.tile_texture_box.insert(pos_key, texture[0])
 
                 self.tile_texture_box.tag_add(pos_key, pos_key, pos_key+'+1c')
-                self.tile_texture_box.tag_config(pos_key, foreground=texture[1])
+                self.tile_texture_box.tag_config(pos_key, foreground=texture[1], background=background)
 
             self.tile_texture_box.insert(tk.END, '\n')
 
@@ -614,7 +625,7 @@ class MapPopout:
                 self.map_box.insert(pos_key, texture[0])
 
                 self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
-                self.map_box.tag_config(pos_key, foreground=texture[1])
+                self.map_box.tag_config(pos_key, foreground=texture[1], background='Black')
 
                 # Save the positions that have been updated
                 self.updated_positions.append(pos_key)
