@@ -85,7 +85,7 @@ class MassPossession(Disaster):
 
         self.name = 'MassPossession'
         self.weight = 3
-        self.timer = 1
+        self.timer = random.randint(6,10)
 
     def on_start(self):
         
