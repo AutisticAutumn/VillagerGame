@@ -292,7 +292,7 @@ class Farm(Building):
         
         self.reset_texture()
 
-        # add crops to farm
+        # Add crops to farm
         self.cost['food'] = 5
 
     def reset_texture(self, crops=0):
@@ -393,18 +393,21 @@ class Storehouse(Building):
         self.storage = []
         self.barrels = 0
 
+        # Create initial texture
+        self.texture = '''●----●¦++++¦●----●'''
+        self.colours = ['chocolate3', 'brown4', 'tan1', 'tan4']
+        self.colour_map = [0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0]
+        self.background_map = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
         self.size = (6,3)
-        self.reset_texture()
+        #self.reset_texture()
 
         self.cost['wood'] = 20
 
     def reset_texture(self):
         '''Reset texture to default'''
         
-        self.colours = ['chocolate3', 'brown4', 'tan1', 'tan4']
         self.barrel_textures = ['õ', 'ð', '%']
-        
-
 
         temp_texture = []
         center_texture = []
