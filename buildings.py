@@ -418,7 +418,6 @@ class Storehouse(Building):
                     self.colour_map[i] = 2
 
                 center_texture.pop(0)
-            print(temp_texture)
 
         # Set final texture
         self.texture = ''.join(temp_texture)
