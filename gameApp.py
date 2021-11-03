@@ -254,6 +254,7 @@ class GameApp:
             self.append_log(['\nThere are no villagers remaining', 'white'])
             self.append_log(['GAME OVER', 'white'])
             self.end_turn_button.config(state=tk.DISABLED)
+            mapUI.draw_map(config.map.frame)
             return False
 
         # Attempt to run end of turn functions for disaster
