@@ -66,12 +66,7 @@ class VillagerFrame:
                            bg='black',
                            wrap=tk.NONE,
                            font=self.map_font)
-        self.map.grid(row=0, column=0, padx=2, pady=2, sticky=tk.EW)
-
-        self.name_var = tk.StringVar()
-        self.name = tk.Label(self.left_frame, textvariable=self.name_var, 
-                             width=16, font=self.font)
-        self.name.grid(row=1, column=0, padx=2, pady=2, sticky=tk.EW)
+        self.map.grid(row=0, column=0, padx=8, pady=2, sticky=tk.EW)
 
         self.kill_button = tk.Button(self.left_frame, text='Kill', 
                                      width=8, font=self.font,
@@ -171,8 +166,6 @@ class VillagerFrame:
     def update_stats(self):
         '''Updates the onscreen stats and data for the villager'''
 
-        self.name_var.set(self.villager.name)
-
         # If villager is possessed give custom name suffix
         name_suffix = self.villager.profession.name 
         if self.villager.phantom:
@@ -250,6 +243,12 @@ class VillagerFrame:
                 except:
                     # If texture out of map return blank
                     texture = (' ', 'black')
+                
+                # Get background texture if it exists
+                try:
+                    background = texture[2]
+                except:
+                    background = 'Black'
                     
                 # If tile is a villager tile then draw that instead
                 villager_tile = (x+xx, y+yy) in villager_positions.keys()
@@ -262,7 +261,7 @@ class VillagerFrame:
                 self.map.insert(pos_key, texture[0])
 
                 self.map.tag_add(pos_key, pos_key, pos_key+'+1c')
-                self.map.tag_config(pos_key, foreground=texture[1])
+                self.map.tag_config(pos_key, foreground=texture[1], background=background)
 
             self.map.insert(tk.END, '\n')
         
