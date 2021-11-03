@@ -60,6 +60,12 @@ def draw_map(self, updated_positions=[]):
             pos_key = f'{y}.{x-1}'
             texture = self.map.texture_map[pos]
 
+            # Get background texture if it exists
+            try:
+                background = texture[2]
+            except:
+                background = None
+
             # Check is position has changes
             pos_change = self.map_box.get(pos_key, pos_key+'+1c') == texture[0]
 
@@ -80,7 +86,7 @@ def draw_map(self, updated_positions=[]):
                 self.map_box.insert(pos_key, texture[0])
 
                 self.map_box.tag_add(pos_key, pos_key, pos_key+'+1c')
-                self.map_box.tag_config(pos_key, foreground=texture[1])
+                self.map_box.tag_config(pos_key, foreground=texture[1], background=background)
 
     # Turn the map back off 
     self.map_box.config(state=tk.DISABLED)
@@ -490,6 +496,22 @@ class MapPopout:
                     description.append((f'\n\nCurrently occupied by {name} the {job}', building.villager.profession.colour))
                 else:
                     description.append((f'\n\nCurrently unoccupied', 'white'))
+            
+            elif building.type == 'Storage':
+
+                if len(building.storage) > 0:
+
+                    description.append((f'\n\nStorage currently contains:', building.text_colour))
+
+                    if 'Food' in building.storage:
+                        description.append((f'\n  {building.storage.count("Food")} Food', 'lime'))
+                    if 'Wood' in building.storage:
+                        description.append((f'\n  {building.storage.count("Wood")} Wood', 'chocolate'))
+                    if 'Stone' in building.storage:
+                        description.append((f'\n  {building.storage.count("Stone")} Stone', 'gray72'))
+                else:
+                    description.append((f'\n\nStorage currently empty', building.text_colour))
+
         
         # Return the complete description
         return description
