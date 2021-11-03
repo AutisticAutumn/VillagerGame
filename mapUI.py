@@ -64,7 +64,7 @@ def draw_map(self, updated_positions=[]):
             try:
                 background = texture[2]
             except:
-                background = None
+                background = 'Black'
 
             # Check is position has changes
             pos_change = self.map_box.get(pos_key, pos_key+'+1c') == texture[0]
