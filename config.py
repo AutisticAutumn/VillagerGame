@@ -152,6 +152,8 @@ def get_material(material, amount):
     global food, wood, stone, storehouses
     total_stored = 0
 
+    storehouses_suffled = random.shuffle(storehouses)
+
     # Break if nothing
     if amount == 0:
         return
@@ -162,7 +164,7 @@ def get_material(material, amount):
         stored = False
 
         # Run through each storage building and attempt to add
-        for building in storehouses:
+        for building in storehouses_suffled:
             if len(building.storage) < building.capacity:
                 if (building.materials == []) or (material in building.materials):
                     building.storage.append(material)
@@ -194,6 +196,8 @@ def remove_material(material, amount):
 
     global food, wood, stone, storehouses
 
+    storehouses_suffled = random.shuffle(storehouses)
+
     # Break if nothing
     if amount == 0:
         return
@@ -203,9 +207,9 @@ def remove_material(material, amount):
 
         removed = False
 
-        # Run through each storage building and attempt to add
-        for building in storehouses:
-            if (building.materials == []) or (material in building.materials):
+        # Run through each storage building and attempt to remove
+        for building in storehouses_suffled:
+            if (material in building.storage):
                 building.storage.pop(building.storage.index(material))
                 removed = True
                 break
