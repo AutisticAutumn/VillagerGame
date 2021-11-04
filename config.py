@@ -61,7 +61,7 @@ def init():
     # Phantom Responses
     global phantom_responses, phantom_chance
     phantom_responses = get_phantom_responses()
-    phantom_chance = 96
+    phantom_chance = 128
 
     # Skills and preferences
     global skill_level_names
